@@ -1,14 +1,15 @@
-# Mystery Game - Top-Down 2D JRPG
+# Mystery Game - Top-Down 2D Investigation Game
 
-A web-based tactical JRPG inspired by Shining Force 2, built with PixiJS v8.
+A web-based mystery investigation game built with PixiJS v8.
 
 ## Overview
 
-This project is a proof-of-concept for a 2D tactical role-playing game featuring:
-- Turn-based grid-based combat
-- Character progression and party management
-- Overworld exploration
-- Strategic positioning and terrain effects
+This project is a proof-of-concept for a 2D mystery investigation game featuring:
+- Grid-based exploration and movement
+- Interactive NPCs with dialogue
+- Clue collection and investigation
+- Evidence connections and deduction
+- Story-driven mystery solving
 
 ## Technology Stack
 
@@ -48,9 +49,7 @@ The development server will start at `http://localhost:5173` with hot module rep
 ## Project Structure
 
 ```
-poc-mystery-game/
-├── docs/                      # Documentation
-│   └── adrs/                 # Architectural Decision Records
+game/
 ├── public/                   # Static assets (served as-is)
 │   └── assets/              # Processed game assets (auto-generated)
 ├── raw-assets/              # Source assets (processed by AssetPack)
@@ -67,11 +66,10 @@ poc-mystery-game/
 │   │   └── utils/         # App utilities
 │   ├── game/               # Game logic layer
 │   │   ├── types.ts       # Core type definitions
-│   │   ├── entities/      # Game entities
-│   │   ├── systems/       # Game systems (combat, state)
+│   │   ├── systems/       # Game systems (state, investigation)
 │   │   ├── grid/          # Grid system and pathfinding
 │   │   ├── data/          # Game data definitions
-│   │   └── ai/            # AI for enemies
+│   │   └── ai/            # AI for NPCs
 │   └── main.ts            # Application entry point
 ├── scripts/                # Build scripts
 └── index.html             # HTML entry point
@@ -85,7 +83,7 @@ The project follows a layered architecture:
 2. **App Layer** (`src/app/`): Screens, UI components, and presentation logic
 3. **Game Layer** (`src/game/`): Pure game logic, data structures, and systems
 
-See [Architectural Decision Records](./docs/adrs/README.md) for detailed design decisions.
+See [Architectural Decision Records](../docs/adrs/README.md) for detailed design decisions.
 
 ## Game Systems
 
@@ -93,20 +91,19 @@ See [Architectural Decision Records](./docs/adrs/README.md) for detailed design 
 - Rectangular tile-based grid
 - Pathfinding with A* algorithm
 - Movement range calculation
-- Terrain effects on movement and defense
+- Terrain effects on movement
 
-### Combat System
-- Turn-based with initiative order
-- Position-based tactics
-- Abilities with MP costs
-- Status effects
-- Victory/defeat conditions
+### Investigation System
+- Clue collection and tracking
+- Evidence connections and relationships
+- NPC dialogue and testimony
+- Interactive environment examination
 
 ### State Management
 - Centralized game state
-- Character management
+- Character and NPC management
 - Map transitions
-- Combat/exploration mode switching
+- Clue and investigation progress tracking
 
 ## Assets
 
@@ -118,27 +115,26 @@ Assets are managed through AssetPack:
 
 ## Documentation
 
-- [ADR-001: Choice of PixiJS v8 and Project Setup](./docs/adrs/001-pixijs-v8-setup.md)
-- [ADR-002: Project Architecture and Structure](./docs/adrs/002-project-architecture.md)
-- [ADR-003: Top-Down 2D JRPG Game Design](./docs/adrs/003-jrpg-game-design.md)
+- [ADR-001: Choice of PixiJS v8 and Project Setup](../docs/adrs/001-pixijs-v8-setup.md)
+- [ADR-002: Project Architecture and Structure](../docs/adrs/002-project-architecture.md)
+- [ADR-003: Mystery Game Design](../docs/adrs/003-mystery-game-design.md)
 
 ## Development Status
 
 This is currently a boilerplate setup with core systems implemented but no game content. The following are ready:
 
 - ✅ PixiJS v8 project setup
-- ✅ Type definitions for game entities
+- ✅ Type definitions for mystery game entities
 - ✅ Grid system with pathfinding
-- ✅ Combat system foundation
 - ✅ Game state management
-- ✅ Sample data structures
-- ⏳ Battle screen implementation
+- ✅ Clue and investigation types
+- ✅ Sample data structures (clues, NPCs, maps)
+- ⏳ Investigation screen implementation
 - ⏳ Exploration screen implementation
 - ⏳ Character sprites and animations
 - ⏳ Tile graphics
 - ⏳ UI design
-- ⏳ AI implementation
-- ⏳ Dialogue system
+- ⏳ Dialogue system implementation
 - ⏳ Save/load system
 
 ## License

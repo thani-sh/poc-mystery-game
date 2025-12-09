@@ -8,18 +8,18 @@ Accepted
 
 ## Context
 
-The PixiJS Creation Template provides a base structure, but we need to define how we'll organize code for a JRPG game with specific requirements:
-- Turn-based tactical combat on a grid
-- Overworld exploration
-- Character management
-- Multiple game screens (title, menu, battle, exploration)
+The PixiJS Creation Template provides a base structure, but we need to define how we'll organize code for a mystery investigation game with specific requirements:
+- Grid-based exploration
+- NPC interaction and dialogue
+- Clue collection and tracking
+- Multiple game screens (title, menu, investigation, exploration)
 - Save/load system
 - Dialogue system
-- Item and inventory management
+- Evidence and clue management
 
 ## Decision
 
-We will extend the Creation Template's architecture with a layered structure optimized for JRPG development:
+We will extend the Creation Template's architecture with a layered structure optimized for mystery game development:
 
 ### Directory Structure
 
@@ -33,25 +33,24 @@ src/
 ├── app/
 │   ├── screens/        # Full-screen views
 │   │   ├── LoadScreen.ts
-│   │   ├── TitleScreen.ts      # [TO ADD]
-│   │   ├── BattleScreen.ts     # [TO ADD]
-│   │   └── ExplorationScreen.ts # [TO ADD]
+│   │   ├── TitleScreen.ts           # [TO ADD]
+│   │   ├── InvestigationScreen.ts   # [TO ADD]
+│   │   └── ExplorationScreen.ts     # [TO ADD]
 │   ├── popups/         # Modal overlays
 │   │   ├── PausePopup.ts
 │   │   ├── SettingsPopup.ts
-│   │   └── MenuPopup.ts        # [TO ADD]
+│   │   ├── EvidenceJournalPopup.ts  # [TO ADD]
+│   │   └── DialoguePopup.ts         # [TO ADD]
 │   ├── ui/             # Reusable UI components
 │   │   └── Button.ts
 │   └── utils/          # App utilities
-├── game/               # [TO ADD] Game-specific logic
-│   ├── entities/       # Game entities (characters, items)
-│   ├── systems/        # Game systems (combat, movement, inventory)
+├── game/               # [IMPLEMENTED] Game-specific logic
+│   ├── systems/        # Game systems (state, investigation)
 │   ├── grid/           # Grid and tile system
 │   ├── data/           # Game data definitions
-│   └── ai/             # AI for enemies
+│   └── ai/             # AI for NPCs
 └── main.ts             # Application entry point
 ```
-
 ### Architecture Layers
 
 1. **Engine Layer** (`src/engine/`)
@@ -66,8 +65,8 @@ src/
    - User interaction handling
    - Bridges game logic with rendering
 
-3. **Game Layer** (`src/game/`) [TO BE IMPLEMENTED]
-   - Pure game logic (entity management, combat rules)
+3. **Game Layer** (`src/game/`) [IMPLEMENTED]
+   - Pure game logic (clue management, investigation mechanics)
    - Should be largely render-agnostic
    - Contains game state and systems
    - Can be unit tested independently
@@ -90,12 +89,12 @@ src/
 **State Management:**
 - No global state framework initially (keep it simple)
 - Screens own their state
-- Shared state in service classes (e.g., `GameState`, `PlayerData`)
+- Shared state in service classes (e.g., `GameState`)
 - Will evaluate Redux/MobX if complexity grows
 
-**Entity-Component Pattern:**
-- Game entities are data objects
-- Systems process entities (combat system, movement system)
+**Data-Driven Design:**
+- Game entities are data objects (Characters, Clues, Maps)
+- Systems process entities (investigation system, dialogue system)
 - View components render entities (sprite representation)
 - Separation between logic and rendering
 
@@ -108,12 +107,18 @@ src/
 - Easy to add new screens and popups
 - Asset pipeline is optimized out of the box
 - Hot reload works well with screen-based architecture
+- Data-driven approach makes content creation easier
 
 ### Negative
 - Additional layer of abstraction beyond template
 - Need to build game systems from scratch
 - Communication between layers requires careful design
 - May need refactoring as game complexity grows
+
+### Neutral
+- Will need to define game data schema
+- State management approach may evolve
+- Asset organization needs discipline
 
 ### Neutral
 - Will need to define game data schema

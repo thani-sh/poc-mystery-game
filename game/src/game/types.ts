@@ -1,5 +1,5 @@
 /**
- * Core type definitions for the JRPG game
+ * Core type definitions for the mystery game
  */
 
 /**
@@ -14,12 +14,6 @@ export interface GridPosition {
  * Character statistics
  */
 export interface CharacterStats {
-  hp: number;
-  maxHp: number;
-  mp: number;
-  maxMp: number;
-  attack: number;
-  defense: number;
   speed: number;
   movement: number; // Movement range in tiles
 }
@@ -42,7 +36,6 @@ export interface Tile {
   id: number;
   type: TileType;
   movementCost: number; // Cost to move through this tile
-  defenseBonus: number; // Defense bonus for units on this tile
   sprite: string; // Asset path for the tile sprite
 }
 
@@ -60,64 +53,48 @@ export enum Direction {
  * Character class types
  */
 export enum CharacterClass {
-  Warrior = "warrior",
-  Mage = "mage",
-  Healer = "healer",
-  Archer = "archer",
-  Knight = "knight",
+  Detective = "detective",
+  Journalist = "journalist",
+  Scientist = "scientist",
+  Officer = "officer",
 }
 
 /**
- * Status effect types
+ * Clue types
  */
-export enum StatusEffect {
-  Poisoned = "poisoned",
-  Stunned = "stunned",
-  Strengthened = "strengthened",
-  Weakened = "weakened",
-  Protected = "protected",
+export enum ClueType {
+  Physical = "physical",
+  Testimony = "testimony",
+  Document = "document",
+  Photograph = "photograph",
 }
 
 /**
- * Status effect instance
+ * Clue definition
  */
-export interface StatusEffectInstance {
-  type: StatusEffect;
-  duration: number; // Turns remaining
-  power: number; // Effect strength
-}
-
-/**
- * Ability/skill definition
- */
-export interface Ability {
+export interface Clue {
   id: string;
   name: string;
   description: string;
-  mpCost: number;
-  range: number; // Attack range in tiles
-  areaOfEffect: number; // 0 for single target, >0 for area
-  damage: number;
-  healing: number;
-  statusEffects: StatusEffect[];
+  type: ClueType;
+  relatedCharacters: string[]; // Character IDs related to this clue
+  relatedClues: string[]; // Other clue IDs related to this clue
 }
 
 /**
- * Character/unit definition
+ * Character/NPC definition
  */
 export interface Character {
   id: string;
   name: string;
   class: CharacterClass;
-  level: number;
-  experience: number;
   stats: CharacterStats;
   position: GridPosition;
   direction: Direction;
   sprite: string; // Base sprite name for this character
-  abilities: Ability[];
-  statusEffects: StatusEffectInstance[];
-  isPlayer: boolean; // true for player units, false for enemies
+  isPlayer: boolean; // true for player character, false for NPCs
+  dialogueId?: string; // ID of dialogue tree for this character
+  clues: string[]; // Clue IDs that this character knows about
 }
 
 /**
@@ -135,7 +112,8 @@ export interface UnitPlacement {
 export enum TriggerType {
   OnEnter = "onEnter",
   OnInteract = "onInteract",
-  OnBattleWin = "onBattleWin",
+  OnClueFound = "onClueFound",
+  OnDialogueComplete = "onDialogueComplete",
 }
 
 /**
@@ -158,37 +136,44 @@ export interface GameMap {
   width: number; // Width in tiles
   height: number; // Height in tiles
   tiles: number[][]; // 2D array of tile IDs
-  units: UnitPlacement[];
+  characters: UnitPlacement[]; // Character placements (renamed from units)
   triggers: Trigger[];
+  clues: ClueLocation[]; // Clues that can be found on this map
 }
 
 /**
- * Turn order entry
+ * Clue location on a map
  */
-export interface TurnEntry {
-  characterId: string;
-  initiative: number;
+export interface ClueLocation {
+  clueId: string;
+  position: GridPosition;
+  revealed: boolean; // Whether the clue has been found
 }
 
 /**
- * Combat action types
+ * Dialogue choice
  */
-export enum ActionType {
-  Move = "move",
-  Attack = "attack",
-  UseAbility = "useAbility",
-  UseItem = "useItem",
-  Wait = "wait",
+export interface DialogueChoice {
+  text: string;
+  nextNodeId: string;
+  requiresClue?: string; // Optional clue ID required to see this choice
 }
 
 /**
- * Combat action
+ * Dialogue node
  */
-export interface CombatAction {
-  type: ActionType;
-  actorId: string;
-  targetId?: string;
-  targetPosition?: GridPosition;
-  abilityId?: string;
-  itemId?: string;
+export interface DialogueNode {
+  id: string;
+  speaker: string;
+  text: string;
+  choices: DialogueChoice[];
+}
+
+/**
+ * Dialogue tree
+ */
+export interface DialogueTree {
+  id: string;
+  startNodeId: string;
+  nodes: DialogueNode[];
 }

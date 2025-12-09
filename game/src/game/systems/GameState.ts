@@ -1,26 +1,26 @@
-import type { Character, GameMap } from "../types";
+import type { Character, GameMap, Clue } from "../types";
 
 /**
  * Central game state manager
- * Manages the current state of the game including characters, maps, and progression
+ * Manages the current state of the game including characters, maps, clues, and progression
  */
 export class GameState {
   private static instance: GameState;
 
-  /** All characters in the game (player party and enemies) */
+  /** All characters in the game (player and NPCs) */
   private characters: Map<string, Character> = new Map();
 
   /** Current active map */
   private currentMap: GameMap | null = null;
 
-  /** Player party character IDs */
-  private party: string[] = [];
+  /** Player character ID */
+  private playerId: string | null = null;
 
-  /** Current turn index in combat */
-  private currentTurnIndex = 0;
+  /** Collected clues */
+  private collectedClues: Set<string> = new Set();
 
-  /** Whether the game is in combat mode */
-  private inCombat = false;
+  /** All clues in the game */
+  private clues: Map<string, Clue> = new Map();
 
   private constructor() {
     // Private constructor for singleton
@@ -41,10 +41,10 @@ export class GameState {
    */
   public initialize(): void {
     this.characters.clear();
-    this.party = [];
+    this.playerId = null;
     this.currentMap = null;
-    this.currentTurnIndex = 0;
-    this.inCombat = false;
+    this.collectedClues.clear();
+    this.clues.clear();
   }
 
   /**
@@ -73,25 +73,22 @@ export class GameState {
    */
   public removeCharacter(id: string): void {
     this.characters.delete(id);
-    this.party = this.party.filter((charId) => charId !== id);
   }
 
   /**
-   * Add a character to the player's party
+   * Set the player character
    */
-  public addToParty(characterId: string): void {
-    if (this.characters.has(characterId) && !this.party.includes(characterId)) {
-      this.party.push(characterId);
+  public setPlayer(characterId: string): void {
+    if (this.characters.has(characterId)) {
+      this.playerId = characterId;
     }
   }
 
   /**
-   * Get the player's party characters
+   * Get the player character
    */
-  public getParty(): Character[] {
-    return this.party
-      .map((id) => this.characters.get(id))
-      .filter((char): char is Character => char !== undefined);
+  public getPlayer(): Character | undefined {
+    return this.playerId ? this.characters.get(this.playerId) : undefined;
   }
 
   /**
@@ -109,49 +106,6 @@ export class GameState {
   }
 
   /**
-   * Start combat mode
-   */
-  public startCombat(): void {
-    this.inCombat = true;
-    this.currentTurnIndex = 0;
-  }
-
-  /**
-   * End combat mode
-   */
-  public endCombat(): void {
-    this.inCombat = false;
-  }
-
-  /**
-   * Check if in combat
-   */
-  public isInCombat(): boolean {
-    return this.inCombat;
-  }
-
-  /**
-   * Get the current turn index
-   */
-  public getCurrentTurnIndex(): number {
-    return this.currentTurnIndex;
-  }
-
-  /**
-   * Advance to next turn
-   */
-  public nextTurn(): void {
-    this.currentTurnIndex++;
-  }
-
-  /**
-   * Reset turn counter
-   */
-  public resetTurns(): void {
-    this.currentTurnIndex = 0;
-  }
-
-  /**
    * Update a character's position
    */
   public updateCharacterPosition(
@@ -166,48 +120,50 @@ export class GameState {
   }
 
   /**
-   * Update character stats (e.g., after taking damage)
+   * Add a clue to the game
    */
-  public updateCharacterStats(
-    characterId: string,
-    stats: Partial<Character["stats"]>,
-  ): void {
-    const character = this.characters.get(characterId);
-    if (character) {
-      Object.assign(character.stats, stats);
+  public addClue(clue: Clue): void {
+    this.clues.set(clue.id, clue);
+  }
+
+  /**
+   * Collect a clue
+   */
+  public collectClue(clueId: string): boolean {
+    if (this.clues.has(clueId) && !this.collectedClues.has(clueId)) {
+      this.collectedClues.add(clueId);
+      return true;
     }
+    return false;
   }
 
   /**
-   * Check if a character is defeated (HP <= 0)
+   * Check if a clue has been collected
    */
-  public isCharacterDefeated(characterId: string): boolean {
-    const character = this.characters.get(characterId);
-    return character ? character.stats.hp <= 0 : false;
+  public hasClue(clueId: string): boolean {
+    return this.collectedClues.has(clueId);
   }
 
   /**
-   * Get all alive characters
+   * Get all collected clues
    */
-  public getAliveCharacters(): Character[] {
-    return this.getAllCharacters().filter((char) => char.stats.hp > 0);
+  public getCollectedClues(): Clue[] {
+    return Array.from(this.collectedClues)
+      .map((id) => this.clues.get(id))
+      .filter((clue): clue is Clue => clue !== undefined);
   }
 
   /**
-   * Get all alive player characters
+   * Get a clue by ID
    */
-  public getAlivePlayerCharacters(): Character[] {
-    return this.getAllCharacters().filter(
-      (char) => char.isPlayer && char.stats.hp > 0,
-    );
+  public getClue(clueId: string): Clue | undefined {
+    return this.clues.get(clueId);
   }
 
   /**
-   * Get all alive enemy characters
+   * Get all NPCs (non-player characters)
    */
-  public getAliveEnemyCharacters(): Character[] {
-    return this.getAllCharacters().filter(
-      (char) => !char.isPlayer && char.stats.hp > 0,
-    );
+  public getNPCs(): Character[] {
+    return this.getAllCharacters().filter((char) => !char.isPlayer);
   }
 }

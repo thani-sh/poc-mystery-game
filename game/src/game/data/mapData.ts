@@ -2,96 +2,112 @@ import type { GameMap } from "../types";
 import { Direction, TriggerType } from "../types";
 
 /**
- * Sample battle map for testing
+ * Sample investigation scene map
  */
-export const sampleBattleMap: GameMap = {
-  id: "battle_plains_01",
-  name: "Plains Battle",
+export const crimeSceneMap: GameMap = {
+  id: "crime_scene",
+  name: "Crime Scene - Warehouse",
   width: 12,
   height: 10,
-  // 0 = grass, 4 = forest, 5 = mountain, 6 = wall
+  // 0 = floor, 4 = crates, 6 = walls
   tiles: [
-    [0, 0, 0, 0, 0, 4, 4, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 4, 4, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 0, 0],
-    [0, 0, 4, 0, 0, 0, 0, 0, 5, 5, 0, 0],
-    [0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 5, 0, 0, 0, 4, 0, 0, 0],
-    [0, 0, 0, 0, 5, 0, 0, 0, 4, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6],
+    [6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6],
+    [6, 0, 0, 0, 4, 4, 0, 0, 0, 0, 0, 6],
+    [6, 0, 0, 0, 4, 4, 0, 0, 0, 0, 0, 6],
+    [6, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 6],
+    [6, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 6],
+    [6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6],
+    [6, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 6],
+    [6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6],
+    [6, 6, 6, 6, 6, 0, 0, 6, 6, 6, 6, 6],
   ],
-  units: [
-    // Player units
+  characters: [
     {
-      characterId: "hero",
+      characterId: "detective",
       position: { x: 2, y: 8 },
       direction: Direction.Up,
     },
     {
-      characterId: "mage",
-      position: { x: 3, y: 9 },
-      direction: Direction.Up,
-    },
-    {
-      characterId: "healer",
-      position: { x: 1, y: 9 },
-      direction: Direction.Up,
-    },
-    // Enemy units
-    {
-      characterId: "goblin_1",
-      position: { x: 8, y: 1 },
-      direction: Direction.Down,
-    },
-    {
-      characterId: "goblin_2",
+      characterId: "officer",
       position: { x: 9, y: 2 },
       direction: Direction.Down,
     },
   ],
-  triggers: [],
+  triggers: [
+    {
+      id: "examine_crates",
+      type: TriggerType.OnInteract,
+      position: { x: 4, y: 2 },
+      action: "examineObject",
+      data: { clueId: "clue_shipping_label" },
+    },
+  ],
+  clues: [
+    {
+      clueId: "clue_footprints",
+      position: { x: 3, y: 5 },
+      revealed: false,
+    },
+    {
+      clueId: "clue_broken_glass",
+      position: { x: 8, y: 4 },
+      revealed: false,
+    },
+  ],
 };
 
 /**
- * Sample exploration map
+ * Sample town/office map
  */
-export const sampleTownMap: GameMap = {
-  id: "town_center",
-  name: "Town Center",
-  width: 20,
-  height: 15,
+export const detectiveOfficeMap: GameMap = {
+  id: "detective_office",
+  name: "Detective Office",
+  width: 15,
+  height: 12,
   tiles: [
-    // Simplified town layout (would typically be more detailed)
-    ...Array(15)
+    // Simplified office layout
+    ...Array(12)
       .fill(null)
-      .map(() => Array(20).fill(0)),
+      .map(() => Array(15).fill(0)),
   ],
-  units: [
+  characters: [
     {
-      characterId: "hero",
-      position: { x: 10, y: 12 },
+      characterId: "detective",
+      position: { x: 7, y: 10 },
       direction: Direction.Up,
+    },
+    {
+      characterId: "journalist",
+      position: { x: 3, y: 3 },
+      direction: Direction.Down,
     },
   ],
   triggers: [
     {
-      id: "town_entrance",
-      type: TriggerType.OnEnter,
-      position: { x: 10, y: 14 },
+      id: "examine_desk",
+      type: TriggerType.OnInteract,
+      position: { x: 7, y: 4 },
+      action: "examineObject",
+      data: { description: "Your cluttered desk with case files." },
+    },
+    {
+      id: "talk_to_journalist",
+      type: TriggerType.OnInteract,
+      position: { x: 3, y: 3 },
       action: "startDialogue",
-      data: { dialogueId: "welcome_to_town" },
+      data: { dialogueId: "journalist_intro" },
     },
   ],
+  clues: [],
 };
 
 /**
  * Map registry - add new maps here
  */
 export const MAP_REGISTRY: Record<string, GameMap> = {
-  battle_plains_01: sampleBattleMap,
-  town_center: sampleTownMap,
+  crime_scene: crimeSceneMap,
+  detective_office: detectiveOfficeMap,
 };
 
 /**

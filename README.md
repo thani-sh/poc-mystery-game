@@ -1,13 +1,13 @@
 # poc-mystery-game
 
-A proof-of-concept repository for a web-based 2D JRPG game inspired by Shining Force 2.
+A proof-of-concept repository for a web-based 2D mystery investigation game.
 
 ## Repository Structure
 
 ```
 poc-mystery-game/
 ├── docs/           # Documentation and Architectural Decision Records
-└── game/           # The PixiJS-based JRPG game application
+└── game/           # The PixiJS-based mystery game application
 ```
 
 ## Documentation

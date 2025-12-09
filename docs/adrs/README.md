@@ -10,7 +10,7 @@ An Architectural Decision Record (ADR) is a document that captures an important 
 
 - [ADR-001: Choice of PixiJS v8 and Project Setup](./001-pixijs-v8-setup.md)
 - [ADR-002: Project Architecture and Structure](./002-project-architecture.md)
-- [ADR-003: Top-Down 2D JRPG Game Design](./003-jrpg-game-design.md)
+- [ADR-003: Mystery Game Design](./003-mystery-game-design.md)
 
 ## ADR Template
 

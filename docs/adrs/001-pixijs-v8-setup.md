@@ -8,10 +8,10 @@ Accepted
 
 ## Context
 
-We need to build a web-based top-down 2D JRPG game inspired by Shining Force 2. The game requires:
+We need to build a web-based top-down 2D mystery investigation game. The game requires:
 - High-performance 2D rendering
 - Sprite-based graphics
-- Grid-based movement and combat
+- Grid-based movement
 - Asset management
 - Sound support
 - UI components
@@ -56,14 +56,14 @@ We will use **PixiJS version 8** as our rendering engine and game foundation, in
 - TypeScript provides type safety and better IDE support
 - Vite enables hot module replacement for fast iteration
 - AssetPack will optimize our sprite sheets and textures automatically
-- Built-in navigation system works well for JRPG's multiple screens (title, battle, exploration, menus)
+- Built-in navigation system works well for mystery game's multiple screens (investigation, dialogue, exploration, menus)
 - Sound management is handled by @pixi/sound plugin
 
 ### Negative
 - Learning curve for PixiJS-specific concepts (Container, Sprite, Texture)
 - Need to understand the Creation Template's architecture
-- Some game-specific systems still need to be built (grid system, turn-based combat, pathfinding)
-- Asset pipeline may need customization for JRPG-specific needs (character portraits, tilesets)
+- Some game-specific systems still need to be built (grid system, dialogue, clue tracking)
+- Asset pipeline may need customization for mystery game-specific needs (character portraits, UI elements)
 
 ### Neutral
 - Vite configuration may need adjustment for specific requirements

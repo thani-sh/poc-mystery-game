@@ -2,141 +2,72 @@ import type { Character } from "../types";
 import { CharacterClass, Direction } from "../types";
 
 /**
- * Sample player characters
+ * Sample player character
  */
-export const HERO: Character = {
-  id: "hero",
-  name: "Hero",
-  class: CharacterClass.Warrior,
-  level: 1,
-  experience: 0,
+export const DETECTIVE: Character = {
+  id: "detective",
+  name: "Detective Morgan",
+  class: CharacterClass.Detective,
   stats: {
-    hp: 100,
-    maxHp: 100,
-    mp: 20,
-    maxMp: 20,
-    attack: 15,
-    defense: 10,
     speed: 12,
     movement: 5,
   },
   position: { x: 0, y: 0 },
   direction: Direction.Down,
-  sprite: "characters/hero",
-  abilities: [
-    {
-      id: "power_strike",
-      name: "Power Strike",
-      description: "A powerful melee attack",
-      mpCost: 5,
-      range: 1,
-      areaOfEffect: 0,
-      damage: 25,
-      healing: 0,
-      statusEffects: [],
-    },
-  ],
-  statusEffects: [],
+  sprite: "characters/detective",
   isPlayer: true,
+  clues: [],
 };
 
-export const MAGE: Character = {
-  id: "mage",
-  name: "Mage",
-  class: CharacterClass.Mage,
-  level: 1,
-  experience: 0,
+/**
+ * Sample NPCs
+ */
+export const JOURNALIST: Character = {
+  id: "journalist",
+  name: "Sarah Chen",
+  class: CharacterClass.Journalist,
   stats: {
-    hp: 70,
-    maxHp: 70,
-    mp: 50,
-    maxMp: 50,
-    attack: 8,
-    defense: 5,
     speed: 10,
     movement: 4,
   },
   position: { x: 0, y: 0 },
   direction: Direction.Down,
-  sprite: "characters/mage",
-  abilities: [
-    {
-      id: "fireball",
-      name: "Fireball",
-      description: "A ball of fire that damages enemies",
-      mpCost: 10,
-      range: 3,
-      areaOfEffect: 1,
-      damage: 30,
-      healing: 0,
-      statusEffects: [],
-    },
-  ],
-  statusEffects: [],
-  isPlayer: true,
+  sprite: "characters/journalist",
+  isPlayer: false,
+  dialogueId: "journalist_intro",
+  clues: ["clue_newspaper"],
 };
 
-export const HEALER: Character = {
-  id: "healer",
-  name: "Healer",
-  class: CharacterClass.Healer,
-  level: 1,
-  experience: 0,
+export const SCIENTIST: Character = {
+  id: "scientist",
+  name: "Dr. Harris",
+  class: CharacterClass.Scientist,
   stats: {
-    hp: 80,
-    maxHp: 80,
-    mp: 40,
-    maxMp: 40,
-    attack: 10,
-    defense: 8,
-    speed: 11,
-    movement: 4,
-  },
-  position: { x: 0, y: 0 },
-  direction: Direction.Down,
-  sprite: "characters/healer",
-  abilities: [
-    {
-      id: "heal",
-      name: "Heal",
-      description: "Restores ally HP",
-      mpCost: 8,
-      range: 2,
-      areaOfEffect: 0,
-      damage: 0,
-      healing: 30,
-      statusEffects: [],
-    },
-  ],
-  statusEffects: [],
-  isPlayer: true,
-};
-
-/**
- * Sample enemy characters
- */
-export const GOBLIN: Character = {
-  id: "goblin_1",
-  name: "Goblin",
-  class: CharacterClass.Warrior,
-  level: 1,
-  experience: 0,
-  stats: {
-    hp: 50,
-    maxHp: 50,
-    mp: 0,
-    maxMp: 0,
-    attack: 12,
-    defense: 5,
     speed: 8,
     movement: 4,
   },
   position: { x: 0, y: 0 },
   direction: Direction.Down,
-  sprite: "characters/goblin",
-  abilities: [],
-  statusEffects: [],
+  sprite: "characters/scientist",
   isPlayer: false,
+  dialogueId: "scientist_intro",
+  clues: ["clue_lab_report"],
+};
+
+export const OFFICER: Character = {
+  id: "officer",
+  name: "Officer Blake",
+  class: CharacterClass.Officer,
+  stats: {
+    speed: 11,
+    movement: 5,
+  },
+  position: { x: 0, y: 0 },
+  direction: Direction.Down,
+  sprite: "characters/officer",
+  isPlayer: false,
+  dialogueId: "officer_intro",
+  clues: ["clue_police_report"],
 };
 
 /**
@@ -150,8 +81,7 @@ export function createCharacter(
     ...template,
     ...overrides,
     stats: { ...template.stats, ...(overrides?.stats ?? {}) },
-    abilities: [...template.abilities],
-    statusEffects: [],
+    clues: [...template.clues],
   };
 }
 
@@ -159,8 +89,8 @@ export function createCharacter(
  * Character registry for easy lookup
  */
 export const CHARACTER_TEMPLATES = {
-  hero: HERO,
-  mage: MAGE,
-  healer: HEALER,
-  goblin: GOBLIN,
+  detective: DETECTIVE,
+  journalist: JOURNALIST,
+  scientist: SCIENTIST,
+  officer: OFFICER,
 };

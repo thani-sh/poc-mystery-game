@@ -12,9 +12,9 @@ export { Pathfinder } from "./grid/Pathfinder";
 
 // Systems
 export { GameState } from "./systems/GameState";
-export { CombatSystem } from "./systems/CombatSystem";
 
 // Data
 export * from "./data/tileData";
 export * from "./data/mapData";
 export * from "./data/characterData";
+export * from "./data/clueData";
