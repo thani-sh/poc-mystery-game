@@ -3,6 +3,16 @@
 	
 	let { form } = $props();
 	let isGenerating = $state(false);
+	
+	async function copyPrompt() {
+		if (!form?.prompt) return;
+		try {
+			await navigator.clipboard.writeText(form.prompt);
+		} catch (error) {
+			console.error('Failed to copy prompt:', error);
+			alert('Failed to copy prompt to clipboard');
+		}
+	}
 </script>
 
 <svelte:head>
@@ -144,7 +154,7 @@
 							<button 
 								type="button" 
 								class="action-btn"
-								onclick={() => navigator.clipboard.writeText(form.prompt)}
+								onclick={copyPrompt}
 							>
 								📋 Copy Prompt
 							</button>

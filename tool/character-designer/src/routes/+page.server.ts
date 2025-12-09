@@ -4,8 +4,11 @@ import { join } from 'path';
 import { GoogleGenAI } from '@google/genai';
 import mime from 'mime';
 
-// Load prompt templates
-const promptsPath = join(process.cwd(), '../../docs/prompts');
+// Load prompt templates - use absolute path from project root
+const projectRoot = process.cwd().includes('tool/character-designer') 
+	? join(process.cwd(), '../..')
+	: process.cwd();
+const promptsPath = join(projectRoot, 'docs/prompts');
 
 async function loadPrompts() {
 	const portraitPrompt = await readFile(join(promptsPath, 'character-portrait-prompt.md'), 'utf-8');
