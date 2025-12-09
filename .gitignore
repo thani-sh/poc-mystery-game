@@ -31,3 +31,5 @@ game/src/manifest.json
 # Tool-specific generated files
 tool/*/dist
 tool/*/node_modules
+tool/*/.svelte-kit
+tool/*/build

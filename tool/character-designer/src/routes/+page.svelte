@@ -1,0 +1,508 @@
+<script lang="ts">
+	import { enhance } from '$app/forms';
+	
+	let { form } = $props();
+	let isGenerating = $state(false);
+</script>
+
+<svelte:head>
+	<title>Character Designer - POC Mystery Game</title>
+</svelte:head>
+
+<div class="container">
+	<header>
+		<h1>🎮 Character Designer</h1>
+		<p>Create characters for POC Mystery Game using Google AI</p>
+	</header>
+
+	<div class="main-content">
+		<aside class="sidebar">
+			<form method="POST" use:enhance={() => {
+				isGenerating = true;
+				return async ({ update }) => {
+					await update();
+					isGenerating = false;
+				};
+			}}>
+				<h2>Character Details</h2>
+
+				<div class="form-group">
+					<label for="apiKey">Google AI API Key:</label>
+					<input 
+						type="password" 
+						id="apiKey" 
+						name="apiKey"
+						placeholder="Enter your Google AI API key"
+						required
+					/>
+					<small>Your API key is sent securely to generate images</small>
+				</div>
+
+				<div class="form-group">
+					<label for="characterType">Character Type:</label>
+					<select id="characterType" name="characterType">
+						<option value="portrait">Portrait Sprite Sheet (3:4 ratio, 12 frames)</option>
+						<option value="spritesheet">Game Sprite Sheet (Square, 16 frames)</option>
+					</select>
+				</div>
+
+				<div class="form-group">
+					<label for="race">Race/Species:</label>
+					<input type="text" id="race" name="race" placeholder="e.g., Human, Elf, Dwarf, Dragon" />
+				</div>
+
+				<div class="form-group">
+					<label for="class">Class/Role:</label>
+					<input type="text" id="class" name="class" placeholder="e.g., Warrior, Mage, Rogue, Merchant" />
+				</div>
+
+				<div class="form-group">
+					<label for="gender">Gender:</label>
+					<select id="gender" name="gender">
+						<option value="">Not specified</option>
+						<option value="male">Male</option>
+						<option value="female">Female</option>
+						<option value="non-binary">Non-binary</option>
+					</select>
+				</div>
+
+				<div class="form-group">
+					<label for="age">Age/Appearance:</label>
+					<input type="text" id="age" name="age" placeholder="e.g., Young, Middle-aged, Elderly, Child" />
+				</div>
+
+				<div class="form-group">
+					<label for="physicalFeatures">Physical Features:</label>
+					<textarea id="physicalFeatures" name="physicalFeatures" rows="3" placeholder="e.g., Blue hair, scar on cheek, green eyes, tall and muscular"></textarea>
+				</div>
+
+				<div class="form-group">
+					<label for="clothing">Clothing/Armor:</label>
+					<textarea id="clothing" name="clothing" rows="3" placeholder="e.g., Heavy steel armor, leather tunic, flowing robes with gold trim"></textarea>
+				</div>
+
+				<div class="form-group">
+					<label for="hairColor">Hair Color:</label>
+					<input type="text" id="hairColor" name="hairColor" placeholder="e.g., Silver, Auburn, Black" />
+				</div>
+
+				<div class="form-group">
+					<label for="eyeColor">Eye Color:</label>
+					<input type="text" id="eyeColor" name="eyeColor" placeholder="e.g., Emerald green, Amber, Deep blue" />
+				</div>
+
+				<div class="form-group">
+					<label for="skinTone">Skin Tone:</label>
+					<input type="text" id="skinTone" name="skinTone" placeholder="e.g., Pale, Tan, Dark brown, Green" />
+				</div>
+
+				<div class="form-group">
+					<label for="additionalDetails">Additional Details:</label>
+					<textarea id="additionalDetails" name="additionalDetails" rows="3" placeholder="Any other specific details about the character"></textarea>
+				</div>
+
+				<div class="button-group">
+					<button type="submit" class="primary-btn" disabled={isGenerating}>
+						{#if isGenerating}
+							<span class="loading-spinner"></span> Generating...
+						{:else}
+							✨ Generate Character
+						{/if}
+					</button>
+				</div>
+			</form>
+		</aside>
+
+		<main class="preview-area">
+			{#if form?.error}
+				<div class="status-message error">
+					{form.error}
+				</div>
+			{:else if form?.success}
+				<div class="status-message success">
+					Character generated successfully!
+				</div>
+			{/if}
+
+			{#if form?.images && form.images.length > 0}
+				<div class="image-container">
+					{#each form.images as image, i}
+						<div class="image-wrapper">
+							<img src={image.dataUrl} alt="Generated Character {i + 1}" />
+							<div class="image-actions">
+								<a href={image.dataUrl} download="character-{i + 1}.{image.extension}" class="action-btn">
+									📥 Download Image {i + 1}
+								</a>
+							</div>
+						</div>
+					{/each}
+
+					{#if form.prompt}
+						<div class="prompt-display">
+							<h3>Generated Prompt:</h3>
+							<pre>{form.prompt}</pre>
+							<button 
+								type="button" 
+								class="action-btn"
+								onclick={() => navigator.clipboard.writeText(form.prompt)}
+							>
+								📋 Copy Prompt
+							</button>
+						</div>
+					{/if}
+				</div>
+			{:else}
+				<div class="preview-container">
+					<div class="placeholder">
+						<div class="placeholder-icon">🎨</div>
+						<h3>No Image Generated Yet</h3>
+						<p>Fill in the character details and click "Generate Character" to see the results</p>
+					</div>
+				</div>
+			{/if}
+		</main>
+	</div>
+</div>
+
+<style>
+	* {
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box;
+	}
+
+	:global(body) {
+		font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+		background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+		color: #e8e8e8;
+		min-height: 100vh;
+		line-height: 1.6;
+	}
+
+	.container {
+		max-width: 1600px;
+		margin: 0 auto;
+		padding: 20px;
+	}
+
+	header {
+		text-align: center;
+		padding: 30px 20px;
+		background: rgba(255, 255, 255, 0.05);
+		border-radius: 12px;
+		margin-bottom: 30px;
+		backdrop-filter: blur(10px);
+		animation: fadeInDown 0.6s ease-out;
+	}
+
+	header h1 {
+		font-size: 2.5em;
+		margin-bottom: 10px;
+		background: linear-gradient(135deg, #4a90e2, #50c878);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+	}
+
+	header p {
+		color: rgba(255, 255, 255, 0.7);
+		font-size: 1.1em;
+	}
+
+	.main-content {
+		display: grid;
+		grid-template-columns: 400px 1fr;
+		gap: 30px;
+		animation: fadeIn 0.8s ease-out;
+	}
+
+	@media (max-width: 1200px) {
+		.main-content {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	.sidebar {
+		background: rgba(255, 255, 255, 0.05);
+		border-radius: 12px;
+		padding: 25px;
+		backdrop-filter: blur(10px);
+		border: 1px solid rgba(255, 255, 255, 0.1);
+		max-height: calc(100vh - 200px);
+		overflow-y: auto;
+	}
+
+	.sidebar h2 {
+		margin-bottom: 25px;
+		color: #50c878;
+		font-size: 1.5em;
+	}
+
+	.form-group {
+		margin-bottom: 20px;
+	}
+
+	.form-group label {
+		display: block;
+		margin-bottom: 8px;
+		color: rgba(255, 255, 255, 0.9);
+		font-weight: 500;
+	}
+
+	.form-group input,
+	.form-group select,
+	.form-group textarea {
+		width: 100%;
+		padding: 12px;
+		background: rgba(255, 255, 255, 0.1);
+		border: 1px solid rgba(255, 255, 255, 0.2);
+		border-radius: 8px;
+		color: #e8e8e8;
+		font-size: 14px;
+		transition: all 0.3s ease;
+		font-family: inherit;
+	}
+
+	.form-group input:focus,
+	.form-group select:focus,
+	.form-group textarea:focus {
+		outline: none;
+		border-color: #4a90e2;
+		background: rgba(255, 255, 255, 0.15);
+		box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+	}
+
+	.form-group textarea {
+		resize: vertical;
+	}
+
+	.form-group small {
+		display: block;
+		margin-top: 5px;
+		color: rgba(255, 255, 255, 0.5);
+		font-size: 12px;
+	}
+
+	.button-group {
+		margin-top: 25px;
+	}
+
+	.primary-btn,
+	.action-btn {
+		padding: 12px 24px;
+		border: none;
+		border-radius: 8px;
+		font-size: 16px;
+		font-weight: 600;
+		cursor: pointer;
+		transition: all 0.3s ease;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 8px;
+		text-decoration: none;
+		color: white;
+	}
+
+	.primary-btn {
+		width: 100%;
+		background: linear-gradient(135deg, #4a90e2, #50c878);
+	}
+
+	.primary-btn:hover:not(:disabled) {
+		transform: translateY(-2px);
+		box-shadow: 0 8px 20px rgba(74, 144, 226, 0.4);
+	}
+
+	.primary-btn:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+	}
+
+	.action-btn {
+		background: rgba(74, 144, 226, 0.2);
+		border: 1px solid #4a90e2;
+		margin: 10px 5px;
+	}
+
+	.action-btn:hover {
+		background: rgba(74, 144, 226, 0.3);
+		transform: translateY(-2px);
+	}
+
+	.preview-area {
+		background: rgba(255, 255, 255, 0.05);
+		border-radius: 12px;
+		padding: 25px;
+		backdrop-filter: blur(10px);
+		border: 1px solid rgba(255, 255, 255, 0.1);
+		min-height: 600px;
+	}
+
+	.status-message {
+		padding: 15px;
+		border-radius: 8px;
+		margin-bottom: 20px;
+		text-align: center;
+		font-weight: 500;
+		animation: slideInDown 0.3s ease-out;
+	}
+
+	.status-message.success {
+		background: rgba(46, 204, 113, 0.2);
+		border: 1px solid #2ecc71;
+		color: #2ecc71;
+	}
+
+	.status-message.error {
+		background: rgba(231, 76, 60, 0.2);
+		border: 1px solid #e74c3c;
+		color: #e74c3c;
+	}
+
+	.preview-container {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		min-height: 500px;
+		border-radius: 8px;
+		background: rgba(0, 0, 0, 0.2);
+	}
+
+	.placeholder {
+		text-align: center;
+		animation: pulse 2s ease-in-out infinite;
+	}
+
+	.placeholder-icon {
+		font-size: 80px;
+		margin-bottom: 20px;
+	}
+
+	.placeholder h3 {
+		margin-bottom: 10px;
+		color: rgba(255, 255, 255, 0.8);
+	}
+
+	.placeholder p {
+		color: rgba(255, 255, 255, 0.5);
+	}
+
+	.image-container {
+		animation: fadeInScale 0.6s ease-out;
+	}
+
+	.image-wrapper {
+		margin-bottom: 20px;
+	}
+
+	.image-wrapper img {
+		width: 100%;
+		max-width: 100%;
+		height: auto;
+		border-radius: 8px;
+		box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+		animation: imageReveal 0.8s ease-out;
+	}
+
+	.image-actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 10px;
+		margin-top: 15px;
+	}
+
+	.prompt-display {
+		background: rgba(0, 0, 0, 0.3);
+		padding: 20px;
+		border-radius: 8px;
+		border: 1px solid rgba(255, 255, 255, 0.1);
+		margin-top: 20px;
+	}
+
+	.prompt-display h3 {
+		margin-bottom: 15px;
+		color: #50c878;
+	}
+
+	.prompt-display pre {
+		max-height: 300px;
+		overflow-y: auto;
+		font-family: 'Courier New', monospace;
+		font-size: 13px;
+		line-height: 1.8;
+		white-space: pre-wrap;
+		word-wrap: break-word;
+		margin-bottom: 15px;
+	}
+
+	.loading-spinner {
+		display: inline-block;
+		width: 20px;
+		height: 20px;
+		border: 3px solid rgba(255, 255, 255, 0.3);
+		border-top-color: white;
+		border-radius: 50%;
+		animation: spin 1s linear infinite;
+	}
+
+	@keyframes fadeIn {
+		from { opacity: 0; }
+		to { opacity: 1; }
+	}
+
+	@keyframes fadeInDown {
+		from {
+			opacity: 0;
+			transform: translateY(-20px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	@keyframes fadeInScale {
+		from {
+			opacity: 0;
+			transform: scale(0.9);
+		}
+		to {
+			opacity: 1;
+			transform: scale(1);
+		}
+	}
+
+	@keyframes slideInDown {
+		from {
+			opacity: 0;
+			transform: translateY(-10px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	@keyframes pulse {
+		0%, 100% { opacity: 0.8; }
+		50% { opacity: 0.4; }
+	}
+
+	@keyframes spin {
+		to { transform: rotate(360deg); }
+	}
+
+	@keyframes imageReveal {
+		from {
+			opacity: 0;
+			transform: scale(0.95);
+			filter: blur(10px);
+		}
+		to {
+			opacity: 1;
+			transform: scale(1);
+			filter: blur(0);
+		}
+	}
+</style>
