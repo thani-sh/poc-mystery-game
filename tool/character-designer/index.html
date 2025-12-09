@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Character Designer - POC Mystery Game</title>
+    <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎮 Character Designer</h1>
+            <p>Create characters for POC Mystery Game using Google AI</p>
+        </header>
+
+        <div class="main-content">
+            <aside class="sidebar">
+                <div class="form-section">
+                    <h2>Character Details</h2>
+                    
+                    <div class="form-group">
+                        <label for="apiKey">Google AI API Key:</label>
+                        <input type="password" id="apiKey" placeholder="Enter your Google AI API key">
+                        <small>Your API key is stored locally and never sent to our servers</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="characterType">Character Type:</label>
+                        <select id="characterType">
+                            <option value="portrait">Portrait Sprite Sheet (3:4 ratio, 12 frames)</option>
+                            <option value="spritesheet">Game Sprite Sheet (Square, 16 frames)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="race">Race/Species:</label>
+                        <input type="text" id="race" placeholder="e.g., Human, Elf, Dwarf, Dragon">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="class">Class/Role:</label>
+                        <input type="text" id="class" placeholder="e.g., Warrior, Mage, Rogue, Merchant">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="gender">Gender:</label>
+                        <select id="gender">
+                            <option value="">Not specified</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="non-binary">Non-binary</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="age">Age/Appearance:</label>
+                        <input type="text" id="age" placeholder="e.g., Young, Middle-aged, Elderly, Child">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="physicalFeatures">Physical Features:</label>
+                        <textarea id="physicalFeatures" rows="3" placeholder="e.g., Blue hair, scar on cheek, green eyes, tall and muscular"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="clothing">Clothing/Armor:</label>
+                        <textarea id="clothing" rows="3" placeholder="e.g., Heavy steel armor, leather tunic, flowing robes with gold trim"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="hairColor">Hair Color:</label>
+                        <input type="text" id="hairColor" placeholder="e.g., Silver, Auburn, Black">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="eyeColor">Eye Color:</label>
+                        <input type="text" id="eyeColor" placeholder="e.g., Emerald green, Amber, Deep blue">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="skinTone">Skin Tone:</label>
+                        <input type="text" id="skinTone" placeholder="e.g., Pale, Tan, Dark brown, Green">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="additionalDetails">Additional Details:</label>
+                        <textarea id="additionalDetails" rows="3" placeholder="Any other specific details about the character"></textarea>
+                    </div>
+
+                    <div class="button-group">
+                        <button id="generateBtn" class="primary-btn">✨ Generate Character</button>
+                        <button id="clearBtn" class="secondary-btn">🗑️ Clear Form</button>
+                    </div>
+                </div>
+            </aside>
+
+            <main class="preview-area">
+                <div id="statusMessage" class="status-message"></div>
+                
+                <div id="previewContainer" class="preview-container">
+                    <div class="placeholder">
+                        <div class="placeholder-icon">🎨</div>
+                        <h3>No Image Generated Yet</h3>
+                        <p>Fill in the character details and click "Generate Character" to see the results</p>
+                    </div>
+                </div>
+
+                <div id="imageContainer" class="image-container hidden">
+                    <div class="image-wrapper">
+                        <img id="generatedImage" alt="Generated Character">
+                        <div class="image-actions">
+                            <button id="downloadBtn" class="action-btn">📥 Download Image</button>
+                            <button id="copyPromptBtn" class="action-btn">📋 Copy Prompt</button>
+                        </div>
+                    </div>
+                    <div id="promptDisplay" class="prompt-display"></div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script type="module" src="./main.js"></script>
+</body>
+</html>
