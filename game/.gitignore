@@ -8,8 +8,8 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
-game/dist
-game/dist-ssr
+dist
+dist-ssr
 *.local
 
 # Editor directories and files
@@ -23,7 +23,6 @@ game/dist-ssr
 *.sln
 *.sw?
 
-# Game-specific generated files
-game/public/assets
-game/.assetpack
-game/src/manifest.json
+public/assets
+.assetpack
+src/manifest.json
