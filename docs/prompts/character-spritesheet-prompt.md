@@ -4,7 +4,7 @@ Sprite Sheet Layout:
 - Square image format with a 4x4 grid (16 cells total, equally divided).
 - Each cell contains a single character sprite frame.
 - All sprites in the sheet should be the same character, maintaining consistent design across all frames.
-- Transparent or neutral background for each cell to allow easy extraction.
+- Transparent background (alpha channel) for the entire sprite sheet to allow easy extraction and compositing.
 - Grid lines should be clear and visible to delineate each cell boundary.
 
 Frame Layout (in order, left to right, top to bottom):
@@ -86,12 +86,13 @@ Design Consistency:
 Grid and Background:
 - The overall image should be perfectly square.
 - Divide the square into a precise 4x4 grid with 16 equal cells.
-- Each cell should have a transparent background OR a neutral, very light background color that contrasts with the character.
+- Transparent background (alpha channel) for all cells - no solid background color.
 - Thin, visible grid lines between cells to clearly separate each frame (optional but helpful).
 - No environmental elements, props, or scene details - focus entirely on the character sprite.
 
 Technical Requirements:
 - Square aspect ratio (e.g., 1024x1024, 2048x2048, or similar).
+- PNG format with alpha channel transparency support.
 - Each cell is exactly 1/4 of the total width and 1/4 of the total height.
 - High enough resolution that individual sprites remain crisp when extracted from the sheet.
 - Sprites should be easy to extract programmatically by dividing the image into 4 equal columns and 4 equal rows.
