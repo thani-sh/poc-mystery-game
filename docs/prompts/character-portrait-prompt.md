@@ -1,26 +1,50 @@
-Game concept art of a [INSERT CHARACTER RACE AND CLASS], [INSERT KEY PHYSICAL FEATURES: e.g. blue hair, scar on cheek, young face], wearing [INSERT CLOTHING/ARMOR DETAILS].
+Character portrait sprite sheet of a [INSERT CHARACTER RACE AND CLASS], [INSERT KEY PHYSICAL FEATURES: e.g. blue hair, scar on cheek, young face], wearing [INSERT CLOTHING/ARMOR DETAILS].
+
+Portrait Sprite Sheet Layout:
+- Square image format with a 3x3 grid (9 cells total, equally divided).
+- Each cell contains a character portrait with a different expression, emotion, or state.
+- All portraits in the sheet should be the same character, maintaining consistent design across all frames.
+- Transparent background (alpha channel) for the entire sprite sheet to allow easy extraction and background customization.
+- Grid lines should be clear and visible to delineate each cell boundary.
+
+Portrait Layout (in order, left to right, top to bottom):
+Row 1 (Talking and Neutral):
+  - Cell 1: Talking frame 1 (mouth open, mid-speech, neutral/friendly expression)
+  - Cell 2: Talking frame 2 (mouth in different position, alternate talking pose for animation)
+  - Cell 3: Neutral/Idle (default expression, calm, eyes forward)
+
+Row 2 (Positive Emotions):
+  - Cell 4: Happy/Smiling (bright smile, cheerful eyes, upbeat expression)
+  - Cell 5: Laughing (wide smile or laugh, eyes closed or squinting with joy)
+  - Cell 6: Surprised (eyes wide, mouth open in shock or amazement, raised eyebrows)
+
+Row 3 (Negative Emotions and States):
+  - Cell 7: Angry/Upset (furrowed brow, frown or scowl, intense eyes)
+  - Cell 8: Exhausted (tired eyes, half-closed or drooping, weary expression, slight slouch)
+  - Cell 9: Dizzy/Confused (swirly or unfocused eyes, dazed expression, slightly tilted head)
+
+Optional Alternative for Cell 9:
+  - Cell 9 (alternate): Sneaking (side-glance, shifty eyes, finger to lips or cautious expression)
 
 Overall Style:
 - 1990s retro JRPG character design.
 - 90s fantasy anime style with slightly exaggerated, chibi-influenced proportions (large expressive eyes, slightly oversized heads, simplified but readable anatomy).
 - Clean, bold character silhouettes with clear, easily distinguishable shapes for hair, armor, and accessories.
 - Expressive facial features intended for use as dialogue portraits in a classic RPG (clear eyes, eyebrows, and mouth shapes, readable at small sizes).
-- Consistent stylized design across all characters so that every portrait looks like it belongs to the same game.
+- Consistent stylized design across all portraits so that every portrait looks like it belongs to the same game.
 
 Art Medium:
 - Ink and watercolor illustration look.
 - Flat cel-shaded coloring with minimal gradients.
 - Bold, clean black outlines around major forms and details.
-- Limited but harmonious color palette with strong contrast between character and background.
+- Limited but harmonious color palette with strong contrast between character and transparent background.
 - Subtle vintage paper texture, as if printed in a 1990s game manual or strategy guide.
 
-Composition and Angle:
-- Single character portrait.
+Portrait Framing and Composition:
 - Character turned three-quarters to the left: the head and body are oriented toward the left side of the image, but most of the face is still clearly visible (not a strict side profile).
 - The character's eyes and facial expression are clearly readable and facing generally toward the viewer.
-- Neutral white or very light, plain background with no detailed environment (the focus is entirely on the character).
+- Portrait is centered within each cell, with the character occupying most of the frame.
 - Simple studio-style lighting with soft, even illumination and minimal dramatic shadows.
-- Portrait is centered, with the character occupying most of the frame and cropped consistently according to the rules below.
 
 Framing Rules by Character Size/Age:
 - Adult / large / older humanoid characters:
@@ -47,13 +71,38 @@ Framing Rules by Character Size/Age:
   - Never show the full body and never show below the hip/waist equivalent for that creature.
   - Framing mimics a character portrait rather than a full creature illustration.
 
+Expression and Emotion Guidelines:
+- Each portrait should clearly convey its intended emotion or state through facial features.
+- Maintain consistent character design (hair, face shape, clothing, colors) across all 9 cells.
+- Only facial expressions, eye positions, and mouth shapes should change between cells.
+- Body posture can shift slightly (e.g., slouch for exhausted, tilt for dizzy) but should remain subtle.
+- Eyes are the key to emotion: use eye shape, pupil size, and eyelid position to convey feelings.
+- Mouth shapes should be varied and expressive: open for talking/surprise, curved for happy/angry, etc.
+
 Design Consistency:
-- All portraits should share:
+- All 9 portraits must share:
+  - The same character design (hair, face, clothing, proportions).
   - The same three-quarters-left viewing angle.
-  - The same neutral background style.
-  - The same inking and coloring approach.
-  - Similar scale of the head within the frame (large enough to read expressions clearly).
-- Avoid extreme perspective, dramatic foreshortening, or unusual camera angles.
+  - The same art style and line weight.
+  - The same color palette.
+  - The same level of detail.
+  - The same scale and size within their cells.
+- Lighting should be consistent across all frames - simple, even illumination from above and slightly in front.
+- Avoid dramatic shadows or perspective changes between frames.
+
+Grid and Background:
+- The overall image should be perfectly square.
+- Divide the square into a precise 3x3 grid with 9 equal cells.
+- Transparent background (alpha channel) for all cells - no solid background color.
+- Thin, visible grid lines between cells to clearly separate each portrait (optional but helpful).
+- No environmental elements, props, or scene details - focus entirely on the character portrait.
+
+Technical Requirements:
+- Square aspect ratio (e.g., 1024x1024, 2048x2048, or similar).
+- PNG format with alpha channel transparency support.
+- Each cell is exactly 1/3 of the total width and 1/3 of the total height.
+- High enough resolution that individual portraits remain crisp when extracted from the sheet.
+- Portraits should be easy to extract programmatically by dividing the image into 3 equal columns and 3 equal rows.
 
 Negative Prompts:
---no 3d render, photorealistic, pixel art, low resolution, blurry, sketch, messy lines, painterly brush strokes, modern digital painting look, photobashing, extreme close-up, fisheye, dynamic action pose, full-body shot, busy background, environmental scene.
+--no 3d render, photorealistic, pixel art, low resolution, blurry, sketch, messy lines, painterly brush strokes, modern digital painting look, photobashing, extreme close-up, fisheye, dynamic action pose, full-body shot, busy background, environmental scene, inconsistent character design between portraits, different scales between portraits, solid background, opaque background.
