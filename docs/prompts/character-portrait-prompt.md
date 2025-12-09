@@ -1,7 +1,7 @@
 Character portrait sprite sheet of a [INSERT CHARACTER RACE AND CLASS], [INSERT KEY PHYSICAL FEATURES: e.g. blue hair, scar on cheek, young face], wearing [INSERT CLOTHING/ARMOR DETAILS].
 
 Portrait Sprite Sheet Layout:
-- Square image format with a 3x3 grid (9 cells total, equally divided).
+- 3:4 aspect ratio (width:height) with a 4x3 grid (12 cells total, equally divided into 4 columns and 3 rows).
 - Each cell contains a character portrait with a different expression, emotion, or state.
 - All portraits in the sheet should be the same character, maintaining consistent design across all frames.
 - Transparent background (alpha channel) for the entire sprite sheet to allow easy extraction and background customization.
@@ -12,19 +12,19 @@ Row 1 (Talking and Neutral):
   - Cell 1: Talking frame 1 (mouth open, mid-speech, neutral/friendly expression)
   - Cell 2: Talking frame 2 (mouth in different position, alternate talking pose for animation)
   - Cell 3: Neutral/Idle (default expression, calm, eyes forward)
+  - Cell 4: Thinking/Pondering (hand on chin, thoughtful expression, eyes slightly upward or to the side)
 
 Row 2 (Positive Emotions):
-  - Cell 4: Happy/Smiling (bright smile, cheerful eyes, upbeat expression)
-  - Cell 5: Laughing (wide smile or laugh, eyes closed or squinting with joy)
-  - Cell 6: Surprised (eyes wide, mouth open in shock or amazement, raised eyebrows)
+  - Cell 5: Happy/Smiling (bright smile, cheerful eyes, upbeat expression)
+  - Cell 6: Laughing (wide smile or laugh, eyes closed or squinting with joy)
+  - Cell 7: Surprised (eyes wide, mouth open in shock or amazement, raised eyebrows)
+  - Cell 8: Determined/Confident (firm expression, focused eyes, slight smirk or serious look)
 
 Row 3 (Negative Emotions and States):
-  - Cell 7: Angry/Upset (furrowed brow, frown or scowl, intense eyes)
-  - Cell 8: Exhausted (tired eyes, half-closed or drooping, weary expression, slight slouch)
-  - Cell 9: Dizzy/Confused (swirly or unfocused eyes, dazed expression, slightly tilted head)
-
-Optional Alternative for Cell 9:
-  - Cell 9 (alternate): Sneaking (side-glance, shifty eyes, finger to lips or cautious expression)
+  - Cell 9: Angry/Upset (furrowed brow, frown or scowl, intense eyes)
+  - Cell 10: Sad/Worried (downturned mouth, concerned eyes, possibly tears or drooping features)
+  - Cell 11: Exhausted (tired eyes, half-closed or drooping, weary expression, slight slouch)
+  - Cell 12: Dizzy/Confused (swirly or unfocused eyes, dazed expression, slightly tilted head)
 
 Overall Style:
 - 1990s retro JRPG character design.
@@ -73,14 +73,14 @@ Framing Rules by Character Size/Age:
 
 Expression and Emotion Guidelines:
 - Each portrait should clearly convey its intended emotion or state through facial features.
-- Maintain consistent character design (hair, face shape, clothing, colors) across all 9 cells.
+- Maintain consistent character design (hair, face shape, clothing, colors) across all 12 cells.
 - Only facial expressions, eye positions, and mouth shapes should change between cells.
-- Body posture can shift slightly (e.g., slouch for exhausted, tilt for dizzy) but should remain subtle.
+- Body posture can shift slightly (e.g., slouch for exhausted, tilt for dizzy, hand on chin for thinking) but should remain subtle.
 - Eyes are the key to emotion: use eye shape, pupil size, and eyelid position to convey feelings.
 - Mouth shapes should be varied and expressive: open for talking/surprise, curved for happy/angry, etc.
 
 Design Consistency:
-- All 9 portraits must share:
+- All 12 portraits must share:
   - The same character design (hair, face, clothing, proportions).
   - The same three-quarters-left viewing angle.
   - The same art style and line weight.
@@ -91,18 +91,18 @@ Design Consistency:
 - Avoid dramatic shadows or perspective changes between frames.
 
 Grid and Background:
-- The overall image should be perfectly square.
-- Divide the square into a precise 3x3 grid with 9 equal cells.
+- The overall image should have a 3:4 aspect ratio (width:height).
+- Divide the image into a precise 4x3 grid with 12 equal cells (4 columns, 3 rows).
 - Transparent background (alpha channel) for all cells - no solid background color.
 - Thin, visible grid lines between cells to clearly separate each portrait (optional but helpful).
 - No environmental elements, props, or scene details - focus entirely on the character portrait.
 
 Technical Requirements:
-- Square aspect ratio (e.g., 1024x1024, 2048x2048, or similar).
+- 3:4 aspect ratio (width:height) - e.g., 1536x2048, 768x1024, or similar dimensions maintaining this ratio.
 - PNG format with alpha channel transparency support.
-- Each cell is exactly 1/3 of the total width and 1/3 of the total height.
+- Each cell is exactly 1/4 of the total width and 1/3 of the total height.
 - High enough resolution that individual portraits remain crisp when extracted from the sheet.
-- Portraits should be easy to extract programmatically by dividing the image into 3 equal columns and 3 equal rows.
+- Portraits should be easy to extract programmatically by dividing the image into 4 equal columns and 3 equal rows.
 
 Negative Prompts:
 --no 3d render, photorealistic, pixel art, low resolution, blurry, sketch, messy lines, painterly brush strokes, modern digital painting look, photobashing, extreme close-up, fisheye, dynamic action pose, full-body shot, busy background, environmental scene, inconsistent character design between portraits, different scales between portraits, solid background, opaque background.
