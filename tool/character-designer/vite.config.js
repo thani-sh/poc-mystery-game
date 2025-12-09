@@ -5,11 +5,16 @@ export default defineConfig({
   base: './',
   server: {
     port: 5174,
-    open: true
+    open: true,
+    fs: {
+      // Allow serving files from parent directories
+      allow: ['..', '../..']
+    }
   },
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
     emptyOutDir: true
-  }
+  },
+  assetsInclude: ['**/*.md']
 });

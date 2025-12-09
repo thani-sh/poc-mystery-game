@@ -1,19 +1,14 @@
-import { GoogleGenerativeAI } from '@google/generative-ai';
-
-// Constants
-const API_KEY_STORAGE_KEY = 'google_ai_api_key';
-const PORTRAIT_PROMPT_URL = '../../docs/prompts/character-portrait-prompt.md';
-const SPRITESHEET_PROMPT_URL = '../../docs/prompts/character-spritesheet-prompt.md';
+import portraitPromptRaw from '../../docs/prompts/character-portrait-prompt.md?raw';
+import spritesheetPromptRaw from '../../docs/prompts/character-spritesheet-prompt.md?raw';
 
 // State
-let portraitBasePrompt = '';
-let spritesheetBasePrompt = '';
+let portraitBasePrompt = portraitPromptRaw;
+let spritesheetBasePrompt = spritesheetPromptRaw;
 let currentImageData = null;
 let currentPrompt = '';
 
 // DOM Elements
 const elements = {
-    apiKey: document.getElementById('apiKey'),
     characterType: document.getElementById('characterType'),
     race: document.getElementById('race'),
     class: document.getElementById('class'),
@@ -38,52 +33,9 @@ const elements = {
 
 // Initialize
 async function init() {
-    loadApiKey();
-    await loadBasePrompts();
     attachEventListeners();
-    showStatus('Ready to generate characters!', 'success');
+    showStatus('Ready to generate character prompts!', 'success');
     setTimeout(() => hideStatus(), 3000);
-}
-
-// Load API key from localStorage
-function loadApiKey() {
-    const savedKey = localStorage.getItem(API_KEY_STORAGE_KEY);
-    if (savedKey) {
-        elements.apiKey.value = savedKey;
-    }
-}
-
-// Save API key to localStorage
-function saveApiKey() {
-    const apiKey = elements.apiKey.value.trim();
-    if (apiKey) {
-        localStorage.setItem(API_KEY_STORAGE_KEY, apiKey);
-    }
-}
-
-// Load base prompts from markdown files
-async function loadBasePrompts() {
-    try {
-        const [portraitResponse, spritesheetResponse] = await Promise.all([
-            fetch(PORTRAIT_PROMPT_URL),
-            fetch(SPRITESHEET_PROMPT_URL)
-        ]);
-
-        if (portraitResponse.ok) {
-            portraitBasePrompt = await portraitResponse.text();
-        } else {
-            console.warn('Could not load portrait prompt');
-        }
-
-        if (spritesheetResponse.ok) {
-            spritesheetBasePrompt = await spritesheetResponse.text();
-        } else {
-            console.warn('Could not load spritesheet prompt');
-        }
-    } catch (error) {
-        console.error('Error loading base prompts:', error);
-        showStatus('Warning: Could not load base prompt templates', 'error');
-    }
 }
 
 // Attach event listeners
@@ -92,8 +44,6 @@ function attachEventListeners() {
     elements.clearBtn.addEventListener('click', handleClear);
     elements.downloadBtn.addEventListener('click', handleDownload);
     elements.copyPromptBtn.addEventListener('click', handleCopyPrompt);
-    elements.apiKey.addEventListener('change', saveApiKey);
-    elements.apiKey.addEventListener('blur', saveApiKey);
 }
 
 // Build the complete prompt
@@ -188,14 +138,6 @@ function hideStatus() {
 
 // Handle generate button click
 async function handleGenerate() {
-    const apiKey = elements.apiKey.value.trim();
-    
-    if (!apiKey) {
-        showStatus('Please enter your Google AI API key', 'error');
-        elements.apiKey.focus();
-        return;
-    }
-
     const prompt = buildPrompt();
     
     if (!prompt) {
@@ -209,22 +151,22 @@ async function handleGenerate() {
     try {
         elements.generateBtn.disabled = true;
         elements.generateBtn.innerHTML = '<span class="loading-spinner"></span> Generating...';
-        showStatus('Generating character image... This may take a moment.', 'loading');
+        showStatus('Generating character prompt...', 'loading');
 
-        const genAI = new GoogleGenerativeAI(apiKey);
-        const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
-
-        // Note: As of the current version, Gemini API doesn't support direct image generation
-        // through the JavaScript SDK. We'll simulate the process and show instructions.
+        // Note: This tool generates prompts for use with external image generation services.
+        // Direct image generation would require integration with services like:
+        // - Google Imagen API (requires separate API access)
+        // - OpenAI DALL-E API
+        // - Stability AI API
+        // - Midjourney (via Discord bot)
         
-        showStatus('Note: Image generation requires using Imagen API or another image generation service. This tool shows the prompt that should be used.', 'warning');
+        showStatus('Prompt generated successfully! Copy it and use with an image generation service.', 'success');
         
         // Show the prompt in the display area
         elements.previewContainer.style.display = 'none';
         elements.imageContainer.classList.remove('hidden');
         
-        // For now, we'll show a placeholder indicating that the user should use the prompt
-        // with an actual image generation service
+        // Create a visual placeholder to indicate the prompt is ready
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d');
         
