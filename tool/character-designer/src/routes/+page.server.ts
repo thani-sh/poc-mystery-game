@@ -19,7 +19,7 @@ async function loadPrompts() {
 
 // Constants for character generation
 const DEFAULT_CHARACTER_CONTEXT = 'a human character from the UK';
-const DEFAULT_CLOTHING = 'everyday casual clothes suitable for adventure';
+const DEFAULT_CLOTHING = 'everyday casual clothes from 1980s';
 const DEFAULT_FEATURES = 'typical features for their age';
 
 function buildPrompt(formData: FormData, basePrompt: string) {
