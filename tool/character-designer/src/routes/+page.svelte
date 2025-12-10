@@ -1,18 +1,30 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import { Palette, Download, Copy, Sparkles, Trash2 } from 'lucide-svelte';
+	import { Palette, Download, Copy, Sparkles, FileText, Image as ImageIcon, RefreshCw } from 'lucide-svelte';
 	
 	let { form } = $props();
-	let isGenerating = $state(false);
+	let isGeneratingPrompt = $state(false);
+	let isGeneratingImage = $state(false);
+	let baseCharacterValue = $state('');
+	let customDetailsValue = $state('');
+	let editablePrompt = $state('');
 	
 	const CUSTOM_DETAILS_PLACEHOLDER = `Add specific details about appearance, clothing, age, personality traits, etc.
 
 Example: A 12-year-old girl with short curly brown hair, freckles, wearing a school uniform with a detective's notebook in her pocket. Adventurous and curious expression.`;
 	
+	// Initialize editable prompt when form data changes
+	// Only update if we have a new prompt and either no existing prompt or user generated a new one
+	$effect(() => {
+		if (form?.generatedPrompt && form?.generatedPrompt !== editablePrompt) {
+			editablePrompt = form.generatedPrompt;
+		}
+	});
+	
 	async function copyPrompt() {
-		if (!form?.prompt) return;
+		if (!editablePrompt && !form?.prompt) return;
 		try {
-			await navigator.clipboard.writeText(form.prompt);
+			await navigator.clipboard.writeText(editablePrompt || form?.prompt || '');
 		} catch (error) {
 			console.error('Failed to copy prompt:', error);
 			alert('Failed to copy prompt to clipboard');
@@ -25,57 +37,105 @@ Example: A 12-year-old girl with short curly brown hair, freckles, wearing a sch
 </svelte:head>
 
 <div class="container">
-	<header>
-		<div class="header-icon">
-			<Palette size={48} />
-		</div>
-		<h1>Character Designer</h1>
-		<p>Create characters for POC Mystery Game using Google AI</p>
-	</header>
-
 	<div class="main-content">
 		<aside class="sidebar">
-			<form method="POST" use:enhance={() => {
-				isGenerating = true;
-				return async ({ update }) => {
-					await update();
-					isGenerating = false;
-				};
-			}}>
-				<h2>Character Details</h2>
+			<header class="sidebar-header">
+				<div class="header-icon">
+					<Palette size={32} />
+				</div>
+				<h1>Character Designer</h1>
+				<p>Create characters for POC Mystery Game</p>
+			</header>
+
+			<div class="form-section">
+				<h2>Step 1: Character Details</h2>
 
 				<div class="form-group">
 					<label for="baseCharacter">Base character on:</label>
 					<input 
 						type="text" 
 						id="baseCharacter" 
-						name="baseCharacter" 
+						bind:value={baseCharacterValue}
 						placeholder="e.g., George from Famous Five, Julian, Anne, Fatty from Five Find-Outers" 
 					/>
-					<small>Reference a character from Enid Blyton's Mystery series or other popular stories</small>
+					<small>Reference a character from Enid Blyton's Mystery series</small>
 				</div>
 
 				<div class="form-group">
 					<label for="customDetails">Custom details:</label>
 					<textarea 
 						id="customDetails" 
-						name="customDetails" 
+						bind:value={customDetailsValue}
 						rows="6" 
 						placeholder={CUSTOM_DETAILS_PLACEHOLDER}
 					></textarea>
-					<small>Describe physical features, clothing, age, and any other details</small>
+					<small>Describe physical features, clothing, age, and details</small>
 				</div>
 
-				<div class="button-group">
-					<button type="submit" class="primary-btn" disabled={isGenerating}>
-						{#if isGenerating}
-							<span class="loading-spinner"></span> Generating...
-						{:else}
-							<Sparkles size={20} /> Generate Character
-						{/if}
-					</button>
+				<form method="POST" action="?/generatePrompt" use:enhance={() => {
+					isGeneratingPrompt = true;
+					return async ({ update }) => {
+						await update();
+						isGeneratingPrompt = false;
+					};
+				}}>
+					<input type="hidden" name="baseCharacter" value={baseCharacterValue} />
+					<input type="hidden" name="customDetails" value={customDetailsValue} />
+					<div class="button-group">
+						<button type="submit" class="primary-btn" disabled={isGeneratingPrompt}>
+							{#if isGeneratingPrompt}
+								<span class="loading-spinner"></span> Generating...
+							{:else}
+								<FileText size={20} /> Generate Prompt
+							{/if}
+						</button>
+					</div>
+				</form>
+			</div>
+
+			{#if form?.generatedPrompt || editablePrompt}
+				<div class="form-section">
+					<h2>Step 2: Review & Edit Prompt</h2>
+					<div class="form-group">
+						<label for="editablePrompt">Generated Prompt:</label>
+						<textarea 
+							id="editablePrompt" 
+							bind:value={editablePrompt}
+							rows="12" 
+							class="prompt-textarea"
+						></textarea>
+						<small>Edit the prompt as needed before generating images</small>
+					</div>
+
+					<form method="POST" action="?/generateImages" use:enhance={() => {
+						isGeneratingImage = true;
+						return async ({ update }) => {
+							await update();
+							isGeneratingImage = false;
+						};
+					}}>
+						<input type="hidden" name="prompt" value={editablePrompt} />
+						<input type="hidden" name="baseCharacter" value={baseCharacterValue} />
+						<input type="hidden" name="customDetails" value={customDetailsValue} />
+						<div class="button-group">
+							<button type="submit" class="primary-btn" disabled={isGeneratingImage}>
+								{#if isGeneratingImage}
+									<span class="loading-spinner"></span> Generating...
+								{:else}
+									<ImageIcon size={20} /> Generate Images
+								{/if}
+							</button>
+							<button 
+								type="button" 
+								class="secondary-btn"
+								onclick={copyPrompt}
+							>
+								<Copy size={16} /> Copy Prompt
+							</button>
+						</div>
+					</form>
 				</div>
-			</form>
+			{/if}
 		</aside>
 
 		<main class="preview-area">
@@ -88,6 +148,9 @@ Example: A 12-year-old girl with short curly brown hair, freckles, wearing a sch
 					Character generated successfully!
 					{#if form.warning}
 						<div class="warning-text">{form.warning}</div>
+					{/if}
+					{#if form.savedPath}
+						<div class="saved-path">Saved to: {form.savedPath}</div>
 					{/if}
 				</div>
 			{/if}
@@ -104,20 +167,6 @@ Example: A 12-year-old girl with short curly brown hair, freckles, wearing a sch
 							</div>
 						</div>
 					{/each}
-
-					{#if form.prompt}
-						<div class="prompt-display">
-							<h3>Generated Prompt:</h3>
-							<pre>{form.prompt}</pre>
-							<button 
-								type="button" 
-								class="action-btn"
-								onclick={copyPrompt}
-							>
-								<Copy size={16} /> Copy Prompt
-							</button>
-						</div>
-					{/if}
 				</div>
 			{:else}
 				<div class="preview-container">
@@ -126,7 +175,13 @@ Example: A 12-year-old girl with short curly brown hair, freckles, wearing a sch
 							<Palette size={80} strokeWidth={1.5} />
 						</div>
 						<h3>No Image Generated Yet</h3>
-						<p>Fill in the character details and click "Generate Character" to see the results</p>
+						<p>Follow the steps on the left:</p>
+						<ol class="steps-list">
+							<li>Fill in character details</li>
+							<li>Generate and review the prompt</li>
+							<li>Edit the prompt if needed</li>
+							<li>Generate images</li>
+						</ol>
 					</div>
 				</div>
 			{/if}
@@ -155,35 +210,41 @@ Example: A 12-year-old girl with short curly brown hair, freckles, wearing a sch
 		padding: 20px;
 	}
 
-	header {
+	.sidebar-header {
 		text-align: center;
-		padding: 30px 20px;
-		background: rgba(255, 255, 255, 0.05);
+		padding: 20px;
+		background: rgba(255, 255, 255, 0.08);
 		border-radius: 12px;
-		margin-bottom: 30px;
+		margin-bottom: 20px;
 		backdrop-filter: blur(10px);
-		animation: fadeInDown 0.6s ease-out;
 	}
 
-	.header-icon {
+	.sidebar-header .header-icon {
 		display: flex;
 		justify-content: center;
-		margin-bottom: 15px;
+		margin-bottom: 10px;
 		color: #50c878;
 	}
 
-	header h1 {
-		font-size: 2.5em;
-		margin-bottom: 10px;
+	.sidebar-header h1 {
+		font-size: 1.5em;
+		margin-bottom: 5px;
 		background: linear-gradient(135deg, #4a90e2, #50c878);
 		-webkit-background-clip: text;
 		-webkit-text-fill-color: transparent;
 		background-clip: text;
 	}
 
-	header p {
+	.sidebar-header p {
 		color: rgba(255, 255, 255, 0.7);
-		font-size: 1.1em;
+		font-size: 0.9em;
+	}
+
+	.saved-path {
+		margin-top: 10px;
+		font-size: 0.85em;
+		color: rgba(255, 255, 255, 0.7);
+		font-family: monospace;
 	}
 
 	.warning-text {
@@ -194,7 +255,7 @@ Example: A 12-year-old girl with short curly brown hair, freckles, wearing a sch
 
 	.main-content {
 		display: grid;
-		grid-template-columns: 400px 1fr;
+		grid-template-columns: 450px 1fr;
 		gap: 30px;
 		animation: fadeIn 0.8s ease-out;
 	}
@@ -208,17 +269,26 @@ Example: A 12-year-old girl with short curly brown hair, freckles, wearing a sch
 	.sidebar {
 		background: rgba(255, 255, 255, 0.05);
 		border-radius: 12px;
-		padding: 25px;
+		padding: 0;
 		backdrop-filter: blur(10px);
 		border: 1px solid rgba(255, 255, 255, 0.1);
-		max-height: calc(100vh - 200px);
+		max-height: calc(100vh - 40px);
 		overflow-y: auto;
 	}
 
-	.sidebar h2 {
-		margin-bottom: 25px;
+	.form-section {
+		padding: 25px;
+		border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+	}
+
+	.form-section:last-child {
+		border-bottom: none;
+	}
+
+	.form-section h2 {
+		margin-bottom: 20px;
 		color: #50c878;
-		font-size: 1.5em;
+		font-size: 1.2em;
 	}
 
 	.form-group {
@@ -257,6 +327,12 @@ Example: A 12-year-old girl with short curly brown hair, freckles, wearing a sch
 		resize: vertical;
 	}
 
+	.prompt-textarea {
+		font-family: 'Courier New', monospace;
+		font-size: 13px;
+		line-height: 1.6;
+	}
+
 	.form-group small {
 		display: block;
 		margin-top: 5px;
@@ -265,10 +341,14 @@ Example: A 12-year-old girl with short curly brown hair, freckles, wearing a sch
 	}
 
 	.button-group {
-		margin-top: 25px;
+		margin-top: 20px;
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
 	}
 
 	.primary-btn,
+	.secondary-btn,
 	.action-btn {
 		padding: 12px 24px;
 		border: none;
@@ -298,6 +378,17 @@ Example: A 12-year-old girl with short curly brown hair, freckles, wearing a sch
 	.primary-btn:disabled {
 		opacity: 0.5;
 		cursor: not-allowed;
+	}
+
+	.secondary-btn {
+		width: 100%;
+		background: rgba(80, 200, 120, 0.2);
+		border: 1px solid #50c878;
+	}
+
+	.secondary-btn:hover {
+		background: rgba(80, 200, 120, 0.3);
+		transform: translateY(-2px);
 	}
 
 	.action-btn {
@@ -367,6 +458,14 @@ Example: A 12-year-old girl with short curly brown hair, freckles, wearing a sch
 
 	.placeholder p {
 		color: rgba(255, 255, 255, 0.5);
+		margin-bottom: 15px;
+	}
+
+	.steps-list {
+		text-align: left;
+		display: inline-block;
+		color: rgba(255, 255, 255, 0.6);
+		line-height: 2;
 	}
 
 	.image-container {
@@ -391,30 +490,6 @@ Example: A 12-year-old girl with short curly brown hair, freckles, wearing a sch
 		flex-wrap: wrap;
 		gap: 10px;
 		margin-top: 15px;
-	}
-
-	.prompt-display {
-		background: rgba(0, 0, 0, 0.3);
-		padding: 20px;
-		border-radius: 8px;
-		border: 1px solid rgba(255, 255, 255, 0.1);
-		margin-top: 20px;
-	}
-
-	.prompt-display h3 {
-		margin-bottom: 15px;
-		color: #50c878;
-	}
-
-	.prompt-display pre {
-		max-height: 300px;
-		overflow-y: auto;
-		font-family: 'Courier New', monospace;
-		font-size: 13px;
-		line-height: 1.8;
-		white-space: pre-wrap;
-		word-wrap: break-word;
-		margin-bottom: 15px;
 	}
 
 	.loading-spinner {

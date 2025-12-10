@@ -6,31 +6,32 @@ Sprite Sheet Layout:
 - All sprites in the sheet should be the same character, maintaining consistent design across all frames.
 - Transparent background (alpha channel) for the entire sprite sheet to allow easy extraction and compositing.
 - Grid lines should be clear and visible to delineate each cell boundary.
+- **CRITICAL: STRICTLY follow the exact cell positioning described below. Each frame MUST be in the correct cell. Empty cells or incorrect variants will make the sprite sheet unusable with the game engine.**
 
 Frame Layout (in order, left to right, top to bottom):
-Row 1 (Movement - Horizontal):
-  - Cell 1: Move left frame 1 (mid-step, left foot forward)
-  - Cell 2: Move left frame 2 (mid-step, right foot forward)
-  - Cell 3: Move right frame 1 (mid-step, right foot forward)
-  - Cell 4: Move right frame 2 (mid-step, left foot forward)
+Row 1 (Moving Left - 4 Frame Animation):
+  - Cell 1: Move left frame 1 (left foot forward, right foot back, body facing left, arms swinging naturally)
+  - Cell 2: Move left frame 2 (both feet together mid-stride, transitional pose, body facing left)
+  - Cell 3: Move left frame 3 (right foot forward, left foot back, body facing left, arms swinging opposite to frame 1)
+  - Cell 4: Move left frame 4 (both feet together mid-stride, transitional pose returning to frame 1, body facing left)
 
-Row 2 (Movement - Vertical):
-  - Cell 5: Move up frame 1 (mid-step, walking away from viewer)
-  - Cell 6: Move up frame 2 (alternate step, walking away from viewer)
-  - Cell 7: Move down frame 1 (mid-step, walking toward viewer)
-  - Cell 8: Move down frame 2 (alternate step, walking toward viewer)
+Row 2 (Moving Up - 4 Frame Animation, Back View):
+  - Cell 5: Move up frame 1 (walking away from viewer, we see the character's back, left foot forward, right foot back)
+  - Cell 6: Move up frame 2 (walking away from viewer, both feet together mid-stride, transitional pose)
+  - Cell 7: Move up frame 3 (walking away from viewer, we see the character's back, right foot forward, left foot back)
+  - Cell 8: Move up frame 4 (walking away from viewer, both feet together mid-stride, transitional pose returning to frame 1)
 
-Row 3 (Idle Animations):
-  - Cell 9: Idle frame 1 (standing, facing forward, neutral stance)
-  - Cell 10: Idle frame 2 (subtle breathing animation, facing forward)
-  - Cell 11: Idle frame 3 (slight weight shift, facing forward)
-  - Cell 12: Idle frame 4 (return to neutral, facing forward)
+Row 3 (Moving Down - 4 Frame Animation, Front View):
+  - Cell 9: Move down frame 1 (walking toward viewer, we see their front fully - NOT sides, left foot forward, right foot back)
+  - Cell 10: Move down frame 2 (walking toward viewer, front view, both feet together mid-stride, transitional pose)
+  - Cell 11: Move down frame 3 (walking toward viewer, we see their front fully - NOT sides, right foot forward, left foot back)
+  - Cell 12: Move down frame 4 (walking toward viewer, front view, both feet together mid-stride, transitional pose returning to frame 1)
 
-Row 4 (Action Frames):
-  - Cell 13: Inspect frame (character leaning forward, examining something, hand near face or reaching down)
-  - Cell 14: Jump frame (character mid-jump, feet off ground, arms up or out for balance)
-  - Cell 15: Custom frame 1 (reserve for character-specific action or emote)
-  - Cell 16: Custom frame 2 (reserve for character-specific action or emote)
+Row 4 (Special Actions):
+  - Cell 13: Search action (character leaning forward, examining ground or object, hand extended or near face, curious focused pose)
+  - Cell 14: Jump action (character mid-jump, both feet clearly off ground, arms up or out for balance, body slightly arched)
+  - Cell 15: Special action 1 (character-specific action: could be waving, pointing, gesturing, or using an item)
+  - Cell 16: Special action 2 (character-specific action: could be celebrating, defending, or another unique pose)
 
 Overall Style:
 - 1990s retro JRPG character design.
@@ -49,29 +50,29 @@ Art Medium:
 Sprite Framing and Size:
 - Full-body character sprites showing from head to feet.
 - Character should occupy approximately 70-80% of each cell's height to ensure readability.
-- Consistent scale across all 16 frames - the character should be the same size in every cell.
+- **CRITICAL: The character MUST be exactly the same size across all 16 cells.** No variation in scale is acceptable - this is essential for game animation.
 - Leave small margins around each sprite within its cell to prevent sprites from touching cell borders.
 - Character should be centered within each cell.
+- Maintain identical proportions (head size, body size, limb length) across all frames.
 
 Movement Animation Details:
 - Walking frames should show clear, exaggerated leg movement typical of 90s JRPGs.
 - Arms should swing naturally opposite to the legs (left arm forward when right leg is forward).
 - Body should have slight bounce or bob during walk cycles.
-- Directional frames (left, right, up, down) should clearly indicate the direction of movement through body orientation and head position.
-- For "move up" frames, show the character's back or three-quarter back view, walking away from the viewer.
-- For "move down" frames, show the character facing toward the viewer, walking forward.
-- For "move left" and "move right" frames, show the character in profile or three-quarter view.
+- **ANIMATION CONSISTENCY IS CRITICAL**: If a character is holding an object, item, or accessory in one frame of an animation sequence, they MUST hold it in ALL frames of that sequence. Objects cannot appear or disappear between frames.
+- All clothing, accessories, and held items must remain consistent across all frames in each row.
+- For Row 1 (move left): Show the character in profile or three-quarter view, body and head facing left.
+- For Row 2 (move up): Show the character's back view walking away from the viewer. We should see their back, not their face.
+- For Row 3 (move down): Show the character facing directly toward the viewer, walking forward. We should see their front fully, NOT a side profile.
+- Each animation row (Rows 1, 2, and 3) contains 4 frames that should loop smoothly when played in sequence.
 
-Idle Animation Details:
-- Idle frames should show subtle, gentle movements: breathing, weight shifts, small adjustments.
-- All idle frames should have the character facing forward toward the viewer.
-- Keep idle animations subtle enough that they loop smoothly.
-- Maintain the same foot position across idle frames - only torso, head, and arms should move slightly.
 
-Action Frame Details:
-- Inspect frame: Character bent forward slightly, one hand raised near face (curious expression) or reaching down (examining ground), clear pose showing investigation or curiosity.
-- Jump frame: Character airborne with feet clearly off the ground, arms positioned for balance, body slightly arched, clothing and hair showing motion.
-- Custom frames: Can be used for character-specific actions such as: casting a spell gesture, using an item, emoting (surprise, laugh), or any other action relevant to the character's class or personality.
+
+Action Frame Details (Row 4):
+- Search action (Cell 13): Character bent forward slightly, one hand raised near face (curious expression) or reaching down (examining ground), clear pose showing investigation or curiosity.
+- Jump action (Cell 14): Character airborne with both feet clearly off the ground, arms positioned for balance, body slightly arched, clothing and hair showing motion.
+- Special action 1 (Cell 15): Can be used for character-specific actions such as: waving, pointing, gesturing, using an item, or any action relevant to the character's personality.
+- Special action 2 (Cell 16): Can be used for character-specific actions such as: celebrating, defending, emoting (surprise, laugh), or another unique pose relevant to the character.
 
 Design Consistency:
 - All 16 sprites must share:
