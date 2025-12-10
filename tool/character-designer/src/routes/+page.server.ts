@@ -69,10 +69,10 @@ function buildPrompt(formData: FormData, basePrompt: string) {
 // Generate a short description for directory naming
 function generateShortDescription(baseCharacter: string, customDetails: string): string {
 	const text = baseCharacter || customDetails || 'character';
-	// Take first few words and clean them
+	// Take first few words and clean them, keeping alphanumeric, hyphens, and underscores
 	const words = text
 		.toLowerCase()
-		.replace(/[^a-z0-9\s]/g, '')
+		.replace(/[^a-z0-9\s_-]/g, '')
 		.split(/\s+/)
 		.filter(w => w.length > 0)
 		.slice(0, 3);
@@ -110,9 +110,11 @@ async function saveGenerationData(
 	await writeFile(join(savePath, 'prompt.txt'), prompt);
 
 	// Save images
+	const imageTypes = ['portrait', 'spritesheet'];
 	for (let i = 0; i < images.length; i++) {
 		const image = images[i];
-		const filename = i === 0 ? `portrait.${image.extension}` : `spritesheet.${image.extension}`;
+		const imageType = imageTypes[i] || `image_${i}`;
+		const filename = `${imageType}.${image.extension}`;
 		const buffer = Buffer.from(image.base64Data, 'base64');
 		await writeFile(join(savePath, filename), buffer);
 	}
@@ -238,10 +240,21 @@ export const actions = {
 		}
 
 		try {
-			// Split the combined prompt
-			const prompts = customPrompt.split('\n\nSprite Sheet:\n');
-			const portraitPromptText = prompts[0]?.replace('Portrait:\n', '') || customPrompt;
-			const spritesheetPromptText = prompts[1] || '';
+			// Split the combined prompt more robustly
+			const spritesheetMarker = '\n\nSprite Sheet:\n';
+			const hasSpritesheetPrompt = customPrompt.includes(spritesheetMarker);
+			
+			let portraitPromptText = customPrompt;
+			let spritesheetPromptText = '';
+			
+			if (hasSpritesheetPrompt) {
+				const parts = customPrompt.split(spritesheetMarker);
+				portraitPromptText = parts[0]?.replace(/^Portrait:\s*/i, '') || customPrompt;
+				spritesheetPromptText = parts.slice(1).join(spritesheetMarker); // Rejoin in case the marker appears multiple times
+			} else {
+				// No sprite sheet section, just use the whole prompt as portrait
+				portraitPromptText = portraitPromptText.replace(/^Portrait:\s*/i, '');
+			}
 
 			// Step 1: Generate portrait sprite sheet first
 			const portraitResult = await generateImage(portraitPromptText);

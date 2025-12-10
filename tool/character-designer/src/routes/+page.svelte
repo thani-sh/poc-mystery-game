@@ -14,8 +14,9 @@
 Example: A 12-year-old girl with short curly brown hair, freckles, wearing a school uniform with a detective's notebook in her pocket. Adventurous and curious expression.`;
 	
 	// Initialize editable prompt when form data changes
+	// Only update if we have a new prompt and either no existing prompt or user generated a new one
 	$effect(() => {
-		if (form?.generatedPrompt && !editablePrompt) {
+		if (form?.generatedPrompt && form?.generatedPrompt !== editablePrompt) {
 			editablePrompt = form.generatedPrompt;
 		}
 	});
