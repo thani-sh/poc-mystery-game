@@ -299,10 +299,5 @@ export const actions = {
 				error: error.message || 'Failed to generate character. Please check your API key and try again.' 
 			});
 		}
-	},
-
-	// Keep the old default action for backwards compatibility, but deprecate it
-	default: async ({ request }) => {
-		return fail(400, { error: 'Please use the new 2-step workflow: Generate Prompt first, then Generate Images.' });
 	}
 };
