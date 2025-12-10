@@ -1,4 +1,4 @@
-Game sprite sheet of a [INSERT CHARACTER RACE AND CLASS], [INSERT KEY PHYSICAL FEATURES: e.g. blue hair, scar on cheek, young face], wearing [INSERT CLOTHING/ARMOR DETAILS].
+Game sprite sheet of a [INSERT CHARACTER DESCRIPTION], a human character inspired by Enid Blyton's Mystery series, set in the UK. [INSERT KEY PHYSICAL FEATURES: e.g. freckles, short hair, young face], wearing [INSERT CLOTHING DETAILS: e.g. school uniform, casual everyday clothes, adventure-ready outfit].
 
 Sprite Sheet Layout:
 - Square image format with a 4x4 grid (16 cells total, equally divided).

@@ -1,4 +1,4 @@
-Character portrait sprite sheet of a [INSERT CHARACTER RACE AND CLASS], [INSERT KEY PHYSICAL FEATURES: e.g. blue hair, scar on cheek, young face], wearing [INSERT CLOTHING/ARMOR DETAILS].
+Character portrait sprite sheet of a [INSERT CHARACTER DESCRIPTION], a human character inspired by Enid Blyton's Mystery series, set in the UK. [INSERT KEY PHYSICAL FEATURES: e.g. freckles, short hair, young face], wearing [INSERT CLOTHING DETAILS: e.g. school uniform, casual everyday clothes, adventure-ready outfit].
 
 Portrait Sprite Sheet Layout:
 - 3:4 aspect ratio (width:height) with a 4x3 grid (12 cells total, equally divided into 4 columns and 3 rows).
@@ -46,30 +46,18 @@ Portrait Framing and Composition:
 - Portrait is centered within each cell, with the character occupying most of the frame.
 - Simple studio-style lighting with soft, even illumination and minimal dramatic shadows.
 
-Framing Rules by Character Size/Age:
-- Adult / large / older humanoid characters:
+Framing Rules by Character Age:
+- Adult characters:
   - Tight portrait framing.
   - Only the head and a small portion of the shoulders visible.
   - No chest, torso, or body visible below the upper chest.
   - Feels like a classic dialogue box portrait: close-up on the face with just enough shoulder to define posture.
 
-- Child / small / younger humanoid characters:
+- Child / younger characters:
   - Slightly looser framing to show more of the body.
   - Head down to mid-torso or waist may be visible.
   - Never show below the hips.
   - Composition still focused on the face; body pose is secondary.
-
-- Large animals or large non-humanoid creatures (e.g. dragons, big beasts, giant monsters):
-  - Portrait-style framing focused on the head and neck area.
-  - Optionally include a small hint of shoulders or upper body mass behind the head.
-  - Do not show full body; no limbs or tail unless they are cropped very close to the head.
-  - The face and eyes must remain the main focal point.
-
-- Small animals, familiars, mascots, or small non-humanoid creatures:
-  - Head and upper body visible.
-  - From head down to mid-torso or the front-leg/forelimb area.
-  - Never show the full body and never show below the hip/waist equivalent for that creature.
-  - Framing mimics a character portrait rather than a full creature illustration.
 
 Expression and Emotion Guidelines:
 - Each portrait should clearly convey its intended emotion or state through facial features.

@@ -18,70 +18,44 @@ async function loadPrompts() {
 }
 
 function buildPrompt(formData: FormData, basePrompt: string) {
-	const race = (formData.get('race') as string)?.trim();
-	const characterClass = (formData.get('class') as string)?.trim();
-	const gender = formData.get('gender') as string;
-	const age = (formData.get('age') as string)?.trim();
-	const hairColor = (formData.get('hairColor') as string)?.trim();
-	const eyeColor = (formData.get('eyeColor') as string)?.trim();
-	const skinTone = (formData.get('skinTone') as string)?.trim();
-	const physicalFeatures = (formData.get('physicalFeatures') as string)?.trim();
-	const clothing = (formData.get('clothing') as string)?.trim();
-	const additionalDetails = (formData.get('additionalDetails') as string)?.trim();
+	const baseCharacter = (formData.get('baseCharacter') as string)?.trim();
+	const customDetails = (formData.get('customDetails') as string)?.trim();
 
 	// Build character description
-	const parts = [];
-
-	// Race and class
-	if (race || characterClass) {
-		parts.push(`${race || 'character'}${characterClass ? ' ' + characterClass : ''}`);
+	let characterDesc = '';
+	
+	// Start with base character reference if provided
+	if (baseCharacter) {
+		characterDesc = `${baseCharacter}, a human character from the UK`;
+	} else {
+		characterDesc = 'a human character from the UK';
 	}
 
-	// Gender and age
-	if (gender || age) {
-		const genderAge = [gender, age].filter(Boolean).join(', ');
-		if (genderAge) parts.push(genderAge);
-	}
-
-	// Physical features with colors
-	const features = [];
-	if (hairColor) features.push(`${hairColor} hair`);
-	if (eyeColor) features.push(`${eyeColor} eyes`);
-	if (skinTone) features.push(`${skinTone} skin`);
-	if (physicalFeatures) features.push(physicalFeatures);
-
-	if (features.length > 0) {
-		parts.push(features.join(', '));
-	}
-
-	// Build the character description line
-	let characterDesc = parts.join(', ');
-
-	// Additional details
-	if (additionalDetails) {
-		characterDesc += '. ' + additionalDetails;
+	// Add custom details if provided
+	if (customDetails) {
+		characterDesc += '. ' + customDetails;
 	}
 
 	// Replace placeholders in base prompt
 	let finalPrompt = basePrompt;
 
 	// Replace the INSERT markers with our character description
-	if (characterDesc) {
-		finalPrompt = finalPrompt.replace(
-			/\[INSERT CHARACTER RACE AND CLASS\]/g,
-			race || characterClass || 'character'
-		);
+	finalPrompt = finalPrompt.replace(
+		/\[INSERT CHARACTER DESCRIPTION\]/g,
+		characterDesc
+	);
 
-		finalPrompt = finalPrompt.replace(
-			/\[INSERT KEY PHYSICAL FEATURES:[^\]]*\]/g,
-			features.join(', ') || 'distinctive features'
-		);
+	// Extract features and clothing from custom details for other placeholders
+	// Default to simple descriptions if not specified
+	finalPrompt = finalPrompt.replace(
+		/\[INSERT KEY PHYSICAL FEATURES:[^\]]*\]/g,
+		customDetails || 'typical features for their age'
+	);
 
-		finalPrompt = finalPrompt.replace(
-			/\[INSERT CLOTHING\/ARMOR DETAILS\]/g,
-			clothing || 'appropriate attire'
-		);
-	}
+	finalPrompt = finalPrompt.replace(
+		/\[INSERT CLOTHING DETAILS:[^\]]*\]/g,
+		'everyday casual clothes suitable for adventure'
+	);
 
 	return finalPrompt;
 }
