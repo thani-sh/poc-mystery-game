@@ -87,7 +87,7 @@ function buildPrompt(formData: FormData, basePrompt: string) {
 	return finalPrompt;
 }
 
-async function generateImage(prompt: string, referenceImage?: string) {
+async function generateImage(prompt: string, referenceImage?: { base64Data: string; mimeType: string }) {
 	if (!GEMINI_API_KEY) {
 		throw new Error('GEMINI_API_KEY environment variable is not set');
 	}
@@ -128,8 +128,8 @@ async function generateImage(prompt: string, referenceImage?: string) {
 	if (referenceImage) {
 		contents[0].parts.unshift({
 			inlineData: {
-				mimeType: 'image/png',
-				data: referenceImage,
+				mimeType: referenceImage.mimeType,
+				data: referenceImage.base64Data,
 			},
 		});
 		contents[0].parts[1].text = `Using this character portrait as reference, ${prompt}`;
@@ -142,7 +142,7 @@ async function generateImage(prompt: string, referenceImage?: string) {
 		contents,
 	});
 
-	const images: Array<{ dataUrl: string; extension: string; base64Data: string }> = [];
+	const images: Array<{ dataUrl: string; extension: string; base64Data: string; mimeType: string }> = [];
 	let textResponse = '';
 
 	for await (const chunk of response) {
@@ -152,10 +152,11 @@ async function generateImage(prompt: string, referenceImage?: string) {
 
 		if (chunk.candidates?.[0]?.content?.parts?.[0]?.inlineData) {
 			const inlineData = chunk.candidates[0].content.parts[0].inlineData;
-			const fileExtension = mime.getExtension(inlineData.mimeType || '') || 'png';
+			const mimeType = inlineData.mimeType || 'image/png';
+			const fileExtension = mime.getExtension(mimeType) || 'png';
 			const base64Data = inlineData.data || '';
-			const dataUrl = `data:${inlineData.mimeType};base64,${base64Data}`;
-			images.push({ dataUrl, extension: fileExtension, base64Data });
+			const dataUrl = `data:${mimeType};base64,${base64Data}`;
+			images.push({ dataUrl, extension: fileExtension, base64Data, mimeType });
 		} else if (chunk.text) {
 			textResponse += chunk.text;
 		}
@@ -192,7 +193,10 @@ export const actions = {
 				const spritesheetPromptText = buildPrompt(formData, spritesheetPrompt);
 				const spritesheetResult = await generateImage(
 					spritesheetPromptText, 
-					portraitResult.images[0].base64Data
+					{
+						base64Data: portraitResult.images[0].base64Data,
+						mimeType: portraitResult.images[0].mimeType
+					}
 				);
 
 				if (spritesheetResult.images.length === 0) {
