@@ -45,16 +45,16 @@ function buildPrompt(formData: FormData, basePrompt: string) {
 	let finalPrompt = basePrompt;
 
 	// Replace the INSERT markers with our character description
+	// For the simplified form, all custom details go into CHARACTER DESCRIPTION
+	// The other placeholders use generic defaults since we can't parse details
 	finalPrompt = finalPrompt.replace(
 		/\[INSERT CHARACTER DESCRIPTION\]/g,
 		characterDesc
 	);
 
-	// Extract features and clothing from custom details for other placeholders
-	// Default to simple descriptions if not specified
 	finalPrompt = finalPrompt.replace(
 		/\[INSERT KEY PHYSICAL FEATURES:[^\]]*\]/g,
-		customDetails || DEFAULT_FEATURES
+		DEFAULT_FEATURES
 	);
 
 	finalPrompt = finalPrompt.replace(
