@@ -1,5 +1,5 @@
 import { fail } from '@sveltejs/kit';
-import { readFile } from 'fs/promises';
+import { readFile, mkdir, writeFile } from 'fs/promises';
 import { join } from 'path';
 import { GoogleGenAI } from '@google/genai';
 import mime from 'mime';
@@ -10,6 +10,7 @@ const projectRoot = process.cwd().includes('tool/character-designer')
 	? join(process.cwd(), '../..')
 	: process.cwd();
 const promptsPath = join(projectRoot, 'docs/prompts');
+const dataPath = join(projectRoot, 'tool/character-designer/data');
 
 async function loadPrompts() {
 	const portraitPrompt = await readFile(join(promptsPath, 'character-portrait-prompt.md'), 'utf-8');
@@ -63,6 +64,60 @@ function buildPrompt(formData: FormData, basePrompt: string) {
 	);
 
 	return finalPrompt;
+}
+
+// Generate a short description for directory naming
+function generateShortDescription(baseCharacter: string, customDetails: string): string {
+	const text = baseCharacter || customDetails || 'character';
+	// Take first few words and clean them
+	const words = text
+		.toLowerCase()
+		.replace(/[^a-z0-9\s]/g, '')
+		.split(/\s+/)
+		.filter(w => w.length > 0)
+		.slice(0, 3);
+	return words.join('-') || 'character';
+}
+
+// Generate timestamp-based directory name
+function generateDirectoryName(baseCharacter: string, customDetails: string): string {
+	const now = new Date();
+	const timestamp = now.toISOString().replace(/:/g, '-').replace(/\..+/, '').replace('T', '_');
+	const description = generateShortDescription(baseCharacter, customDetails);
+	return `${timestamp}_${description}`;
+}
+
+// Save prompt and images to disk
+async function saveGenerationData(
+	dirName: string,
+	prompt: string,
+	images: Array<{ base64Data: string; extension: string; mimeType: string }>,
+	metadata: { baseCharacter: string; customDetails: string }
+) {
+	const savePath = join(dataPath, dirName);
+	await mkdir(savePath, { recursive: true });
+
+	// Save metadata and prompt
+	await writeFile(
+		join(savePath, 'metadata.json'),
+		JSON.stringify({
+			timestamp: new Date().toISOString(),
+			baseCharacter: metadata.baseCharacter,
+			customDetails: metadata.customDetails,
+		}, null, 2)
+	);
+
+	await writeFile(join(savePath, 'prompt.txt'), prompt);
+
+	// Save images
+	for (let i = 0; i < images.length; i++) {
+		const image = images[i];
+		const filename = i === 0 ? `portrait.${image.extension}` : `spritesheet.${image.extension}`;
+		const buffer = Buffer.from(image.base64Data, 'base64');
+		await writeFile(join(savePath, filename), buffer);
+	}
+
+	return savePath;
 }
 
 async function generateImage(prompt: string, referenceImage?: { base64Data: string; mimeType: string }) {
@@ -144,19 +199,51 @@ async function generateImage(prompt: string, referenceImage?: { base64Data: stri
 }
 
 export const actions = {
-	default: async ({ request }) => {
+	generatePrompt: async ({ request }) => {
 		const formData = await request.formData();
-
-		if (!GEMINI_API_KEY) {
-			return fail(500, { error: 'GEMINI_API_KEY environment variable is not set. Please add it to your .env file.' });
-		}
 
 		try {
 			// Load prompts
 			const { portraitPrompt, spritesheetPrompt } = await loadPrompts();
 
-			// Step 1: Generate portrait sprite sheet first
+			// Generate prompts
 			const portraitPromptText = buildPrompt(formData, portraitPrompt);
+			const spritesheetPromptText = buildPrompt(formData, spritesheetPrompt);
+
+			const combinedPrompt = `Portrait:\n${portraitPromptText}\n\nSprite Sheet:\n${spritesheetPromptText}`;
+
+			return {
+				success: true,
+				generatedPrompt: combinedPrompt,
+			};
+
+		} catch (error: any) {
+			console.error('Error generating prompt:', error);
+			return fail(500, { 
+				error: error.message || 'Failed to generate prompt.' 
+			});
+		}
+	},
+
+	generateImages: async ({ request }) => {
+		const formData = await request.formData();
+		const customPrompt = (formData.get('prompt') as string)?.trim();
+
+		if (!GEMINI_API_KEY) {
+			return fail(500, { error: 'GEMINI_API_KEY environment variable is not set. Please add it to your .env file.' });
+		}
+
+		if (!customPrompt) {
+			return fail(400, { error: 'No prompt provided. Please generate a prompt first.' });
+		}
+
+		try {
+			// Split the combined prompt
+			const prompts = customPrompt.split('\n\nSprite Sheet:\n');
+			const portraitPromptText = prompts[0]?.replace('Portrait:\n', '') || customPrompt;
+			const spritesheetPromptText = prompts[1] || '';
+
+			// Step 1: Generate portrait sprite sheet first
 			const portraitResult = await generateImage(portraitPromptText);
 
 			if (portraitResult.images.length === 0) {
@@ -165,32 +252,44 @@ export const actions = {
 				});
 			}
 
-			// Step 2: Generate game sprite sheet using portrait as reference
-			const spritesheetPromptText = buildPrompt(formData, spritesheetPrompt);
-			const spritesheetResult = await generateImage(
-				spritesheetPromptText, 
-				{
-					base64Data: portraitResult.images[0].base64Data,
-					mimeType: portraitResult.images[0].mimeType
-				}
-			);
-
-			if (spritesheetResult.images.length === 0) {
-				// If sprite sheet generation fails, return just the portrait
-				return {
-					success: true,
-					images: portraitResult.images,
-					prompt: `Portrait:\n${portraitPromptText}`,
-					textResponse: portraitResult.textResponse,
-					warning: 'Sprite sheet generation failed. Showing portrait only.'
-				};
+			// Step 2: Generate game sprite sheet using portrait as reference (if we have a spritesheet prompt)
+			let spritesheetResult = { images: [], textResponse: '' };
+			if (spritesheetPromptText) {
+				spritesheetResult = await generateImage(
+					spritesheetPromptText, 
+					{
+						base64Data: portraitResult.images[0].base64Data,
+						mimeType: portraitResult.images[0].mimeType
+					}
+				);
 			}
 
-			// Return both portrait and sprite sheet
+			const allImages = [...portraitResult.images, ...spritesheetResult.images];
+
+			// Save to disk
+			const baseCharacter = (formData.get('baseCharacter') as string)?.trim() || '';
+			const customDetails = (formData.get('customDetails') as string)?.trim() || '';
+			const dirName = generateDirectoryName(baseCharacter, customDetails);
+			
+			const savedPath = await saveGenerationData(
+				dirName,
+				customPrompt,
+				allImages,
+				{ baseCharacter, customDetails }
+			);
+
+			// Return result
+			const warning = spritesheetResult.images.length === 0 && spritesheetPromptText
+				? 'Sprite sheet generation failed. Showing portrait only.'
+				: undefined;
+
 			return {
 				success: true,
-				images: [...portraitResult.images, ...spritesheetResult.images],
-				prompt: `Portrait:\n${portraitPromptText}\n\nSprite Sheet:\n${spritesheetPromptText}`,
+				images: allImages,
+				prompt: customPrompt,
+				generatedPrompt: customPrompt,
+				savedPath: dirName,
+				warning,
 				textResponse: `Portrait: ${portraitResult.textResponse}\n\nSprite Sheet: ${spritesheetResult.textResponse}`
 			};
 
@@ -200,5 +299,10 @@ export const actions = {
 				error: error.message || 'Failed to generate character. Please check your API key and try again.' 
 			});
 		}
+	},
+
+	// Keep the old default action for backwards compatibility, but deprecate it
+	default: async ({ request }) => {
+		return fail(400, { error: 'Please use the new 2-step workflow: Generate Prompt first, then Generate Images.' });
 	}
 };
