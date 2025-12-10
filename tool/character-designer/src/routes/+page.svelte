@@ -5,6 +5,10 @@
 	let { form } = $props();
 	let isGenerating = $state(false);
 	
+	const CUSTOM_DETAILS_PLACEHOLDER = `Add specific details about appearance, clothing, age, personality traits, etc.
+
+Example: A 12-year-old girl with short curly brown hair, freckles, wearing a school uniform with a detective's notebook in her pocket. Adventurous and curious expression.`;
+	
 	async function copyPrompt() {
 		if (!form?.prompt) return;
 		try {
@@ -41,58 +45,25 @@
 				<h2>Character Details</h2>
 
 				<div class="form-group">
-					<label for="race">Race/Species:</label>
-					<input type="text" id="race" name="race" placeholder="e.g., Human, Elf, Dwarf, Dragon" />
+					<label for="baseCharacter">Base character on:</label>
+					<input 
+						type="text" 
+						id="baseCharacter" 
+						name="baseCharacter" 
+						placeholder="e.g., George from Famous Five, Julian, Anne, Fatty from Five Find-Outers" 
+					/>
+					<small>Reference a character from Enid Blyton's Mystery series or other popular stories</small>
 				</div>
 
 				<div class="form-group">
-					<label for="class">Class/Role:</label>
-					<input type="text" id="class" name="class" placeholder="e.g., Warrior, Mage, Rogue, Merchant" />
-				</div>
-
-				<div class="form-group">
-					<label for="gender">Gender:</label>
-					<select id="gender" name="gender">
-						<option value="">Not specified</option>
-						<option value="male">Male</option>
-						<option value="female">Female</option>
-						<option value="non-binary">Non-binary</option>
-					</select>
-				</div>
-
-				<div class="form-group">
-					<label for="age">Age/Appearance:</label>
-					<input type="text" id="age" name="age" placeholder="e.g., Young, Middle-aged, Elderly, Child" />
-				</div>
-
-				<div class="form-group">
-					<label for="physicalFeatures">Physical Features:</label>
-					<textarea id="physicalFeatures" name="physicalFeatures" rows="3" placeholder="e.g., Blue hair, scar on cheek, green eyes, tall and muscular"></textarea>
-				</div>
-
-				<div class="form-group">
-					<label for="clothing">Clothing/Armor:</label>
-					<textarea id="clothing" name="clothing" rows="3" placeholder="e.g., Heavy steel armor, leather tunic, flowing robes with gold trim"></textarea>
-				</div>
-
-				<div class="form-group">
-					<label for="hairColor">Hair Color:</label>
-					<input type="text" id="hairColor" name="hairColor" placeholder="e.g., Silver, Auburn, Black" />
-				</div>
-
-				<div class="form-group">
-					<label for="eyeColor">Eye Color:</label>
-					<input type="text" id="eyeColor" name="eyeColor" placeholder="e.g., Emerald green, Amber, Deep blue" />
-				</div>
-
-				<div class="form-group">
-					<label for="skinTone">Skin Tone:</label>
-					<input type="text" id="skinTone" name="skinTone" placeholder="e.g., Pale, Tan, Dark brown, Green" />
-				</div>
-
-				<div class="form-group">
-					<label for="additionalDetails">Additional Details:</label>
-					<textarea id="additionalDetails" name="additionalDetails" rows="3" placeholder="Any other specific details about the character"></textarea>
+					<label for="customDetails">Custom details:</label>
+					<textarea 
+						id="customDetails" 
+						name="customDetails" 
+						rows="6" 
+						placeholder={CUSTOM_DETAILS_PLACEHOLDER}
+					></textarea>
+					<small>Describe physical features, clothing, age, and any other details</small>
 				</div>
 
 				<div class="button-group">
@@ -262,7 +233,6 @@
 	}
 
 	.form-group input,
-	.form-group select,
 	.form-group textarea {
 		width: 100%;
 		padding: 12px;
@@ -276,7 +246,6 @@
 	}
 
 	.form-group input:focus,
-	.form-group select:focus,
 	.form-group textarea:focus {
 		outline: none;
 		border-color: #4a90e2;
