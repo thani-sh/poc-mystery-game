@@ -41,15 +41,6 @@
 				<h2>Character Details</h2>
 
 				<div class="form-group">
-					<label for="characterType">Character Type:</label>
-					<select id="characterType" name="characterType">
-						<option value="portrait">Portrait Sprite Sheet (3:4 ratio, 12 frames)</option>
-						<option value="spritesheet">Both Portrait & Game Sprite Sheet (with matching style)</option>
-					</select>
-					<small>Sprite sheet generation uses portrait as reference for consistency</small>
-				</div>
-
-				<div class="form-group">
 					<label for="race">Race/Species:</label>
 					<input type="text" id="race" name="race" placeholder="e.g., Human, Elf, Dwarf, Dragon" />
 				</div>

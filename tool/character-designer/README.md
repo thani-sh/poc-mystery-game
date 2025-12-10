@@ -5,7 +5,8 @@ A SvelteKit-based web application for generating character designs using Google'
 ## Features
 
 - 🎨 **Character Customization**: Specify race, class, gender, age, physical features, clothing, and more
-- 🖼️ **Two-Step Generation**: Generates portrait sprite sheet first, then uses it as reference for game sprite sheet (if selected)
+- 🖼️ **Automatic Dual Generation**: Automatically generates both portrait and game sprite sheets
+- 🔗 **Reference-Based Generation**: Portrait sprite sheet generated first, then used as reference for game sprite sheet to ensure consistency
 - 🤖 **Google Gemini AI Integration**: Uses Gemini 3 Pro Image Preview model to generate actual character images
 - 📋 **Prompt Management**: View and copy generated prompts for reference
 - 💾 **Download Images**: Download generated images directly from the browser
@@ -56,11 +57,7 @@ npm run dev
 
 ### Getting Started
 
-1. **Select Character Type**:
-   - **Portrait Sprite Sheet**: 3:4 aspect ratio with 12 emotional expressions (for dialogue)
-   - **Both Portrait & Game Sprite Sheet**: Generates portrait first, then uses it as reference for matching game sprite sheet
-
-2. **Fill in Character Details**:
+1. **Fill in Character Details**:
    - **Race/Species**: Human, Elf, Dwarf, Dragon, etc.
    - **Class/Role**: Warrior, Mage, Rogue, Merchant, etc.
    - **Gender**: Male, Female, Non-binary, or leave unspecified
@@ -72,17 +69,20 @@ npm run dev
    - **Skin Tone**: Skin color or texture
    - **Additional Details**: Any other specific details
 
-4. **Generate Character**:
+2. **Generate Characters**:
    - Click "Generate Character" button
-   - The tool will send the prompt to Google's Gemini AI
-   - Generated images will appear on the right side
+   - The tool will automatically generate **both** sprite sheets:
+     1. **Portrait Sprite Sheet** (3:4 ratio, 12 emotional expressions for dialogue)
+     2. **Game Sprite Sheet** (Square format, 16 frames for movement and actions)
+   - The portrait is generated first and used as reference for the game sprite sheet to ensure matching style
+   - Generated images will appear on the right side, one below the other
    - Download images using the download buttons
 
 ### Tips
 
 - **Be Specific**: The more details you provide, the better the generated images will match your vision
 - **Use Colors**: Specify exact colors for hair, eyes, clothing, etc.
-- **Character Consistency**: Use the same details across multiple generations for consistent character designs
+- **Character Consistency**: The two-step generation process ensures both sprite sheets match
 - **Experiment**: Try different prompts and details to get varied results
 
 ## Understanding the Output

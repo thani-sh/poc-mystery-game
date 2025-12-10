@@ -18,7 +18,6 @@ async function loadPrompts() {
 }
 
 function buildPrompt(formData: FormData, basePrompt: string) {
-	const characterType = formData.get('characterType') as string;
 	const race = (formData.get('race') as string)?.trim();
 	const characterClass = (formData.get('class') as string)?.trim();
 	const gender = formData.get('gender') as string;
@@ -176,7 +175,6 @@ export const actions = {
 		try {
 			// Load prompts
 			const { portraitPrompt, spritesheetPrompt } = await loadPrompts();
-			const characterType = formData.get('characterType') as string;
 
 			// Step 1: Generate portrait sprite sheet first
 			const portraitPromptText = buildPrompt(formData, portraitPrompt);
@@ -188,43 +186,33 @@ export const actions = {
 				});
 			}
 
-			// If user wants sprite sheet, generate it using portrait as reference
-			if (characterType === 'spritesheet') {
-				const spritesheetPromptText = buildPrompt(formData, spritesheetPrompt);
-				const spritesheetResult = await generateImage(
-					spritesheetPromptText, 
-					{
-						base64Data: portraitResult.images[0].base64Data,
-						mimeType: portraitResult.images[0].mimeType
-					}
-				);
-
-				if (spritesheetResult.images.length === 0) {
-					// If sprite sheet generation fails, return just the portrait
-					return {
-						success: true,
-						images: portraitResult.images,
-						prompt: `Portrait:\n${portraitPromptText}`,
-						textResponse: portraitResult.textResponse,
-						warning: 'Sprite sheet generation failed. Showing portrait only.'
-					};
+			// Step 2: Generate game sprite sheet using portrait as reference
+			const spritesheetPromptText = buildPrompt(formData, spritesheetPrompt);
+			const spritesheetResult = await generateImage(
+				spritesheetPromptText, 
+				{
+					base64Data: portraitResult.images[0].base64Data,
+					mimeType: portraitResult.images[0].mimeType
 				}
+			);
 
-				// Return both portrait and sprite sheet
+			if (spritesheetResult.images.length === 0) {
+				// If sprite sheet generation fails, return just the portrait
 				return {
 					success: true,
-					images: [...portraitResult.images, ...spritesheetResult.images],
-					prompt: `Portrait:\n${portraitPromptText}\n\nSprite Sheet:\n${spritesheetPromptText}`,
-					textResponse: `Portrait: ${portraitResult.textResponse}\n\nSprite Sheet: ${spritesheetResult.textResponse}`
+					images: portraitResult.images,
+					prompt: `Portrait:\n${portraitPromptText}`,
+					textResponse: portraitResult.textResponse,
+					warning: 'Sprite sheet generation failed. Showing portrait only.'
 				};
 			}
 
-			// Return just the portrait
+			// Return both portrait and sprite sheet
 			return {
 				success: true,
-				images: portraitResult.images,
-				prompt: portraitPromptText,
-				textResponse: portraitResult.textResponse
+				images: [...portraitResult.images, ...spritesheetResult.images],
+				prompt: `Portrait:\n${portraitPromptText}\n\nSprite Sheet:\n${spritesheetPromptText}`,
+				textResponse: `Portrait: ${portraitResult.textResponse}\n\nSprite Sheet: ${spritesheetResult.textResponse}`
 			};
 
 		} catch (error: any) {
