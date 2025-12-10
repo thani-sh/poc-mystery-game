@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import { Palette, Download, Copy, Sparkles, Trash2 } from 'lucide-svelte';
 	
 	let { form } = $props();
 	let isGenerating = $state(false);
@@ -21,7 +22,10 @@
 
 <div class="container">
 	<header>
-		<h1>🎮 Character Designer</h1>
+		<div class="header-icon">
+			<Palette size={48} />
+		</div>
+		<h1>Character Designer</h1>
 		<p>Create characters for POC Mystery Game using Google AI</p>
 	</header>
 
@@ -37,23 +41,12 @@
 				<h2>Character Details</h2>
 
 				<div class="form-group">
-					<label for="apiKey">Google AI API Key:</label>
-					<input 
-						type="password" 
-						id="apiKey" 
-						name="apiKey"
-						placeholder="Enter your Google AI API key"
-						required
-					/>
-					<small>Your API key is sent securely to generate images</small>
-				</div>
-
-				<div class="form-group">
 					<label for="characterType">Character Type:</label>
 					<select id="characterType" name="characterType">
 						<option value="portrait">Portrait Sprite Sheet (3:4 ratio, 12 frames)</option>
-						<option value="spritesheet">Game Sprite Sheet (Square, 16 frames)</option>
+						<option value="spritesheet">Both Portrait & Game Sprite Sheet (with matching style)</option>
 					</select>
+					<small>Sprite sheet generation uses portrait as reference for consistency</small>
 				</div>
 
 				<div class="form-group">
@@ -116,7 +109,7 @@
 						{#if isGenerating}
 							<span class="loading-spinner"></span> Generating...
 						{:else}
-							✨ Generate Character
+							<Sparkles size={20} /> Generate Character
 						{/if}
 					</button>
 				</div>
@@ -131,6 +124,9 @@
 			{:else if form?.success}
 				<div class="status-message success">
 					Character generated successfully!
+					{#if form.warning}
+						<div class="warning-text">{form.warning}</div>
+					{/if}
 				</div>
 			{/if}
 
@@ -141,7 +137,7 @@
 							<img src={image.dataUrl} alt="Generated Character {i + 1}" />
 							<div class="image-actions">
 								<a href={image.dataUrl} download="character-{i + 1}.{image.extension}" class="action-btn">
-									📥 Download Image {i + 1}
+									<Download size={16} /> Download Image {i + 1}
 								</a>
 							</div>
 						</div>
@@ -156,7 +152,7 @@
 								class="action-btn"
 								onclick={copyPrompt}
 							>
-								📋 Copy Prompt
+								<Copy size={16} /> Copy Prompt
 							</button>
 						</div>
 					{/if}
@@ -164,7 +160,9 @@
 			{:else}
 				<div class="preview-container">
 					<div class="placeholder">
-						<div class="placeholder-icon">🎨</div>
+						<div class="placeholder-icon">
+							<Palette size={80} strokeWidth={1.5} />
+						</div>
 						<h3>No Image Generated Yet</h3>
 						<p>Fill in the character details and click "Generate Character" to see the results</p>
 					</div>
@@ -205,6 +203,13 @@
 		animation: fadeInDown 0.6s ease-out;
 	}
 
+	.header-icon {
+		display: flex;
+		justify-content: center;
+		margin-bottom: 15px;
+		color: #50c878;
+	}
+
 	header h1 {
 		font-size: 2.5em;
 		margin-bottom: 10px;
@@ -217,6 +222,12 @@
 	header p {
 		color: rgba(255, 255, 255, 0.7);
 		font-size: 1.1em;
+	}
+
+	.warning-text {
+		margin-top: 10px;
+		font-size: 0.9em;
+		color: rgba(255, 255, 255, 0.8);
 	}
 
 	.main-content {

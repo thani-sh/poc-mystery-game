@@ -1,0 +1,17 @@
+{
+  "name": "poc-mystery-game-workspace",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:game\" \"npm run dev:tools\"",
+    "dev:game": "cd game && npm run dev",
+    "dev:tools": "cd tool/character-designer && npm run dev",
+    "build": "npm run build:game && npm run build:tools",
+    "build:game": "cd game && npm run build",
+    "build:tools": "cd tool/character-designer && npm run build"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}

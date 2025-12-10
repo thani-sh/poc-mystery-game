@@ -5,12 +5,12 @@ A SvelteKit-based web application for generating character designs using Google'
 ## Features
 
 - 🎨 **Character Customization**: Specify race, class, gender, age, physical features, clothing, and more
-- 🖼️ **Dual Output Types**: Generate either portrait sprite sheets (3:4 ratio, 12 frames) or game sprite sheets (square, 16 frames)
+- 🖼️ **Two-Step Generation**: Generates portrait sprite sheet first, then uses it as reference for game sprite sheet (if selected)
 - 🤖 **Google Gemini AI Integration**: Uses Gemini 3 Pro Image Preview model to generate actual character images
 - 📋 **Prompt Management**: View and copy generated prompts for reference
 - 💾 **Download Images**: Download generated images directly from the browser
-- ✨ **Animated UI**: Beautiful, responsive SvelteKit interface with smooth animations
-- 🔒 **Secure**: API keys are sent securely and never stored on the server
+- ✨ **Animated UI**: Beautiful, responsive SvelteKit interface with Lucide icons
+- 🔒 **Secure**: API keys stored in .env file, never exposed to the client
 
 ## Setup
 
@@ -20,27 +20,47 @@ A SvelteKit-based web application for generating character designs using Google'
    npm install
    ```
 
-2. Start the development server:
+2. Create a `.env` file (copy from `.env.example`):
+   ```bash
+   cp .env.example .env
+   ```
+
+3. Add your Google AI API Key to the `.env` file:
+   ```
+   GEMINI_API_KEY=your_google_ai_api_key_here
+   ```
+   Get an API key from [Google AI Studio](https://aistudio.google.com/app/apikey)
+
+4. Start the development server:
    ```bash
    npm run dev
    ```
 
-3. Open your browser to the URL shown in the terminal (usually http://localhost:5173)
+5. Open your browser to the URL shown in the terminal (usually http://localhost:5173)
+
+## Running All Tools
+
+From the repository root, you can start all tools (game + character designer) at once:
+
+```bash
+pnpm run dev
+```
+
+Or with npm:
+
+```bash
+npm run dev
+```
 
 ## Usage
 
 ### Getting Started
 
-1. **Enter your Google AI API Key**:
-   - Get an API key from [Google AI Studio](https://aistudio.google.com/app/apikey)
-   - Enter it in the "Google AI API Key" field
-   - The key is sent securely to generate images and is never stored
-
-2. **Select Character Type**:
+1. **Select Character Type**:
    - **Portrait Sprite Sheet**: 3:4 aspect ratio with 12 emotional expressions (for dialogue)
-   - **Game Sprite Sheet**: Square format with 16 movement and action frames (for gameplay)
+   - **Both Portrait & Game Sprite Sheet**: Generates portrait first, then uses it as reference for matching game sprite sheet
 
-3. **Fill in Character Details**:
+2. **Fill in Character Details**:
    - **Race/Species**: Human, Elf, Dwarf, Dragon, etc.
    - **Class/Role**: Warrior, Mage, Rogue, Merchant, etc.
    - **Gender**: Male, Female, Non-binary, or leave unspecified

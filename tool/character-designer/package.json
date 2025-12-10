@@ -23,6 +23,7 @@
 	},
 	"dependencies": {
 		"@google/genai": "1.32.0",
+		"lucide-svelte": "^0.556.0",
 		"mime": "4.1.0"
 	}
 }
