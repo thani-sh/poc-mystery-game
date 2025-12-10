@@ -5,6 +5,10 @@
 	let { form } = $props();
 	let isGenerating = $state(false);
 	
+	const CUSTOM_DETAILS_PLACEHOLDER = `Add specific details about appearance, clothing, age, personality traits, etc.
+
+Example: A 12-year-old girl with short curly brown hair, freckles, wearing a school uniform with a detective's notebook in her pocket. Adventurous and curious expression.`;
+	
 	async function copyPrompt() {
 		if (!form?.prompt) return;
 		try {
@@ -57,7 +61,7 @@
 						id="customDetails" 
 						name="customDetails" 
 						rows="6" 
-						placeholder="Add specific details about appearance, clothing, age, personality traits, etc.&#10;&#10;Example: A 12-year-old girl with short curly brown hair, freckles, wearing a school uniform with a detective's notebook in her pocket. Adventurous and curious expression."
+						placeholder={CUSTOM_DETAILS_PLACEHOLDER}
 					></textarea>
 					<small>Describe physical features, clothing, age, and any other details</small>
 				</div>

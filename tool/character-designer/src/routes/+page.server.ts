@@ -17,6 +17,11 @@ async function loadPrompts() {
 	return { portraitPrompt, spritesheetPrompt };
 }
 
+// Constants for character generation
+const DEFAULT_CHARACTER_CONTEXT = 'a human character from the UK';
+const DEFAULT_CLOTHING = 'everyday casual clothes suitable for adventure';
+const DEFAULT_FEATURES = 'typical features for their age';
+
 function buildPrompt(formData: FormData, basePrompt: string) {
 	const baseCharacter = (formData.get('baseCharacter') as string)?.trim();
 	const customDetails = (formData.get('customDetails') as string)?.trim();
@@ -26,9 +31,9 @@ function buildPrompt(formData: FormData, basePrompt: string) {
 	
 	// Start with base character reference if provided
 	if (baseCharacter) {
-		characterDesc = `${baseCharacter}, a human character from the UK`;
+		characterDesc = `${baseCharacter}, ${DEFAULT_CHARACTER_CONTEXT}`;
 	} else {
-		characterDesc = 'a human character from the UK';
+		characterDesc = DEFAULT_CHARACTER_CONTEXT;
 	}
 
 	// Add custom details if provided
@@ -49,12 +54,12 @@ function buildPrompt(formData: FormData, basePrompt: string) {
 	// Default to simple descriptions if not specified
 	finalPrompt = finalPrompt.replace(
 		/\[INSERT KEY PHYSICAL FEATURES:[^\]]*\]/g,
-		customDetails || 'typical features for their age'
+		customDetails || DEFAULT_FEATURES
 	);
 
 	finalPrompt = finalPrompt.replace(
 		/\[INSERT CLOTHING DETAILS:[^\]]*\]/g,
-		'everyday casual clothes suitable for adventure'
+		DEFAULT_CLOTHING
 	);
 
 	return finalPrompt;
