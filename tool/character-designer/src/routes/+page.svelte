@@ -190,6 +190,8 @@ Example: A 12-year-old girl with short curly brown hair, freckles, wearing a sch
 </div>
 
 <style>
+	@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');
+
 	* {
 		margin: 0;
 		padding: 0;
@@ -197,60 +199,118 @@ Example: A 12-year-old girl with short curly brown hair, freckles, wearing a sch
 	}
 
 	:global(body) {
-		font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-		background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-		color: #e8e8e8;
+		font-family: 'VT323', monospace;
+		background: #0a0a0a;
+		color: #00ff00;
 		min-height: 100vh;
 		line-height: 1.6;
+		position: relative;
+		overflow-x: hidden;
+	}
+
+	:global(body::before) {
+		content: '';
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: repeating-linear-gradient(
+			0deg,
+			rgba(0, 0, 0, 0.15),
+			rgba(0, 0, 0, 0.15) 1px,
+			transparent 1px,
+			transparent 2px
+		);
+		pointer-events: none;
+		z-index: 1000;
+		animation: scanline 8s linear infinite;
+	}
+
+	:global(body::after) {
+		content: '';
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: radial-gradient(ellipse at center, transparent 0%, rgba(0, 0, 0, 0.5) 100%);
+		pointer-events: none;
+		z-index: 999;
+	}
+
+	@keyframes scanline {
+		0% { transform: translateY(0); }
+		100% { transform: translateY(10px); }
 	}
 
 	.container {
 		max-width: 1600px;
 		margin: 0 auto;
 		padding: 20px;
+		position: relative;
+		z-index: 1;
 	}
 
 	.sidebar-header {
 		text-align: center;
 		padding: 20px;
-		background: rgba(255, 255, 255, 0.08);
-		border-radius: 12px;
+		background: #000;
+		border: 3px solid #00ff00;
+		box-shadow: 
+			0 0 10px #00ff00,
+			inset 0 0 10px rgba(0, 255, 0, 0.1);
 		margin-bottom: 20px;
-		backdrop-filter: blur(10px);
 	}
 
 	.sidebar-header .header-icon {
 		display: flex;
 		justify-content: center;
 		margin-bottom: 10px;
-		color: #50c878;
+		color: #00ffff;
+		filter: drop-shadow(0 0 8px #00ffff);
+		animation: flicker 3s infinite;
+	}
+
+	@keyframes flicker {
+		0%, 100% { opacity: 1; }
+		50% { opacity: 0.8; }
+		51% { opacity: 1; }
+		60% { opacity: 0.9; }
+		61% { opacity: 1; }
 	}
 
 	.sidebar-header h1 {
-		font-size: 1.5em;
-		margin-bottom: 5px;
-		background: linear-gradient(135deg, #4a90e2, #50c878);
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-		background-clip: text;
+		font-family: 'Press Start 2P', cursive;
+		font-size: 1.2em;
+		margin-bottom: 10px;
+		color: #ff00ff;
+		text-shadow: 
+			0 0 10px #ff00ff,
+			0 0 20px #ff00ff,
+			2px 2px 0 #000;
+		letter-spacing: 2px;
 	}
 
 	.sidebar-header p {
-		color: rgba(255, 255, 255, 0.7);
-		font-size: 0.9em;
+		color: #00ff00;
+		font-size: 1.2em;
+		text-shadow: 0 0 5px #00ff00;
 	}
 
 	.saved-path {
 		margin-top: 10px;
-		font-size: 0.85em;
-		color: rgba(255, 255, 255, 0.7);
-		font-family: monospace;
+		font-size: 0.9em;
+		color: #00ffff;
+		font-family: 'VT323', monospace;
+		text-shadow: 0 0 5px #00ffff;
 	}
 
 	.warning-text {
 		margin-top: 10px;
-		font-size: 0.9em;
-		color: rgba(255, 255, 255, 0.8);
+		font-size: 1em;
+		color: #ffff00;
+		text-shadow: 0 0 5px #ffff00;
 	}
 
 	.main-content {
@@ -267,18 +327,39 @@ Example: A 12-year-old girl with short curly brown hair, freckles, wearing a sch
 	}
 
 	.sidebar {
-		background: rgba(255, 255, 255, 0.05);
-		border-radius: 12px;
+		background: #000;
+		border: 3px solid #00ff00;
 		padding: 0;
-		backdrop-filter: blur(10px);
-		border: 1px solid rgba(255, 255, 255, 0.1);
+		box-shadow: 
+			0 0 20px #00ff00,
+			inset 0 0 20px rgba(0, 255, 0, 0.1);
 		max-height: calc(100vh - 40px);
 		overflow-y: auto;
+		position: relative;
+	}
+
+	.sidebar::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background: repeating-linear-gradient(
+			0deg,
+			transparent,
+			transparent 2px,
+			rgba(0, 255, 0, 0.03) 2px,
+			rgba(0, 255, 0, 0.03) 4px
+		);
+		pointer-events: none;
 	}
 
 	.form-section {
 		padding: 25px;
-		border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+		border-bottom: 2px solid #00ff00;
+		position: relative;
+		z-index: 1;
 	}
 
 	.form-section:last-child {
@@ -287,8 +368,13 @@ Example: A 12-year-old girl with short curly brown hair, freckles, wearing a sch
 
 	.form-section h2 {
 		margin-bottom: 20px;
-		color: #50c878;
-		font-size: 1.2em;
+		color: #00ffff;
+		font-family: 'Press Start 2P', cursive;
+		font-size: 0.9em;
+		text-shadow: 
+			0 0 10px #00ffff,
+			2px 2px 0 #000;
+		letter-spacing: 1px;
 	}
 
 	.form-group {
@@ -298,29 +384,40 @@ Example: A 12-year-old girl with short curly brown hair, freckles, wearing a sch
 	.form-group label {
 		display: block;
 		margin-bottom: 8px;
-		color: rgba(255, 255, 255, 0.9);
+		color: #ffff00;
 		font-weight: 500;
+		font-size: 1.2em;
+		text-shadow: 0 0 5px #ffff00;
 	}
 
 	.form-group input,
 	.form-group textarea {
 		width: 100%;
 		padding: 12px;
-		background: rgba(255, 255, 255, 0.1);
-		border: 1px solid rgba(255, 255, 255, 0.2);
-		border-radius: 8px;
-		color: #e8e8e8;
-		font-size: 14px;
+		background: #000;
+		border: 2px solid #00ff00;
+		color: #00ff00;
+		font-size: 16px;
+		font-family: 'VT323', monospace;
 		transition: all 0.3s ease;
-		font-family: inherit;
+		box-shadow: 
+			0 0 10px rgba(0, 255, 0, 0.5),
+			inset 0 0 10px rgba(0, 255, 0, 0.1);
+	}
+
+	.form-group input::placeholder,
+	.form-group textarea::placeholder {
+		color: rgba(0, 255, 0, 0.5);
 	}
 
 	.form-group input:focus,
 	.form-group textarea:focus {
 		outline: none;
-		border-color: #4a90e2;
-		background: rgba(255, 255, 255, 0.15);
-		box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+		border-color: #00ffff;
+		box-shadow: 
+			0 0 20px #00ffff,
+			inset 0 0 10px rgba(0, 255, 255, 0.2);
+		color: #00ffff;
 	}
 
 	.form-group textarea {
@@ -328,16 +425,16 @@ Example: A 12-year-old girl with short curly brown hair, freckles, wearing a sch
 	}
 
 	.prompt-textarea {
-		font-family: 'Courier New', monospace;
-		font-size: 13px;
+		font-family: 'VT323', monospace;
+		font-size: 16px;
 		line-height: 1.6;
 	}
 
 	.form-group small {
 		display: block;
 		margin-top: 5px;
-		color: rgba(255, 255, 255, 0.5);
-		font-size: 12px;
+		color: rgba(0, 255, 0, 0.7);
+		font-size: 14px;
 	}
 
 	.button-group {
@@ -351,28 +448,58 @@ Example: A 12-year-old girl with short curly brown hair, freckles, wearing a sch
 	.secondary-btn,
 	.action-btn {
 		padding: 12px 24px;
-		border: none;
-		border-radius: 8px;
-		font-size: 16px;
+		border: 3px solid;
+		font-size: 18px;
 		font-weight: 600;
 		cursor: pointer;
-		transition: all 0.3s ease;
+		transition: all 0.2s ease;
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
 		gap: 8px;
 		text-decoration: none;
-		color: white;
+		font-family: 'Press Start 2P', cursive;
+		text-transform: uppercase;
+		position: relative;
+		overflow: hidden;
+	}
+
+	.primary-btn::before,
+	.secondary-btn::before,
+	.action-btn::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: -100%;
+		width: 100%;
+		height: 100%;
+		background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+		transition: left 0.5s;
+	}
+
+	.primary-btn:hover::before,
+	.secondary-btn:hover::before,
+	.action-btn:hover::before {
+		left: 100%;
 	}
 
 	.primary-btn {
 		width: 100%;
-		background: linear-gradient(135deg, #4a90e2, #50c878);
+		background: #000;
+		color: #ff00ff;
+		border-color: #ff00ff;
+		box-shadow: 
+			0 0 20px #ff00ff,
+			inset 0 0 20px rgba(255, 0, 255, 0.2);
+		text-shadow: 0 0 10px #ff00ff;
 	}
 
 	.primary-btn:hover:not(:disabled) {
-		transform: translateY(-2px);
-		box-shadow: 0 8px 20px rgba(74, 144, 226, 0.4);
+		background: #ff00ff;
+		color: #000;
+		box-shadow: 
+			0 0 30px #ff00ff,
+			inset 0 0 30px rgba(255, 0, 255, 0.5);
 	}
 
 	.primary-btn:disabled {
@@ -382,54 +509,102 @@ Example: A 12-year-old girl with short curly brown hair, freckles, wearing a sch
 
 	.secondary-btn {
 		width: 100%;
-		background: rgba(80, 200, 120, 0.2);
-		border: 1px solid #50c878;
+		background: #000;
+		color: #00ff00;
+		border-color: #00ff00;
+		box-shadow: 
+			0 0 20px #00ff00,
+			inset 0 0 20px rgba(0, 255, 0, 0.2);
+		text-shadow: 0 0 10px #00ff00;
 	}
 
 	.secondary-btn:hover {
-		background: rgba(80, 200, 120, 0.3);
-		transform: translateY(-2px);
+		background: #00ff00;
+		color: #000;
+		box-shadow: 
+			0 0 30px #00ff00,
+			inset 0 0 30px rgba(0, 255, 0, 0.5);
 	}
 
 	.action-btn {
-		background: rgba(74, 144, 226, 0.2);
-		border: 1px solid #4a90e2;
+		background: #000;
+		color: #00ffff;
+		border-color: #00ffff;
+		box-shadow: 
+			0 0 20px #00ffff,
+			inset 0 0 20px rgba(0, 255, 255, 0.2);
+		text-shadow: 0 0 10px #00ffff;
 		margin: 10px 5px;
+		font-size: 14px;
 	}
 
 	.action-btn:hover {
-		background: rgba(74, 144, 226, 0.3);
-		transform: translateY(-2px);
+		background: #00ffff;
+		color: #000;
+		box-shadow: 
+			0 0 30px #00ffff,
+			inset 0 0 30px rgba(0, 255, 255, 0.5);
 	}
 
 	.preview-area {
-		background: rgba(255, 255, 255, 0.05);
-		border-radius: 12px;
+		background: #000;
+		border: 3px solid #00ff00;
 		padding: 25px;
-		backdrop-filter: blur(10px);
-		border: 1px solid rgba(255, 255, 255, 0.1);
+		box-shadow: 
+			0 0 20px #00ff00,
+			inset 0 0 20px rgba(0, 255, 0, 0.1);
 		min-height: 600px;
+		position: relative;
+	}
+
+	.preview-area::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background: repeating-linear-gradient(
+			0deg,
+			transparent,
+			transparent 2px,
+			rgba(0, 255, 0, 0.03) 2px,
+			rgba(0, 255, 0, 0.03) 4px
+		);
+		pointer-events: none;
 	}
 
 	.status-message {
 		padding: 15px;
-		border-radius: 8px;
+		border: 2px solid;
 		margin-bottom: 20px;
 		text-align: center;
 		font-weight: 500;
 		animation: slideInDown 0.3s ease-out;
+		font-family: 'VT323', monospace;
+		font-size: 1.2em;
+		position: relative;
+		z-index: 1;
 	}
 
 	.status-message.success {
-		background: rgba(46, 204, 113, 0.2);
-		border: 1px solid #2ecc71;
-		color: #2ecc71;
+		background: #000;
+		border-color: #00ff00;
+		color: #00ff00;
+		box-shadow: 
+			0 0 20px #00ff00,
+			inset 0 0 20px rgba(0, 255, 0, 0.2);
+		text-shadow: 0 0 5px #00ff00;
 	}
 
 	.status-message.error {
-		background: rgba(231, 76, 60, 0.2);
-		border: 1px solid #e74c3c;
-		color: #e74c3c;
+		background: #000;
+		border-color: #ff0000;
+		color: #ff0000;
+		box-shadow: 
+			0 0 20px #ff0000,
+			inset 0 0 20px rgba(255, 0, 0, 0.2);
+		text-shadow: 0 0 5px #ff0000;
 	}
 
 	.preview-container {
@@ -437,8 +612,10 @@ Example: A 12-year-old girl with short curly brown hair, freckles, wearing a sch
 		align-items: center;
 		justify-content: center;
 		min-height: 500px;
-		border-radius: 8px;
-		background: rgba(0, 0, 0, 0.2);
+		background: rgba(0, 0, 0, 0.5);
+		border: 2px dashed rgba(0, 255, 0, 0.3);
+		position: relative;
+		z-index: 1;
 	}
 
 	.placeholder {
@@ -449,40 +626,59 @@ Example: A 12-year-old girl with short curly brown hair, freckles, wearing a sch
 	.placeholder-icon {
 		font-size: 80px;
 		margin-bottom: 20px;
+		color: #00ff00;
+		filter: drop-shadow(0 0 20px #00ff00);
 	}
 
 	.placeholder h3 {
 		margin-bottom: 10px;
-		color: rgba(255, 255, 255, 0.8);
+		color: #00ffff;
+		font-family: 'Press Start 2P', cursive;
+		font-size: 1em;
+		text-shadow: 0 0 10px #00ffff;
 	}
 
 	.placeholder p {
-		color: rgba(255, 255, 255, 0.5);
+		color: #ffff00;
 		margin-bottom: 15px;
+		font-size: 1.2em;
+		text-shadow: 0 0 5px #ffff00;
 	}
 
 	.steps-list {
 		text-align: left;
 		display: inline-block;
-		color: rgba(255, 255, 255, 0.6);
+		color: #00ff00;
 		line-height: 2;
+		font-size: 1.1em;
+		text-shadow: 0 0 5px #00ff00;
 	}
 
 	.image-container {
 		animation: fadeInScale 0.6s ease-out;
+		position: relative;
+		z-index: 1;
 	}
 
 	.image-wrapper {
 		margin-bottom: 20px;
+		border: 3px solid #ff00ff;
+		padding: 10px;
+		background: #000;
+		box-shadow: 
+			0 0 20px #ff00ff,
+			inset 0 0 20px rgba(255, 0, 255, 0.1);
 	}
 
 	.image-wrapper img {
 		width: 100%;
 		max-width: 100%;
 		height: auto;
-		border-radius: 8px;
-		box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+		box-shadow: 0 0 30px rgba(255, 0, 255, 0.5);
 		animation: imageReveal 0.8s ease-out;
+		image-rendering: pixelated;
+		image-rendering: -moz-crisp-edges;
+		image-rendering: crisp-edges;
 	}
 
 	.image-actions {
@@ -496,15 +692,15 @@ Example: A 12-year-old girl with short curly brown hair, freckles, wearing a sch
 		display: inline-block;
 		width: 20px;
 		height: 20px;
-		border: 3px solid rgba(255, 255, 255, 0.3);
-		border-top-color: white;
-		border-radius: 50%;
+		border: 3px solid rgba(255, 0, 255, 0.3);
+		border-top-color: #ff00ff;
 		animation: spin 1s linear infinite;
+		box-shadow: 0 0 10px #ff00ff;
 	}
 
 	@keyframes fadeIn {
-		from { opacity: 0; }
-		to { opacity: 1; }
+		from { opacity: 0; transform: scale(0.95); }
+		to { opacity: 1; transform: scale(1); }
 	}
 
 	@keyframes fadeInDown {
@@ -521,7 +717,7 @@ Example: A 12-year-old girl with short curly brown hair, freckles, wearing a sch
 	@keyframes fadeInScale {
 		from {
 			opacity: 0;
-			transform: scale(0.9);
+			transform: scale(0.8);
 		}
 		to {
 			opacity: 1;
@@ -541,8 +737,14 @@ Example: A 12-year-old girl with short curly brown hair, freckles, wearing a sch
 	}
 
 	@keyframes pulse {
-		0%, 100% { opacity: 0.8; }
-		50% { opacity: 0.4; }
+		0%, 100% { 
+			opacity: 1;
+			transform: scale(1);
+		}
+		50% { 
+			opacity: 0.6;
+			transform: scale(0.98);
+		}
 	}
 
 	@keyframes spin {
@@ -552,13 +754,13 @@ Example: A 12-year-old girl with short curly brown hair, freckles, wearing a sch
 	@keyframes imageReveal {
 		from {
 			opacity: 0;
-			transform: scale(0.95);
-			filter: blur(10px);
+			transform: scale(0.9);
+			filter: brightness(0);
 		}
 		to {
 			opacity: 1;
 			transform: scale(1);
-			filter: blur(0);
+			filter: brightness(1);
 		}
 	}
 </style>
