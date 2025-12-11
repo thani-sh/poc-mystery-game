@@ -676,9 +676,9 @@ Example: A 12-year-old girl with short curly brown hair, freckles, wearing a sch
 		height: auto;
 		box-shadow: 0 0 30px rgba(255, 0, 255, 0.5);
 		animation: imageReveal 0.8s ease-out;
-		image-rendering: pixelated;
 		image-rendering: -moz-crisp-edges;
 		image-rendering: crisp-edges;
+		image-rendering: pixelated;
 	}
 
 	.image-actions {
