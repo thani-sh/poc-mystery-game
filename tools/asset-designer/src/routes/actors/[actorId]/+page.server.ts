@@ -9,13 +9,9 @@ export async function load({ params }) {
 		throw error(404, 'Actor not found');
 	}
 
-	// Load base portrait spec for prompt building
-	const basePortrait = await getSpecFile('base-portrait');
-
 	return {
 		actor,
 		hasConcept: await hasActorConcept(params.actorId),
-		conceptDataUrl: await getActorConceptDataUrl(params.actorId),
-		basePortrait: basePortrait?.content || ''
+		conceptDataUrl: await getActorConceptDataUrl(params.actorId)
 	};
 }

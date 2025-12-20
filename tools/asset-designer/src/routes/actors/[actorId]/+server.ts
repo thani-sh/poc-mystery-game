@@ -19,14 +19,14 @@ export async function POST({ request, params }) {
 		try {
 			// Get actor and base portrait spec
 			const actor = await getActor(params.actorId);
-			const basePortrait = await getSpecFile('base-portrait');
+			const baseConcept = await getSpecFile('base-concept');
 
-			if (!actor || !basePortrait) {
-				return json({ success: false, error: 'Actor or base portrait not found' }, { status: 404 });
+			if (!actor || !baseConcept) {
+				return json({ success: false, error: 'Actor or base concept not found' }, { status: 404 });
 			}
 
 			// Build prompt
-			const prompt = buildConceptPrompt(actor.content, basePortrait.content);
+			const prompt = buildConceptPrompt(actor.content, baseConcept.content);
 
 			// Generate image
 			const result = await generateImage({ prompt });
