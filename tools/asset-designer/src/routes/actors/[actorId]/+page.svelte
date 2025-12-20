@@ -1,22 +1,22 @@
 <script lang="ts">
 	let { data } = $props();
-	let editContent = $state('');
+	let editContent = $state(data.actor.content);
 	let generating = $state(false);
-	let generatingSpeechNeutral = $state(false);
-	let generatingSpeechTalking = $state(false);
+	let generatingExpression = $state<Record<string, boolean>>({});
+	let generatingFrame = $state<Record<string, boolean>>({});
 	let saving = $state(false);
 	let status = $state<{ type: 'success' | 'error' | 'info'; message: string } | null>(null);
-	let conceptUrl = $state<string | null>(null);
-	let speechNeutralUrl = $state<string | null>(null);
-	let speechTalkingUrl = $state<string | null>(null);
 
-	// Initialize from data
-	$effect(() => {
-		editContent = data.actor.content;
-		conceptUrl = data.conceptDataUrl;
-		speechNeutralUrl = data.speechNeutralDataUrl;
-		speechTalkingUrl = data.speechTalkingDataUrl;
-	});
+	// Use $derived for values computed from props to avoid effect loops
+	let conceptUrl = $derived(data.conceptDataUrl);
+	let speechPortraits = $derived(
+		Object.fromEntries(
+			data.expressionTypes.map((type) => [type, data.speechPortraits[type]?.dataUrl || null])
+		)
+	);
+	let frames = $derived(
+		Object.fromEntries(data.frameTypes.map((type) => [type, data.frames[type]?.dataUrl || null]))
+	);
 
 	async function generateConcept() {
 		generating = true;
@@ -48,45 +48,74 @@
 		}
 	}
 
-	async function generateSpeechPortrait(type: 'neutral' | 'talking') {
-		const isNeutral = type === 'neutral';
-		if (isNeutral) {
-			generatingSpeechNeutral = true;
-		} else {
-			generatingSpeechTalking = true;
-		}
-		status = { type: 'info', message: `Generating ${type} speech portrait...` };
+	async function generateSpeechPortrait(expressionType: string) {
+		generatingExpression[expressionType] = true;
+		status = { type: 'info', message: `Generating ${expressionType} expression...` };
 
 		try {
 			const response = await fetch(`/actors/${data.actor.id}`, {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({
-					action: `generate-speech-${type}`
+					action: 'generate-speech',
+					expressionType
 				})
 			});
 
 			const result = await response.json();
 
 			if (result.success) {
-				status = { type: 'success', message: `${type} speech portrait generated successfully!` };
+				status = {
+					type: 'success',
+					message: `${expressionType} expression generated successfully!`
+				};
 				// Reload the page to get the new portrait
 				window.location.reload();
 			} else {
 				status = {
 					type: 'error',
-					message: result.error || `Failed to generate ${type} speech portrait`
+					message: result.error || `Failed to generate ${expressionType} expression`
 				};
 			}
 		} catch (error) {
-			status = { type: 'error', message: `Error generating ${type} speech portrait` };
+			status = { type: 'error', message: `Error generating ${expressionType} expression` };
 			console.error('Generate error:', error);
 		} finally {
-			if (isNeutral) {
-				generatingSpeechNeutral = false;
+			generatingExpression[expressionType] = false;
+		}
+	}
+
+	async function generateFrame(frameType: string) {
+		generatingFrame[frameType] = true;
+		status = { type: 'info', message: `Generating ${frameType} frame...` };
+
+		try {
+			const response = await fetch(`/actors/${data.actor.id}`, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({
+					action: 'generate-frame',
+					frameType
+				})
+			});
+
+			const result = await response.json();
+
+			if (result.success) {
+				status = { type: 'success', message: `${frameType} frame generated successfully!` };
+				// Reload the page to get the new frame
+				window.location.reload();
 			} else {
-				generatingSpeechTalking = false;
+				status = {
+					type: 'error',
+					message: result.error || `Failed to generate ${frameType} frame`
+				};
 			}
+		} catch (error) {
+			status = { type: 'error', message: `Error generating ${frameType} frame` };
+			console.error('Generate error:', error);
+		} finally {
+			generatingFrame[frameType] = false;
 		}
 	}
 
@@ -187,65 +216,89 @@
 
 				<!-- Horizontal scrollable container -->
 				<div class="flex gap-4 overflow-x-auto pb-2">
-					<!-- Neutral Expression -->
-					<div class="shrink-0 w-64">
-						<h3 class="font-semibold mb-2 text-sm">Neutral Expression</h3>
-						<div class="bg-base-200 rounded-lg p-4 aspect-square flex items-center justify-center">
-							{#if speechNeutralUrl}
-								<img
-									src={speechNeutralUrl}
-									alt="{data.actor.name} - Neutral"
-									class="w-full h-full object-contain"
-								/>
-							{:else}
-								<div class="text-center text-base-content/50">
-									<div class="text-4xl mb-2">😐</div>
-									<p class="text-xs">No neutral portrait yet</p>
-								</div>
-							{/if}
+					{#each data.expressionTypes as expressionType}
+						<div class="shrink-0 w-64">
+							<h3 class="font-semibold mb-2 text-sm capitalize">
+								{expressionType.replace(/-/g, ' ')}
+							</h3>
+							<div
+								class="bg-base-200 rounded-lg p-4 aspect-square flex items-center justify-center"
+							>
+								{#if speechPortraits[expressionType]}
+									<img
+										src={speechPortraits[expressionType]}
+										alt="{data.actor.name} - {expressionType}"
+										class="w-full h-full object-contain"
+									/>
+								{:else}
+									<div class="text-center text-base-content/50">
+										<div class="text-4xl mb-2">😐</div>
+										<p class="text-xs">No {expressionType} portrait yet</p>
+									</div>
+								{/if}
+							</div>
+							<button
+								class="btn btn-sm btn-primary w-full mt-2"
+								onclick={() => generateSpeechPortrait(expressionType)}
+								disabled={generatingExpression[expressionType] || !conceptUrl}
+							>
+								{generatingExpression[expressionType]
+									? 'Generating...'
+									: speechPortraits[expressionType]
+										? 'Regenerate'
+										: 'Generate'}
+							</button>
 						</div>
-						<button
-							class="btn btn-sm btn-primary w-full mt-2"
-							onclick={() => generateSpeechPortrait('neutral')}
-							disabled={generatingSpeechNeutral || !conceptUrl}
-						>
-							{generatingSpeechNeutral
-								? 'Generating...'
-								: speechNeutralUrl
-									? 'Regenerate'
-									: 'Generate'}
-						</button>
-					</div>
+					{/each}
+				</div>
+			</div>
+		</div>
 
-					<!-- Talking Expression -->
-					<div class="shrink-0 w-64">
-						<h3 class="font-semibold mb-2 text-sm">Talking Expression</h3>
-						<div class="bg-base-200 rounded-lg p-4 aspect-square flex items-center justify-center">
-							{#if speechTalkingUrl}
-								<img
-									src={speechTalkingUrl}
-									alt="{data.actor.name} - Talking"
-									class="w-full h-full object-contain"
-								/>
-							{:else}
-								<div class="text-center text-base-content/50">
-									<div class="text-4xl mb-2">😊</div>
-									<p class="text-xs">No talking portrait yet</p>
-								</div>
-							{/if}
-						</div>
-						<button
-							class="btn btn-sm btn-primary w-full mt-2"
-							onclick={() => generateSpeechPortrait('talking')}
-							disabled={generatingSpeechTalking || !conceptUrl}
-						>
-							{generatingSpeechTalking
-								? 'Generating...'
-								: speechTalkingUrl
-									? 'Regenerate'
-									: 'Generate'}
-						</button>
+		<!-- Character Frames -->
+		<div class="card bg-base-100 shadow-xl">
+			<div class="card-body">
+				<h2 class="card-title mb-4">Character Frames</h2>
+
+				{#if !conceptUrl}
+					<div class="alert alert-warning mb-4">
+						<span class="text-sm">Generate a concept first to create character frames</span>
 					</div>
+				{/if}
+
+				<!-- Horizontal scrollable container -->
+				<div class="flex gap-4 overflow-x-auto pb-2">
+					{#each data.frameTypes as frameType}
+						<div class="shrink-0 w-64">
+							<h3 class="font-semibold mb-2 text-sm capitalize">{frameType.replace(/-/g, ' ')}</h3>
+							<div
+								class="bg-base-200 rounded-lg p-4 aspect-square flex items-center justify-center"
+							>
+								{#if frames[frameType]}
+									<img
+										src={frames[frameType]}
+										alt="{data.actor.name} - {frameType}"
+										class="w-full h-full object-contain"
+									/>
+								{:else}
+									<div class="text-center text-base-content/50">
+										<div class="text-4xl mb-2">🚶</div>
+										<p class="text-xs">No {frameType} frame yet</p>
+									</div>
+								{/if}
+							</div>
+							<button
+								class="btn btn-sm btn-primary w-full mt-2"
+								onclick={() => generateFrame(frameType)}
+								disabled={generatingFrame[frameType] || !conceptUrl}
+							>
+								{generatingFrame[frameType]
+									? 'Generating...'
+									: frames[frameType]
+										? 'Regenerate'
+										: 'Generate'}
+							</button>
+						</div>
+					{/each}
 				</div>
 			</div>
 		</div>

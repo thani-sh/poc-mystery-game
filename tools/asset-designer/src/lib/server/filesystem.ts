@@ -163,19 +163,16 @@ export async function getActorConceptDataUrl(actorId: string): Promise<string | 
 /**
  * Get actor speech portrait path
  */
-function getActorSpeechPath(actorId: string, type: 'neutral' | 'talking'): string {
-	return path.join(ASSETS_DIR, 'actors', actorId, 'speech', `${type}.png`);
+function getActorSpeechPath(actorId: string, expressionType: string): string {
+	return path.join(ASSETS_DIR, 'actors', actorId, 'speech', `${expressionType}.png`);
 }
 
 /**
  * Check if actor has a speech portrait
  */
-export async function hasActorSpeech(
-	actorId: string,
-	type: 'neutral' | 'talking'
-): Promise<boolean> {
+export async function hasActorSpeech(actorId: string, expressionType: string): Promise<boolean> {
 	try {
-		const speechPath = getActorSpeechPath(actorId, type);
+		const speechPath = getActorSpeechPath(actorId, expressionType);
 		await fs.access(speechPath);
 		return true;
 	} catch {
@@ -188,10 +185,10 @@ export async function hasActorSpeech(
  */
 export async function saveActorSpeech(
 	actorId: string,
-	type: 'neutral' | 'talking',
+	expressionType: string,
 	imageData: Buffer
 ): Promise<void> {
-	const speechPath = getActorSpeechPath(actorId, type);
+	const speechPath = getActorSpeechPath(actorId, expressionType);
 	const dir = path.dirname(speechPath);
 
 	// Create directory if it doesn't exist
@@ -204,10 +201,10 @@ export async function saveActorSpeech(
  */
 export async function getActorSpeechDataUrl(
 	actorId: string,
-	type: 'neutral' | 'talking'
+	expressionType: string
 ): Promise<string | null> {
 	try {
-		const speechPath = getActorSpeechPath(actorId, type);
+		const speechPath = getActorSpeechPath(actorId, expressionType);
 		const imageBuffer = await fs.readFile(speechPath);
 		const base64 = imageBuffer.toString('base64');
 		return `data:image/png;base64,${base64}`;
@@ -219,12 +216,104 @@ export async function getActorSpeechDataUrl(
 /**
  * Get speech spec file
  */
-export async function getSpeechSpecFile(type: 'neutral' | 'talking'): Promise<SpecFile | null> {
+export async function getSpeechSpecFile(type: string): Promise<SpecFile | null> {
 	try {
 		const filePath = path.join(SPEC_DIR, 'speech', `${type}.md`);
 		const content = await fs.readFile(filePath, 'utf-8');
 		return { id: type, name: type, content };
 	} catch (error) {
+		return null;
+	}
+}
+
+/**
+ * Get all available speech expression types
+ */
+export async function getSpeechExpressionTypes(): Promise<string[]> {
+	try {
+		const speechDir = path.join(SPEC_DIR, 'speech');
+		const files = await fs.readdir(speechDir);
+		return files.filter((f) => f.endsWith('.md')).map((f) => f.replace('.md', ''));
+	} catch {
+		return [];
+	}
+}
+
+/**
+ * Get frame spec file
+ */
+export async function getFrameSpecFile(frameType: string): Promise<SpecFile | null> {
+	try {
+		const filePath = path.join(SPEC_DIR, 'frames', `${frameType}.md`);
+		const content = await fs.readFile(filePath, 'utf-8');
+		return { id: frameType, name: frameType, content };
+	} catch (error) {
+		return null;
+	}
+}
+
+/**
+ * Get all available frame types
+ */
+export async function getFrameTypes(): Promise<string[]> {
+	try {
+		const framesDir = path.join(SPEC_DIR, 'frames');
+		const files = await fs.readdir(framesDir);
+		return files.filter((f) => f.endsWith('.md')).map((f) => f.replace('.md', ''));
+	} catch {
+		return [];
+	}
+}
+
+/**
+ * Get actor frame image path
+ */
+function getActorFramePath(actorId: string, frameType: string): string {
+	return path.join(ASSETS_DIR, 'actors', actorId, 'frames', `${frameType}.png`);
+}
+
+/**
+ * Check if actor has a specific frame
+ */
+export async function hasActorFrame(actorId: string, frameType: string): Promise<boolean> {
+	try {
+		const framePath = getActorFramePath(actorId, frameType);
+		await fs.access(framePath);
+		return true;
+	} catch {
+		return false;
+	}
+}
+
+/**
+ * Save actor frame image
+ */
+export async function saveActorFrame(
+	actorId: string,
+	frameType: string,
+	imageData: Buffer
+): Promise<void> {
+	const framePath = getActorFramePath(actorId, frameType);
+	const dir = path.dirname(framePath);
+
+	// Create directory if it doesn't exist
+	await fs.mkdir(dir, { recursive: true });
+	await fs.writeFile(framePath, imageData);
+}
+
+/**
+ * Get actor frame as base64 data URL
+ */
+export async function getActorFrameDataUrl(
+	actorId: string,
+	frameType: string
+): Promise<string | null> {
+	try {
+		const framePath = getActorFramePath(actorId, frameType);
+		const imageBuffer = await fs.readFile(framePath);
+		const base64 = imageBuffer.toString('base64');
+		return `data:image/png;base64,${base64}`;
+	} catch {
 		return null;
 	}
 }

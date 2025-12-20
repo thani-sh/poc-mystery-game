@@ -5,14 +5,21 @@ import {
 	getSpecFile,
 	saveActorConcept,
 	saveActorSpeech,
-	getSpeechSpecFile
+	saveActorFrame,
+	getSpeechSpecFile,
+	getFrameSpecFile
 } from '$lib/server/filesystem';
-import { generateImage, buildConceptPrompt, buildSpeechPrompt } from '$lib/server/gemini';
+import {
+	generateImage,
+	buildConceptPrompt,
+	buildSpeechPrompt,
+	buildFramePrompt
+} from '$lib/server/gemini';
 import fs from 'fs/promises';
 import path from 'path';
 
 export async function POST({ request, params }) {
-	const { action, content } = await request.json();
+	const { action, content, expressionType, frameType } = await request.json();
 
 	if (action === 'save') {
 		try {
@@ -60,14 +67,17 @@ export async function POST({ request, params }) {
 		}
 	}
 
-	if (action === 'generate-speech-neutral' || action === 'generate-speech-talking') {
+	// Handle generic speech portrait generation
+	if (action === 'generate-speech') {
 		try {
-			const speechType = action === 'generate-speech-neutral' ? 'neutral' : 'talking';
+			if (!expressionType) {
+				return json({ success: false, error: 'Expression type is required' }, { status: 400 });
+			}
 
 			// Get actor, base speech spec, and expression spec
 			const actor = await getActor(params.actorId);
 			const baseSpeech = await getSpecFile('base-speech');
-			const expressionSpec = await getSpeechSpecFile(speechType);
+			const expressionSpec = await getSpeechSpecFile(expressionType);
 
 			if (!actor || !baseSpeech || !expressionSpec) {
 				return json({ success: false, error: 'Required specs not found' }, { status: 404 });
@@ -100,8 +110,112 @@ export async function POST({ request, params }) {
 			}
 
 			// Save image
-			await saveActorSpeech(params.actorId, speechType, result.data);
+			await saveActorSpeech(params.actorId, expressionType, result.data);
 
+			return json({ success: true });
+		} catch (error) {
+			console.error('Error generating speech portrait:', error);
+			return json(
+				{
+					success: false,
+					error: error instanceof Error ? error.message : 'Failed to generate speech portrait'
+				},
+				{ status: 500 }
+			);
+		}
+	}
+
+	// Handle frame generation
+	if (action === 'generate-frame') {
+		try {
+			if (!frameType) {
+				return json({ success: false, error: 'Frame type is required' }, { status: 400 });
+			}
+
+			// Get actor, base frames spec, and specific frame spec
+			const actor = await getActor(params.actorId);
+			const baseFrames = await getSpecFile('base-frames');
+			const frameSpec = await getFrameSpecFile(frameType);
+
+			if (!actor || !baseFrames || !frameSpec) {
+				return json({ success: false, error: 'Required specs not found' }, { status: 404 });
+			}
+
+			// Try to load concept image as reference
+			let conceptImage: Buffer | undefined;
+			try {
+				const ASSETS_DIR = path.resolve(process.cwd(), '../../assets');
+				const conceptPath = path.join(ASSETS_DIR, 'actors', params.actorId, 'concept.png');
+				conceptImage = await fs.readFile(conceptPath);
+			} catch {
+				// Concept image not available, continue without it
+			}
+
+			// Build prompt
+			const prompt = buildFramePrompt(actor.content, baseFrames.content, frameSpec.content);
+
+			// Generate image with optional concept reference
+			const result = await generateImage({
+				prompt,
+				referenceImage: conceptImage
+			});
+
+			if (!result) {
+				return json({ success: false, error: 'Failed to generate frame' }, { status: 500 });
+			}
+
+			// Save image
+			await saveActorFrame(params.actorId, frameType, result.data);
+
+			return json({ success: true });
+		} catch (error) {
+			console.error('Error generating frame:', error);
+			return json(
+				{
+					success: false,
+					error: error instanceof Error ? error.message : 'Failed to generate frame'
+				},
+				{ status: 500 }
+			);
+		}
+	}
+
+	// Keep backward compatibility for old action names
+	if (action === 'generate-speech-neutral' || action === 'generate-speech-talking') {
+		const speechType = action === 'generate-speech-neutral' ? 'neutral' : 'talking';
+		// Reuse the speech generation logic
+		try {
+			const actor = await getActor(params.actorId);
+			const baseSpeech = await getSpecFile('base-speech');
+			const expressionSpec = await getSpeechSpecFile(speechType);
+
+			if (!actor || !baseSpeech || !expressionSpec) {
+				return json({ success: false, error: 'Required specs not found' }, { status: 404 });
+			}
+
+			let conceptImage: Buffer | undefined;
+			try {
+				const ASSETS_DIR = path.resolve(process.cwd(), '../../assets');
+				const conceptPath = path.join(ASSETS_DIR, 'actors', params.actorId, 'concept.png');
+				conceptImage = await fs.readFile(conceptPath);
+			} catch {
+				// Concept image not available
+			}
+
+			const prompt = buildSpeechPrompt(actor.content, baseSpeech.content, expressionSpec.content);
+			const result = await generateImage({
+				prompt,
+				referenceImage: conceptImage
+			});
+
+			if (!result) {
+				return json(
+					{ success: false, error: 'Failed to generate speech portrait' },
+					{ status: 500 }
+				);
+			}
+
+			await saveActorSpeech(params.actorId, speechType, result.data);
 			return json({ success: true });
 		} catch (error) {
 			console.error('Error generating speech portrait:', error);

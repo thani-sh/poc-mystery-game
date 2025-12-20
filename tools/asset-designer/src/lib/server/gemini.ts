@@ -88,3 +88,14 @@ export function buildSpeechPrompt(
 ): string {
 	return `${baseSpeechPrompt}\n\n${expressionPrompt}\n\nCharacter Description:\n${characterDescription}\n\nPlease generate a character speech portrait following the style guidelines and expression requirements above.\n\nReference the provided concept image for the character's appearance, ensuring consistency in design, colors, and features.`;
 }
+
+/**
+ * Build a prompt for character frame generation
+ */
+export function buildFramePrompt(
+	characterDescription: string,
+	baseFramesPrompt: string,
+	framePrompt: string
+): string {
+	return `${baseFramesPrompt}\n\n${framePrompt}\n\nCharacter Description:\n${characterDescription}\n\nPlease generate a character sprite frame following the style guidelines and pose requirements above.\n\nReference the provided concept image for the character's appearance, ensuring consistency in design, colors, and features across all frames.`;
+}
