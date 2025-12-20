@@ -25,11 +25,6 @@
 					<p class="text-sm opacity-70 line-clamp-2">
 						{actor.description || 'No description available'}
 					</p>
-					<div class="card-actions justify-end">
-						<div class="badge badge-primary">
-							{actor.hasConcept ? 'Has Concept' : 'No Concept'}
-						</div>
-					</div>
 				</div>
 			</a>
 		{/each}
