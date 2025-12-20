@@ -7,13 +7,23 @@ A proof-of-concept repository for a web-based 2D mystery investigation game.
 ```
 poc-mystery-game/
 ├── docs/           # Documentation and Architectural Decision Records
-└── game/           # The PixiJS-based mystery game application
+├── game/           # The PixiJS-based mystery game application
+└── tools/          # Development tools for asset creation
 ```
 
 ## Documentation
 
 See the [docs](./docs) directory for architectural decisions and design documentation:
+
 - [Architectural Decision Records (ADRs)](./docs/adrs/README.md)
+
+## Development Tools
+
+The [tools](./tools) directory contains development tools for creating game assets:
+
+- **Character Designer**: Web-based tool for generating AI-ready character design prompts
+
+See [tools/README.md](./tools/README.md) for more information.
 
 ## Game Application
 
@@ -27,7 +37,7 @@ cd game
 npm install
 
 # Run development server
-npm run dev
+npm run start
 
 # Build for production
 npm run build

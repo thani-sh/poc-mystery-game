@@ -1,13 +1,12 @@
 {
-  "name": "poc-mystery-game",
+  "name": "mystery-game",
   "version": "0.0.0",
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "npm run dev",
+    "start": "vite",
     "build": "npm run lint && tsc && vite build",
-    "lint": "eslint .",
-    "dev": "vite"
+    "lint": "eslint ."
   },
   "dependencies": {
     "@esotericsoftware/spine-pixi-v8": "^4.2.74",
