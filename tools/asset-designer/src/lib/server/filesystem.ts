@@ -1,6 +1,5 @@
 import fs from 'fs/promises';
 import path from 'path';
-import matter from 'gray-matter';
 
 const SPEC_DIR = path.resolve(process.cwd(), '../../docs/spec');
 const ACTORS_DIR = path.join(SPEC_DIR, 'actors');
@@ -11,14 +10,12 @@ export interface Actor {
 	name: string;
 	description: string;
 	content: string;
-	frontmatter: Record<string, unknown>;
 }
 
 export interface SpecFile {
 	id: string;
 	name: string;
 	content: string;
-	frontmatter: Record<string, unknown>;
 }
 
 /**
@@ -31,20 +28,15 @@ export async function getSpecFiles(): Promise<SpecFile[]> {
 	for (const file of files) {
 		const filePath = path.join(SPEC_DIR, file);
 		const stat = await fs.stat(filePath);
-
 		// Skip directories and non-markdown files
 		if (stat.isDirectory() || !file.endsWith('.md')) {
 			continue;
 		}
-
 		const content = await fs.readFile(filePath, 'utf-8');
-		const parsed = matter(content);
-
 		specFiles.push({
 			id: file.replace('.md', ''),
 			name: file.replace('.md', '').replace(/-/g, ' '),
-			content: content,
-			frontmatter: parsed.data
+			content: content
 		});
 	}
 
@@ -58,14 +50,7 @@ export async function getSpecFile(id: string): Promise<SpecFile | null> {
 	try {
 		const filePath = path.join(SPEC_DIR, `${id}.md`);
 		const content = await fs.readFile(filePath, 'utf-8');
-		const parsed = matter(content);
-
-		return {
-			id,
-			name: id.replace(/-/g, ' '),
-			content,
-			frontmatter: parsed.data
-		};
+		return { id, name: id.replace(/-/g, ' '), content };
 	} catch (error) {
 		return null;
 	}
@@ -91,15 +76,12 @@ export async function getActors(): Promise<Actor[]> {
 
 		const filePath = path.join(ACTORS_DIR, file);
 		const content = await fs.readFile(filePath, 'utf-8');
-		const parsed = matter(content);
-
 		const id = file.replace('.md', '');
 		actors.push({
 			id,
-			name: parsed.data.name || id.replace(/-/g, ' '),
-			description: parsed.data.description || '',
-			content,
-			frontmatter: parsed.data
+			name: id.replace(/-/g, ' '),
+			description: '',
+			content
 		});
 	}
 
@@ -113,14 +95,11 @@ export async function getActor(id: string): Promise<Actor | null> {
 	try {
 		const filePath = path.join(ACTORS_DIR, `${id}.md`);
 		const content = await fs.readFile(filePath, 'utf-8');
-		const parsed = matter(content);
-
 		return {
 			id,
-			name: parsed.data.name || id.replace(/-/g, ' '),
-			description: parsed.data.description || '',
-			content,
-			frontmatter: parsed.data
+			name: id.replace(/-/g, ' '),
+			description: '',
+			content
 		};
 	} catch (error) {
 		return null;
@@ -177,6 +156,75 @@ export async function getActorConceptDataUrl(actorId: string): Promise<string | 
 		const base64 = imageBuffer.toString('base64');
 		return `data:image/png;base64,${base64}`;
 	} catch {
+		return null;
+	}
+}
+
+/**
+ * Get actor speech portrait path
+ */
+function getActorSpeechPath(actorId: string, type: 'neutral' | 'talking'): string {
+	return path.join(ASSETS_DIR, 'actors', actorId, 'speech', `${type}.png`);
+}
+
+/**
+ * Check if actor has a speech portrait
+ */
+export async function hasActorSpeech(
+	actorId: string,
+	type: 'neutral' | 'talking'
+): Promise<boolean> {
+	try {
+		const speechPath = getActorSpeechPath(actorId, type);
+		await fs.access(speechPath);
+		return true;
+	} catch {
+		return false;
+	}
+}
+
+/**
+ * Save actor speech portrait image
+ */
+export async function saveActorSpeech(
+	actorId: string,
+	type: 'neutral' | 'talking',
+	imageData: Buffer
+): Promise<void> {
+	const speechPath = getActorSpeechPath(actorId, type);
+	const dir = path.dirname(speechPath);
+
+	// Create directory if it doesn't exist
+	await fs.mkdir(dir, { recursive: true });
+	await fs.writeFile(speechPath, imageData);
+}
+
+/**
+ * Get actor speech portrait as base64 data URL
+ */
+export async function getActorSpeechDataUrl(
+	actorId: string,
+	type: 'neutral' | 'talking'
+): Promise<string | null> {
+	try {
+		const speechPath = getActorSpeechPath(actorId, type);
+		const imageBuffer = await fs.readFile(speechPath);
+		const base64 = imageBuffer.toString('base64');
+		return `data:image/png;base64,${base64}`;
+	} catch {
+		return null;
+	}
+}
+
+/**
+ * Get speech spec file
+ */
+export async function getSpeechSpecFile(type: 'neutral' | 'talking'): Promise<SpecFile | null> {
+	try {
+		const filePath = path.join(SPEC_DIR, 'speech', `${type}.md`);
+		const content = await fs.readFile(filePath, 'utf-8');
+		return { id: type, name: type, content };
+	} catch (error) {
 		return null;
 	}
 }

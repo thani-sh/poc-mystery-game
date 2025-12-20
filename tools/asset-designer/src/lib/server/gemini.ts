@@ -5,6 +5,7 @@ const ai = env.GEMINI_API_KEY ? new GoogleGenAI({ apiKey: env.GEMINI_API_KEY }) 
 
 export interface GenerateImageOptions {
 	prompt: string;
+	referenceImage?: Buffer; // Optional reference image
 }
 
 /**
@@ -18,9 +19,22 @@ export async function generateImage(
 	}
 
 	try {
+		// Build content parts
+		const contentParts: any[] = [{ text: options.prompt }];
+
+		// Add reference image if provided
+		if (options.referenceImage) {
+			contentParts.push({
+				inlineData: {
+					data: options.referenceImage.toString('base64'),
+					mimeType: 'image/png'
+				}
+			});
+		}
+
 		const response = await ai.models.generateContent({
 			model: 'gemini-3-pro-image-preview',
-			contents: options.prompt,
+			contents: contentParts,
 			config: {
 				responseModalities: ['image']
 			}
@@ -62,4 +76,15 @@ export async function generateImage(
  */
 export function buildConceptPrompt(characterDescription: string, basePrompt: string): string {
 	return `${basePrompt}\n\nCharacter Description:\n${characterDescription}\n\nPlease generate a character concept image following the style guidelines above.`;
+}
+
+/**
+ * Build a prompt for character speech portrait generation
+ */
+export function buildSpeechPrompt(
+	characterDescription: string,
+	baseSpeechPrompt: string,
+	expressionPrompt: string
+): string {
+	return `${baseSpeechPrompt}\n\n${expressionPrompt}\n\nCharacter Description:\n${characterDescription}\n\nPlease generate a character speech portrait following the style guidelines and expression requirements above.\n\nReference the provided concept image for the character's appearance, ensuring consistency in design, colors, and features.`;
 }

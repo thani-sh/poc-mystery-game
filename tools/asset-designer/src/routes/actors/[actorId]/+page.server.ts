@@ -1,5 +1,10 @@
-import { getActorConceptDataUrl, hasActorConcept } from '$lib/server/filesystem';
-import { getActor, getSpecFile } from '$lib/server/filesystem';
+import {
+	getActor,
+	getActorConceptDataUrl,
+	getActorSpeechDataUrl,
+	hasActorConcept,
+	hasActorSpeech
+} from '$lib/server/filesystem';
 import { error } from '@sveltejs/kit';
 
 export async function load({ params }) {
@@ -12,6 +17,10 @@ export async function load({ params }) {
 	return {
 		actor,
 		hasConcept: await hasActorConcept(params.actorId),
-		conceptDataUrl: await getActorConceptDataUrl(params.actorId)
+		conceptDataUrl: await getActorConceptDataUrl(params.actorId),
+		hasSpeechNeutral: await hasActorSpeech(params.actorId, 'neutral'),
+		speechNeutralDataUrl: await getActorSpeechDataUrl(params.actorId, 'neutral'),
+		hasSpeechTalking: await hasActorSpeech(params.actorId, 'talking'),
+		speechTalkingDataUrl: await getActorSpeechDataUrl(params.actorId, 'talking')
 	};
 }
