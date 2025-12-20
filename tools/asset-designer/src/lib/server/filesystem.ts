@@ -138,7 +138,7 @@ export async function updateActor(id: string, content: string): Promise<void> {
 /**
  * Get actor concept image path
  */
-export function getActorConceptPath(actorId: string): string {
+function getActorConceptPath(actorId: string): string {
 	return path.join(ASSETS_DIR, 'actors', actorId, 'concept.png');
 }
 
@@ -178,18 +178,5 @@ export async function getActorConceptDataUrl(actorId: string): Promise<string | 
 		return `data:image/png;base64,${base64}`;
 	} catch {
 		return null;
-	}
-}
-
-/**
- * Get all frame types for an actor
- */
-export async function getActorFrames(actorId: string): Promise<string[]> {
-	const actorDir = path.join(ASSETS_DIR, 'actors', actorId);
-	try {
-		const files = await fs.readdir(actorDir);
-		return files.filter((f) => f.endsWith('.png') && f !== 'concept.png');
-	} catch {
-		return [];
 	}
 }
