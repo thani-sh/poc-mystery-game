@@ -6,6 +6,7 @@ const ai = env.GEMINI_API_KEY ? new GoogleGenAI({ apiKey: env.GEMINI_API_KEY }) 
 export interface GenerateImageOptions {
 	prompt: string;
 	referenceImage?: Buffer; // Optional reference image
+	referenceImages?: Buffer[]; // Optional multiple reference images
 }
 
 /**
@@ -22,8 +23,18 @@ export async function generateImage(
 		// Build content parts
 		const contentParts: any[] = [{ text: options.prompt }];
 
-		// Add reference image if provided
-		if (options.referenceImage) {
+		// Add reference images if provided
+		if (options.referenceImages && options.referenceImages.length > 0) {
+			for (const refImage of options.referenceImages) {
+				contentParts.push({
+					inlineData: {
+						data: refImage.toString('base64'),
+						mimeType: 'image/png'
+					}
+				});
+			}
+		} else if (options.referenceImage) {
+			// Backward compatibility: single reference image
 			contentParts.push({
 				inlineData: {
 					data: options.referenceImage.toString('base64'),
@@ -95,7 +106,12 @@ export function buildSpeechPrompt(
 export function buildFramePrompt(
 	characterDescription: string,
 	baseFramesPrompt: string,
-	framePrompt: string
+	framePrompt: string,
+	hasIdleDownReference: boolean = false
 ): string {
-	return `${baseFramesPrompt}\n\n${framePrompt}\n\nCharacter Description:\n${characterDescription}\n\nPlease generate a character sprite frame following the style guidelines and pose requirements above.\n\nReference the provided concept image for the character's appearance, ensuring consistency in design, colors, and features across all frames.`;
+	const referenceInstructions = hasIdleDownReference
+		? "Reference the provided concept image for the character's appearance and the idle-down frame for consistent style, proportions, and design across all frames."
+		: "Reference the provided concept image for the character's appearance, ensuring consistency in design, colors, and features across all frames.";
+
+	return `${baseFramesPrompt}\n\n${framePrompt}\n\nCharacter Description:\n${characterDescription}\n\nPlease generate a character sprite frame following the style guidelines and pose requirements above.\n\n${referenceInstructions}`;
 }

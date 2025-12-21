@@ -142,22 +142,48 @@ export async function POST({ request, params }) {
 			}
 
 			// Try to load concept image as reference
-			let conceptImage: Buffer | undefined;
+			const ASSETS_DIR = path.resolve(process.cwd(), '../../assets');
+			const referenceImages: Buffer[] = [];
+
 			try {
-				const ASSETS_DIR = path.resolve(process.cwd(), '../../assets');
 				const conceptPath = path.join(ASSETS_DIR, 'actors', params.actorId, 'concept.png');
-				conceptImage = await fs.readFile(conceptPath);
+				const conceptImage = await fs.readFile(conceptPath);
+				referenceImages.push(conceptImage);
 			} catch {
-				// Concept image not available, continue without it
+				// Concept image not available
+			}
+
+			// For frames other than idle-down, also use idle-down as reference
+			let hasIdleDownReference = false;
+			if (frameType !== 'idle-down') {
+				try {
+					const idleDownPath = path.join(
+						ASSETS_DIR,
+						'actors',
+						params.actorId,
+						'frames',
+						'idle-down.png'
+					);
+					const idleDownImage = await fs.readFile(idleDownPath);
+					referenceImages.push(idleDownImage);
+					hasIdleDownReference = true;
+				} catch {
+					// Idle-down frame not available yet
+				}
 			}
 
 			// Build prompt
-			const prompt = buildFramePrompt(actor.content, baseFrames.content, frameSpec.content);
+			const prompt = buildFramePrompt(
+				actor.content,
+				baseFrames.content,
+				frameSpec.content,
+				hasIdleDownReference
+			);
 
-			// Generate image with optional concept reference
+			// Generate image with reference images
 			const result = await generateImage({
 				prompt,
-				referenceImage: conceptImage
+				referenceImages: referenceImages.length > 0 ? referenceImages : undefined
 			});
 
 			if (!result) {
