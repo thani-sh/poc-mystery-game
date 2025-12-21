@@ -51,99 +51,28 @@ If the user requests concept art images, follow these guidelines:
 
 ## Portraits
 
-If the user requests individual character portraits, follow these guidelines:
-
-- Pure white background (#ffffff) for the entire portrait.
-- No environmental elements, props, or scene details - only the character.
-- Use 3:4 aspect ratio for the image dimensions and use the full canvas.
-- Position the character portrait at the bottom center of the image.
-- Character turned three-quarters to the left: the head and body are oriented toward the left side of the image, but most of the face is still clearly visible (not a strict side profile)
-- The character's eyes and facial expression are clearly readable and facing generally toward the viewer
-
-### Framing Rules
-
-Adult characters
-
-- Tight portrait framing
-- Only the head and a small portion of the shoulders visible
-- No chest, torso, or body visible below the upper chest
-- Feels like a classic dialogue box portrait: close-up on the face with just enough shoulder to define posture
-
-Child / younger characters
-
-- Slightly looser framing to show more of the body
-- Head down to mid-torso or waist may be visible
-- Never show below the hips
-- Composition still focused on the face; body pose is secondary
-
-Large animals (e.g. horses)
-
-- Portrait-style framing focused on the head and neck area
-- Optionally include a small hint of shoulders or upper body mass behind the head
-- Do not show full body; no limbs or tail unless they are cropped very close to the head
-- The face and eyes must remain the main focal point
-
-Small animals (e.g. dogs, cats)
-
-- Head and upper body visible
-- From head down to mid-torso or the front-leg/forelimb area
-- Never show the full body and never show below the hip/waist equivalent for that creature
-- Framing mimics a character portrait rather than a full creature illustration
-
-### Expression/Emotions
-
-- Each portrait should clearly convey its intended emotion or state through facial features
-- Maintain consistent character design (hair, face shape, clothing, colors) across all portraits
-- Only facial expressions, eye positions, and mouth shapes should change between different expressions
-- Body posture can shift slightly (e.g., slouch for exhausted, tilt for dizzy, hand on chin for thinking) but should remain subtle
-- Eyes are the key to emotion: use eye shape, pupil size, and eyelid position to convey feelings
-- Mouth shapes should be varied and expressive: open for talking/surprise, curved for happy/angry, etc.
-
-### Negative Prompts
-
---no inconsistent character design, equipment, or clothing. no dramatic perspective, foreshortening, motion blur, multiple characters in one frame
+If the user requests individual character portraits, refer to the detailed guidelines in `base-portrait.prompt.md`.
 
 ## Spritesheets
 
-If the user requests individual character spritesheets, follow these guidelines:
+If the user requests individual character spritesheets, refer to the detailed guidelines in `base-spritesheet.prompt.md`.
+
+## Tilesets
+
+If the user requests environment tilesets, follow these guidelines:
 
 - Pure white background (#ffffff) for the entire image.
-- No environmental elements, props, or scene details - only the character.
 - Use 1:1 aspect ratio for the image dimensions and use the full canvas.
-- Position the character sprite at the bottom center of the image.
-- Simple, readable sprites with clear silhouettes optimized for 16-bit era aesthetics
-- Clean, bold character shapes with easily distinguishable features (hair, clothing, accessories)
-- Expressive poses and movement that read clearly even at small sprite sizes
-- Consistent stylized design so that every sprite looks like it belongs to the same character and game
-- Limited but harmonious color palette with strong contrast between character and white background
+- Generate a 16x16 grid of tiles (256 equal squares)
+- Each tile should be 16x16 pixels when the image is divided into the grid
+- Tiles should represent various environmental elements for the specified environment (e.g., grass, dirt, paths, water, flowers, trees, fences, etc.)
+- Tiles should be designed to seamlessly tile with each other when placed adjacent
+- Include edge tiles, corner tiles, and transition tiles for smooth blending between different terrain types
+- Maintain the same retro JRPG art style with clean lines, flat cel-shaded colors, and 90s fantasy anime aesthetic
+- Design tiles so they can be arranged in different combinations to create varied environments
+- Include both ground tiles and decorative overlay tiles
+- Each tile should be distinct and clearly identifiable for use in a tile-based level editor
 
-### Spritesheet Consistency (CRITICAL)
+### Tileset Negative Prompts
 
-**When an idle spritesheet reference is provided, treat the generation as an EDIT operation, not creating from scratch:**
-
-- The idle spritesheet serves as the DEFINITIVE reference for the character's appearance, proportions, style, and color palette
-- Preserve EXACT character design from the idle spritesheet: same face shape, eye style, hair design, clothing details, body proportions, and color values
-- Match the exact art style, line weight, shading approach, and level of detail from the idle reference
-- Only animate the character's pose and movement - DO NOT alter any visual characteristics
-- The character in every animation must look identical to the idle version, just in different poses
-- Think of this as keyframing: the idle spritesheet shows what the character looks like, and you're just adding motion
-- Maintain consistent sprite dimensions and positioning across all animations so they can be swapped seamlessly in-game
-
-**Without an idle reference, establish a new baseline that will be used for future animations**
-
-### Format Rules
-
-**CRITICAL: Generate a 4x4 grid spritesheet with 4 animations, one per row**
-
-- Create a square image divided into a 4x4 grid (16 equal squares)
-- Each spritesheet contains one animation of the character.
-- Each row is dedicated to each cordial direction (down, left, right, up) in that order from top to bottom. !!!IMPORTANT: DO NOT CHANGE THE ORDER OF THE ROWS!!!
-- All 4 frames should show subtle variations in the pose to create smooth animation when cycled
-- Animation frames start from the left to right in each row.
-- Each square contains one animation frame of the character.
-- within each square should have the character on the same y axis position so that the character does not appear to jump up and down between frames.
-- Frames must be evenly spaced in the 4x4 grid with clear separation
-
-### Negative Prompts
-
---no inconsistent character design, equipment, clothing, foreshortening, motion blur, single frame, multiple characters in one frame, varying character sizes, varying positions within frames, grid layout with more or fewer than 16 frames
+--no 3d render, photorealistic, perspective distortion, shadows that don't match top-down view, inconsistent lighting between tiles, tiles that don't align properly, modern digital painting style, blurry tiles

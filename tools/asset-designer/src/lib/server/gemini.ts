@@ -12,6 +12,44 @@ export interface GenerateImageOptions {
 }
 
 /**
+ * Generate text using Gemini Flash
+ */
+export async function generateText(prompt: string): Promise<string | null> {
+	if (!ai) {
+		throw new Error('Gemini API key not configured');
+	}
+
+	try {
+		const response = await ai.models.generateContent({
+			model: 'gemini-3-pro-preview',
+			contents: [{ text: prompt }]
+		});
+
+		const candidates = response.candidates;
+		if (!candidates || candidates.length === 0) {
+			return null;
+		}
+
+		const firstCandidate = candidates[0];
+		if (!firstCandidate.content || !firstCandidate.content.parts) {
+			return null;
+		}
+
+		// Extract text from response
+		for (const part of firstCandidate.content.parts) {
+			if (part.text) {
+				return part.text;
+			}
+		}
+
+		return null;
+	} catch (error) {
+		console.error('Error generating text:', error);
+		throw error;
+	}
+}
+
+/**
  * Generate an image using Gemini
  */
 export async function generateImage(
@@ -101,21 +139,61 @@ export function buildConceptPrompt(systemPrompt: string, characterDescription: s
 /**
  * Build a prompt for portrait generation
  */
-export function buildPortraitPrompt(
+export async function buildPortraitPrompt(
 	systemPrompt: string,
 	characterDescription: string,
 	extraInstructions?: string
-): string {
-	return `${systemPrompt}\n\nCharacter Description:\n${characterDescription}\n\n${extraInstructions}`;
+): Promise<string> {
+	// Load base portrait guidelines
+	const fs = await import('fs/promises');
+	const path = await import('path');
+	const PROMPTS_DIR = path.resolve(process.cwd(), '../../docs/spec/prompts');
+
+	let basePortraitInstructions = '';
+	try {
+		basePortraitInstructions = await fs.readFile(
+			path.join(PROMPTS_DIR, 'base-portrait.prompt.md'),
+			'utf-8'
+		);
+	} catch (error) {
+		console.warn('Could not load base-portrait.prompt.md, continuing without it');
+	}
+
+	return `${systemPrompt}\n\n${basePortraitInstructions}\n\nCharacter Description:\n${characterDescription}${extraInstructions ? `\n\n${extraInstructions}` : ''}`;
 }
 
 /**
  * Build a prompt for spritesheet generation
  */
-export function buildSpritesheetPrompt(
+export async function buildSpritesheetPrompt(
 	systemPrompt: string,
 	characterDescription: string,
 	extraInstructions?: string
-): string {
-	return `${systemPrompt}\n\nCharacter Description:\n${characterDescription}\n\n${extraInstructions}`;
+): Promise<string> {
+	// Load base spritesheet guidelines
+	const fs = await import('fs/promises');
+	const path = await import('path');
+	const PROMPTS_DIR = path.resolve(process.cwd(), '../../docs/spec/prompts');
+
+	let baseSpritesheetInstructions = '';
+	try {
+		baseSpritesheetInstructions = await fs.readFile(
+			path.join(PROMPTS_DIR, 'base-spritesheet.prompt.md'),
+			'utf-8'
+		);
+	} catch (error) {
+		console.warn('Could not load base-spritesheet.prompt.md, continuing without it');
+	}
+
+	return `${systemPrompt}\n\n${baseSpritesheetInstructions}\n\nCharacter Description:\n${characterDescription}${extraInstructions ? `\n\n${extraInstructions}` : ''}`;
+}
+
+/**
+ * Build a prompt for tileset generation
+ */
+export async function buildTilesetPrompt(
+	systemPrompt: string,
+	tilesetDescription: string
+): Promise<string> {
+	return `${systemPrompt}\n\nTileset Description:\n${tilesetDescription}`;
 }

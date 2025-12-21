@@ -3,6 +3,7 @@ import path from 'path';
 
 const SPEC_DIR = path.resolve(process.cwd(), '../../docs/spec');
 const PROMPTS_DIR = path.join(SPEC_DIR, 'prompts');
+const TILESETS_PROMPTS_DIR = path.join(PROMPTS_DIR, 'tilesets');
 const ACTORS_DIR = path.join(SPEC_DIR, 'actors');
 const ASSETS_DIR = path.resolve(process.cwd(), '../../assets');
 
@@ -263,6 +264,137 @@ export async function getActorFrameDataUrl(
 		const imageBuffer = await fs.readFile(framePath);
 		const base64 = imageBuffer.toString('base64');
 		return `data:image/png;base64,${base64}`;
+	} catch {
+		return null;
+	}
+}
+
+/**
+ * Get all tilesets
+ */
+export async function getTilesets(): Promise<SpecFile[]> {
+	const files = await fs.readdir(TILESETS_PROMPTS_DIR);
+	const tilesets: SpecFile[] = [];
+
+	for (const file of files) {
+		if (!file.endsWith('.prompt.md')) continue;
+
+		const filePath = path.join(TILESETS_PROMPTS_DIR, file);
+		const content = await fs.readFile(filePath, 'utf-8');
+		const id = file.replace('.prompt.md', '');
+		tilesets.push({
+			id,
+			name: id.replace(/-/g, ' '),
+			content
+		});
+	}
+
+	return tilesets;
+}
+
+/**
+ * Get a specific tileset
+ */
+export async function getTileset(id: string): Promise<SpecFile | null> {
+	try {
+		const filePath = path.join(TILESETS_PROMPTS_DIR, `${id}.prompt.md`);
+		const content = await fs.readFile(filePath, 'utf-8');
+		return {
+			id,
+			name: id.replace(/-/g, ' '),
+			content
+		};
+	} catch (error) {
+		return null;
+	}
+}
+
+/**
+ * Get tileset image path
+ */
+function getTilesetImagePath(tilesetId: string): string {
+	return path.join(ASSETS_DIR, 'tilesets', `${tilesetId}.png`);
+}
+
+/**
+ * Get tileset JSON path
+ */
+function getTilesetJsonPath(tilesetId: string): string {
+	return path.join(ASSETS_DIR, 'tilesets', `${tilesetId}.json`);
+}
+
+/**
+ * Check if tileset has an image
+ */
+export async function hasTilesetImage(tilesetId: string): Promise<boolean> {
+	try {
+		const imagePath = getTilesetImagePath(tilesetId);
+		await fs.access(imagePath);
+		return true;
+	} catch {
+		return false;
+	}
+}
+
+/**
+ * Check if tileset has a JSON file
+ */
+export async function hasTilesetJson(tilesetId: string): Promise<boolean> {
+	try {
+		const jsonPath = getTilesetJsonPath(tilesetId);
+		await fs.access(jsonPath);
+		return true;
+	} catch {
+		return false;
+	}
+}
+
+/**
+ * Save tileset image
+ */
+export async function saveTilesetImage(tilesetId: string, imageData: Buffer): Promise<void> {
+	const imagePath = getTilesetImagePath(tilesetId);
+	const dir = path.dirname(imagePath);
+
+	// Create directory if it doesn't exist
+	await fs.mkdir(dir, { recursive: true });
+	await fs.writeFile(imagePath, imageData);
+}
+
+/**
+ * Save tileset JSON
+ */
+export async function saveTilesetJson(tilesetId: string, jsonData: any): Promise<void> {
+	const jsonPath = getTilesetJsonPath(tilesetId);
+	const dir = path.dirname(jsonPath);
+
+	// Create directory if it doesn't exist
+	await fs.mkdir(dir, { recursive: true });
+	await fs.writeFile(jsonPath, JSON.stringify(jsonData, null, 2), 'utf-8');
+}
+
+/**
+ * Get tileset image as base64 data URL
+ */
+export async function getTilesetImageDataUrl(tilesetId: string): Promise<string | null> {
+	try {
+		const imagePath = getTilesetImagePath(tilesetId);
+		const imageBuffer = await fs.readFile(imagePath);
+		const base64 = imageBuffer.toString('base64');
+		return `data:image/png;base64,${base64}`;
+	} catch {
+		return null;
+	}
+}
+
+/**
+ * Get tileset JSON data
+ */
+export async function getTilesetJson(tilesetId: string): Promise<any | null> {
+	try {
+		const jsonPath = getTilesetJsonPath(tilesetId);
+		const content = await fs.readFile(jsonPath, 'utf-8');
+		return JSON.parse(content);
 	} catch {
 		return null;
 	}
