@@ -36,7 +36,7 @@ export class CharacterSprite extends Container {
         const key = `${state}-${direction}`;
         // Use left animation for right direction (we'll flip it)
         const loadDirection = direction === "right" ? "left" : direction;
-        const textureName = `/assets/main/characters/${this.characterId}/${this.characterId}-${state}-${loadDirection}.png`;
+        const textureName = `/assets/main/characters/${this.characterId}/${state}-${loadDirection}.png`;
 
         try {
           // Load the texture using Assets API
