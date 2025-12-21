@@ -141,6 +141,17 @@ export const generateSpritesheet = command(
 			} catch {
 				console.warn(`Idle spritesheet not found for ${actorId}, continuing without it`);
 			}
+		} else {
+			// For idle animation, add Bets idle spritesheet as reference if available
+			try {
+				const ASSETS_DIR = path.resolve(process.cwd(), '../../assets');
+				const betsIdlePath = path.join(ASSETS_DIR, 'actors', 'bets', 'frames', 'idle.png');
+				const betsIdleImage = await fs.readFile(betsIdlePath);
+				referenceImages.push(betsIdleImage);
+				console.log(`Added Bets idle spritesheet as reference for ${animationType}`);
+			} catch {
+				console.log(`Bets idle spritesheet not found, continuing without it`);
+			}
 		}
 
 		const result = await generateImage({
@@ -276,6 +287,17 @@ export const generateMissingSpritesheets = command(
 						console.log(`Added idle spritesheet as reference for ${type}`);
 					} catch {
 						console.warn(`Idle spritesheet not found for ${actorId}, continuing without it`);
+					}
+				} else {
+					// For idle animation, add Bets idle spritesheet as reference if available
+					try {
+						const ASSETS_DIR = path.resolve(process.cwd(), '../../assets');
+						const betsIdlePath = path.join(ASSETS_DIR, 'actors', 'bets', 'frames', 'idle.png');
+						const betsIdleImage = await fs.readFile(betsIdlePath);
+						referenceImages.push(betsIdleImage);
+						console.log(`Added Bets idle spritesheet as reference for ${type}`);
+					} catch {
+						console.log(`Bets idle spritesheet not found, continuing without it`);
 					}
 				}
 

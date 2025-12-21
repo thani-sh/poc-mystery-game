@@ -1,5 +1,7 @@
 import { Container, Graphics, Ticker } from "pixi.js";
 import { PlayerController } from "../../game/character/PlayerController";
+import { CharacterSprite } from "../../game/character/CharacterSprite";
+import { Direction } from "../../game/types";
 
 /**
  * Game screen with grid and player character
@@ -12,6 +14,14 @@ export class GameScreen extends Container {
   private characterContainer: Container;
   private player1Controller: PlayerController | null = null;
   private player2Controller: PlayerController | null = null;
+
+  // NPC characters
+  private ernSprite: CharacterSprite | null = null;
+  private fattySprite: CharacterSprite | null = null;
+  private goonSprite: CharacterSprite | null = null;
+  private jenksSprite: CharacterSprite | null = null;
+  private larrySprite: CharacterSprite | null = null;
+  private pipSprite: CharacterSprite | null = null;
 
   private readonly GRID_SIZE = 12; // 12x12 grid
   private readonly TILE_SIZE = 100; // 100 pixels per tile
@@ -72,7 +82,7 @@ export class GameScreen extends Container {
 
     // Initialize player 1 (Bets) on the left
     const player1Pos = {
-      x: 2,
+      x: 2 + 3,
       y: Math.floor(this.GRID_SIZE / 2),
     };
 
@@ -82,6 +92,7 @@ export class GameScreen extends Container {
       this.TILE_SIZE,
       this.GRID_SIZE,
       { up: "w", down: "s", left: "a", right: "d" },
+      0.8,
     );
 
     // Initialize player 2 (Daisy) on the right
@@ -101,6 +112,7 @@ export class GameScreen extends Container {
         left: "arrowleft",
         right: "arrowright",
       },
+      0.9,
     );
 
     console.log("GameScreen: Initializing player controllers");
@@ -111,6 +123,71 @@ export class GameScreen extends Container {
     this.characterContainer.addChild(this.player1Controller.getSprite());
     this.characterContainer.addChild(this.player2Controller.getSprite());
     console.log("GameScreen: Character sprites added to container");
+
+    // Initialize NPCs
+    console.log("GameScreen: Initializing NPCs");
+
+    // Ern - Top left area
+    this.ernSprite = new CharacterSprite("ern", this.TILE_SIZE, 0.9);
+    await this.ernSprite.setup();
+    this.ernSprite.position.set(
+      1 * this.TILE_SIZE + this.TILE_SIZE / 2,
+      (2 + 1) * this.TILE_SIZE,
+    );
+    this.ernSprite.setDirection(Direction.Right);
+    this.characterContainer.addChild(this.ernSprite);
+
+    // Fatty - Top right area
+    this.fattySprite = new CharacterSprite("fatty", this.TILE_SIZE);
+    await this.fattySprite.setup();
+    this.fattySprite.position.set(
+      10 * this.TILE_SIZE + this.TILE_SIZE / 2,
+      (2 + 1) * this.TILE_SIZE,
+    );
+    this.fattySprite.setDirection(Direction.Left);
+    this.characterContainer.addChild(this.fattySprite);
+
+    // Goon - Middle left area
+    this.goonSprite = new CharacterSprite("goon", this.TILE_SIZE, 1.1);
+    await this.goonSprite.setup();
+    this.goonSprite.position.set(
+      2 * this.TILE_SIZE + this.TILE_SIZE / 2,
+      (6 + 1) * this.TILE_SIZE,
+    );
+    this.goonSprite.setDirection(Direction.Down);
+    this.characterContainer.addChild(this.goonSprite);
+
+    // Jenks - Center area
+    this.jenksSprite = new CharacterSprite("jenks", this.TILE_SIZE, 1.1);
+    await this.jenksSprite.setup();
+    this.jenksSprite.position.set(
+      6 * this.TILE_SIZE + this.TILE_SIZE / 2,
+      (5 + 1) * this.TILE_SIZE,
+    );
+    this.jenksSprite.setDirection(Direction.Down);
+    this.characterContainer.addChild(this.jenksSprite);
+
+    // Larry - Bottom left area
+    this.larrySprite = new CharacterSprite("larry", this.TILE_SIZE);
+    await this.larrySprite.setup();
+    this.larrySprite.position.set(
+      1 * this.TILE_SIZE + this.TILE_SIZE / 2,
+      (9 + 1) * this.TILE_SIZE,
+    );
+    this.larrySprite.setDirection(Direction.Right);
+    this.characterContainer.addChild(this.larrySprite);
+
+    // Pip - Bottom right area
+    this.pipSprite = new CharacterSprite("pip", this.TILE_SIZE);
+    await this.pipSprite.setup();
+    this.pipSprite.position.set(
+      10 * this.TILE_SIZE + this.TILE_SIZE / 2,
+      (9 + 1) * this.TILE_SIZE,
+    );
+    this.pipSprite.setDirection(Direction.Left);
+    this.characterContainer.addChild(this.pipSprite);
+
+    console.log("GameScreen: NPCs initialized and added");
   }
 
   /**
@@ -171,6 +248,25 @@ export class GameScreen extends Container {
     }
     if (this.player2Controller) {
       this.player2Controller.destroy();
+    }
+    // Cleanup NPCs
+    if (this.ernSprite) {
+      this.ernSprite.destroy();
+    }
+    if (this.fattySprite) {
+      this.fattySprite.destroy();
+    }
+    if (this.goonSprite) {
+      this.goonSprite.destroy();
+    }
+    if (this.jenksSprite) {
+      this.jenksSprite.destroy();
+    }
+    if (this.larrySprite) {
+      this.larrySprite.destroy();
+    }
+    if (this.pipSprite) {
+      this.pipSprite.destroy();
     }
     super.destroy(options);
   }
