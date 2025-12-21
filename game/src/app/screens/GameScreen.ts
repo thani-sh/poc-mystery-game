@@ -1,4 +1,4 @@
-import { Container, Graphics, Text, TextStyle, Ticker } from "pixi.js";
+import { Container, Graphics, Ticker } from "pixi.js";
 import { PlayerController } from "../../game/character/PlayerController";
 
 /**
@@ -13,8 +13,8 @@ export class GameScreen extends Container {
   private player1Controller: PlayerController | null = null;
   private player2Controller: PlayerController | null = null;
 
-  private readonly GRID_SIZE = 6; // 6x6 grid
-  private readonly TILE_SIZE = 200; // 200 pixels per tile
+  private readonly GRID_SIZE = 12; // 12x12 grid
+  private readonly TILE_SIZE = 100; // 100 pixels per tile
 
   private paused = false;
 
@@ -82,7 +82,6 @@ export class GameScreen extends Container {
       this.TILE_SIZE,
       this.GRID_SIZE,
       { up: "w", down: "s", left: "a", right: "d" },
-      0.8,
     );
 
     // Initialize player 2 (Daisy) on the right

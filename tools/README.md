@@ -4,7 +4,25 @@ This directory contains development tools for creating and managing assets for t
 
 ## Available Tools
 
-...
+### asset-copier
+
+A CLI tool that copies game assets from `/assets/` to `/game/raw-assets/main`, with automatic background removal for character sprites and portraits.
+
+**Usage:**
+
+```bash
+cd asset-copier
+bun install
+bun run dev
+```
+
+See [asset-copier/README.md](./asset-copier/README.md) for detailed documentation.
+
+### asset-designer
+
+Web-based tool for designing and previewing game assets.
+
+See [asset-designer/README.md](./asset-designer/README.md) for documentation.
 
 ## Adding New Tools
 
