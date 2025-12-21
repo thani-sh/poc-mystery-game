@@ -213,16 +213,3 @@ export async function buildSpritesheetPrompt(
 		prompt: `Character Description:\n${characterDescription}${extraInstructions ? `\n\n${extraInstructions}` : ''}`
 	};
 }
-
-/**
- * Build a prompt for tileset generation
- */
-export async function buildTilesetPrompt(
-	systemPrompt: string,
-	tilesetDescription: string
-): Promise<{ systemInstruction: string; prompt: string }> {
-	return {
-		systemInstruction: systemPrompt,
-		prompt: tilesetDescription
-	};
-}

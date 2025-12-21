@@ -89,115 +89,6 @@ async function removeBackground(
 }
 
 /**
- * Check if a file is a tileset
- */
-function isTileset(relativePath: string): boolean {
-  const lowerPath = relativePath.toLowerCase();
-  return (
-    (lowerPath.includes("/tilesets/") || lowerPath.startsWith("tilesets/")) &&
-    lowerPath.endsWith(".png")
-  );
-}
-
-/**
- * Process a tileset by splitting into tiles, removing background from each, and reassembling
- */
-async function processTileset(
-  inputPath: string,
-  outputPath: string,
-): Promise<void> {
-  try {
-    console.log(`    🎨 Processing tileset: ${inputPath}`);
-
-    const image = sharp(inputPath);
-    const metadata = await image.metadata();
-
-    if (!metadata.width || !metadata.height) {
-      throw new Error("Could not get image dimensions");
-    }
-
-    // Tileset is 16x16 grid
-    const gridSize = 16;
-    const tileWidth = Math.floor(metadata.width / gridSize);
-    const tileHeight = Math.floor(metadata.height / gridSize);
-
-    console.log(
-      `    Grid: ${gridSize}x${gridSize}, Tile size: ${tileWidth}x${tileHeight}`,
-    );
-
-    // Extract and process each tile
-    const processedTiles: Buffer[] = [];
-
-    for (let row = 0; row < gridSize; row++) {
-      for (let col = 0; col < gridSize; col++) {
-        // Extract tile
-        const left = col * tileWidth;
-        const top = row * tileHeight;
-
-        const tileBuffer = await sharp(inputPath)
-          .extract({ left, top, width: tileWidth, height: tileHeight })
-          .ensureAlpha()
-          .raw()
-          .toBuffer({ resolveWithObject: true });
-
-        const { data, info } = tileBuffer;
-        const pixelArray = new Uint8Array(data);
-
-        // Remove background from this tile
-        const processedPixels = await removeBackgroundFromBuffer(
-          pixelArray,
-          info.channels,
-        );
-
-        // Convert back to PNG buffer
-        const processedTile = await sharp(processedPixels, {
-          raw: {
-            width: info.width,
-            height: info.height,
-            channels: info.channels as 3 | 4,
-          },
-        })
-          .png()
-          .toBuffer();
-
-        processedTiles.push(processedTile);
-      }
-    }
-
-    console.log(`    Processed ${processedTiles.length} tiles`);
-
-    // Reassemble tiles into grid
-    const compositeOps = processedTiles.map((tile, index) => {
-      const row = Math.floor(index / gridSize);
-      const col = index % gridSize;
-      return {
-        input: tile,
-        left: col * tileWidth,
-        top: row * tileHeight,
-      };
-    });
-
-    // Create blank canvas and composite all tiles
-    await sharp({
-      create: {
-        width: metadata.width,
-        height: metadata.height,
-        channels: 4,
-        background: { r: 0, g: 0, b: 0, alpha: 0 },
-      },
-    })
-      .composite(compositeOps)
-      .png()
-      .toFile(outputPath);
-
-    console.log(`    ✓ Tileset saved with alpha channel`);
-  } catch (error) {
-    console.error(`Error processing tileset ${inputPath}:`, error);
-    throw error;
-  }
-}
-
-/**
  * Process a single asset file
  */
 async function processAsset(options: ProcessOptions): Promise<void> {
@@ -226,14 +117,8 @@ function shouldRemoveBackgroundForFile(relativePath: string): boolean {
   // - Character portraits (talking.png in actors/*/speech/)
   // Keep as-is for:
   // - Concept art (concept.png, main-cast-concept-image.jpeg, etc.)
-  // - Tilesets (handled separately with per-tile processing)
 
   const lowerPath = relativePath.toLowerCase();
-
-  // Tilesets are handled separately
-  if (isTileset(relativePath)) {
-    return false;
-  }
 
   // Check if it's in frames or speech directory (sprites and portraits)
   if (lowerPath.includes("/frames/") || lowerPath.includes("/speech/")) {
@@ -284,17 +169,12 @@ async function processDirectory(
       continue;
     }
 
-    // Special handling for tilesets
-    if (isTileset(entry)) {
-      await processTileset(sourcePath, targetPath);
-    } else {
-      // Process the image
-      await processAsset({
-        sourcePath,
-        targetPath,
-        removeBackground: shouldRemoveBackgroundForFile(entry),
-      });
-    }
+    // Process the image
+    await processAsset({
+      sourcePath,
+      targetPath,
+      removeBackground: shouldRemoveBackgroundForFile(entry),
+    });
   }
 }
 
