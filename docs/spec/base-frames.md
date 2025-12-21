@@ -12,7 +12,7 @@
 
 ## Art Medium
 
-- Pixel-art influenced illustration style with clean edges
+- Use pixel art style while resembling major features
 - Flat cel-shaded coloring with minimal gradients
 - Bold, clean black outlines around major forms and details
 - Limited but harmonious color palette with strong contrast between character and background
@@ -68,4 +68,4 @@ All sprites of the same character must share:
 
 ## Negative Prompts
 
---no 3d render, photorealistic, low resolution, blurry, sketch, messy lines, painterly brush strokes, modern digital painting look, photobashing, inconsistent character design, environmental backgrounds, props in scene, dramatic perspective, foreshortening, motion blur, single frame, multiple characters in one frame, varying character sizes, complex realistic anatomy, grid layout with more or fewer than 4 frames
+--no 3d render, photorealistic, blurry, sketch, messy lines, painterly brush strokes, modern digital painting look, photobashing, inconsistent character design, environmental backgrounds, props in scene, dramatic perspective, foreshortening, motion blur, single frame, multiple characters in one frame, varying character sizes, complex realistic anatomy, grid layout with more or fewer than 4 frames
