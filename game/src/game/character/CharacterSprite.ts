@@ -29,19 +29,28 @@ export class CharacterSprite extends Container {
     console.log(`Setting up character: ${this.characterId}`);
     // Create animations for each direction and state
     const states = ["idle", "walk"];
-    const directions = ["up", "down", "left", "right"];
 
     for (const state of states) {
-      for (const direction of directions) {
-        const key = `${state}-${direction}`;
-        // Use left animation for right direction (we'll flip it)
-        const loadDirection = direction === "right" ? "left" : direction;
-        const textureName = `/assets/main/characters/${this.characterId}/${state}-${loadDirection}.png`;
+      const textureName = `/assets/main/actors/${this.characterId}/frames/${state}.png`;
 
-        try {
-          // Load the texture using Assets API
-          const baseTexture = await Assets.load(textureName);
-          const frames = this.createFramesFromSpritesheet(baseTexture);
+      try {
+        // Load the texture using Assets API
+        const baseTexture = await Assets.load(textureName);
+
+        // Extract frames for each direction from the 4x4 grid
+        // Row 0: Down, Row 1: Left, Row 2: Right, Row 3: Up
+        const directionFrames = this.extractDirectionFrames(baseTexture);
+
+        // Create animations for each direction
+        const directions: Direction[] = [
+          Direction.Down,
+          Direction.Left,
+          Direction.Right,
+          Direction.Up,
+        ];
+        directions.forEach((direction, index) => {
+          const key = `${state}-${direction}`;
+          const frames = directionFrames[index];
 
           const animation = new AnimatedSprite(frames);
           animation.animationSpeed = 0.1;
@@ -55,18 +64,13 @@ export class CharacterSprite extends Container {
             this.characterScale;
           animation.scale.set(scale);
 
-          // Mirror horizontally for right direction
-          if (direction === "right") {
-            animation.scale.x = -scale;
-          }
-
           this.addChild(animation);
-
           this.animations.set(key, animation);
-          console.log(`Loaded animation: ${textureName}`);
-        } catch (error) {
-          console.error(`Failed to load animation: ${textureName}`, error);
-        }
+        });
+
+        console.log(`Loaded animation: ${textureName}`);
+      } catch (error) {
+        console.error(`Failed to load animation: ${textureName}`, error);
       }
     }
 
@@ -75,16 +79,19 @@ export class CharacterSprite extends Container {
   }
 
   /**
-   * Create 4 frames from a 2x2 spritesheet
+   * Extract frames for all 4 directions from a 4x4 spritesheet
+   * Returns array of 4 frame arrays, one for each direction (down, left, right, up)
    */
-  private createFramesFromSpritesheet(baseTexture: Texture): Texture[] {
-    const frames: Texture[] = [];
-    const frameWidth = baseTexture.width / 2;
-    const frameHeight = baseTexture.height / 2;
+  private extractDirectionFrames(baseTexture: Texture): Texture[][] {
+    const frameWidth = baseTexture.width / 4;
+    const frameHeight = baseTexture.height / 4;
+    const directionFrames: Texture[][] = [];
 
-    // Create 4 frames in order: top-left, top-right, bottom-left, bottom-right
-    for (let row = 0; row < 2; row++) {
-      for (let col = 0; col < 2; col++) {
+    // Extract 4 frames for each of the 4 rows (directions)
+    // Row 0: Down, Row 1: Left, Row 2: Right, Row 3: Up
+    for (let row = 0; row < 4; row++) {
+      const frames: Texture[] = [];
+      for (let col = 0; col < 4; col++) {
         const frame = new Texture({
           source: baseTexture.source,
           frame: {
@@ -96,9 +103,10 @@ export class CharacterSprite extends Container {
         });
         frames.push(frame);
       }
+      directionFrames.push(frames);
     }
 
-    return frames;
+    return directionFrames;
   }
 
   /**

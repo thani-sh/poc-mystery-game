@@ -70,14 +70,14 @@ export class GameScreen extends Container {
   public async prepare() {
     console.log("GameScreen: Starting prepare");
 
-    // Initialize player 1 (Elizabeth) on the left
+    // Initialize player 1 (Bets) on the left
     const player1Pos = {
       x: 2,
       y: Math.floor(this.GRID_SIZE / 2),
     };
 
     this.player1Controller = new PlayerController(
-      "elizabeth",
+      "bets",
       player1Pos,
       this.TILE_SIZE,
       this.GRID_SIZE,
