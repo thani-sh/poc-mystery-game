@@ -50,7 +50,8 @@ export class CharacterSprite extends Container {
 
           // Scale to match tile size
           const scale =
-            (this.tileSize / Math.max(frames[0].width, frames[0].height)) *
+            ((this.tileSize * 2) /
+              Math.max(frames[0].width, frames[0].height)) *
             this.characterScale;
           animation.scale.set(scale);
 

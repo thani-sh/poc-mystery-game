@@ -125,6 +125,9 @@ export class GameScreen extends Container {
     if (this.player2Controller) {
       this.player2Controller.update();
     }
+    // Sort children by y position for proper z-ordering (isometric view)
+    // Characters closer to bottom (higher y) should render on top
+    this.characterContainer.children.sort((a, b) => a.y - b.y);
   }
 
   /**
