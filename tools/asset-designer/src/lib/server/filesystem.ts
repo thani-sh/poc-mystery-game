@@ -29,6 +29,19 @@ export async function getSystemPrompt(): Promise<string> {
 }
 
 /**
+ * Get a specific prompt by filename
+ */
+export async function getPrompt(name: string): Promise<string | null> {
+	try {
+		const filePath = path.join(PROMPTS_DIR, name);
+		const content = await fs.readFile(filePath, 'utf-8');
+		return content;
+	} catch (error) {
+		return null;
+	}
+}
+
+/**
  * Get concept art reference images
  */
 export async function getConceptArtImages(): Promise<Buffer[]> {

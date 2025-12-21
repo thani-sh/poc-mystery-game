@@ -123,7 +123,7 @@ If the user requests individual character spritesheets, follow these guidelines:
 
 - Create a square image divided into a 4x4 grid (16 equal squares)
 - Each spritesheet contains one animation of the character.
-- Each row is dedicated to each cordial direction (down, left, right, up) in that order from top to bottom.
+- Each row is dedicated to each cordial direction (down, left, right, up) in that order from top to bottom. !!!IMPORTANT: DO NOT CHANGE THE ORDER OF THE ROWS!!!
 - All 4 frames should show subtle variations in the pose to create smooth animation when cycled
 - Animation frames start from the left to right in each row.
 - Each square contains one animation frame of the character.

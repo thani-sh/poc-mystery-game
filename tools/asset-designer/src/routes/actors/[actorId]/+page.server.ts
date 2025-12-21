@@ -9,16 +9,19 @@ import {
 } from '$lib/server/filesystem';
 import { error } from '@sveltejs/kit';
 
-export async function load({ params }) {
+import type { PageServerLoad } from './$types';
+
+export const load: PageServerLoad = async ({ params }) => {
 	const actor = await getActor(params.actorId);
 
 	if (!actor) {
 		throw error(404, 'Actor not found');
 	}
 
-	// Define available expression types and frame types
-	const expressionTypes = ['neutral', 'talking', 'happy', 'sad', 'angry', 'surprised'];
-	const frameTypes = ['idle-down', 'walk-down', 'walk-left', 'walk-right', 'walk-up'];
+	// Define available expression types and animation types
+	const expressionTypes = ['talking'];
+	const animationTypes = ['idle', 'walk'];
+	const directions = ['down', 'left', 'right', 'up'];
 
 	// Load speech portraits for all expression types
 	const speechPortraits: Record<string, { exists: boolean; dataUrl: string | null }> = {};
@@ -29,12 +32,12 @@ export async function load({ params }) {
 		};
 	}
 
-	// Load frames for all frame types
-	const frames: Record<string, { exists: boolean; dataUrl: string | null }> = {};
-	for (const frameType of frameTypes) {
-		frames[frameType] = {
-			exists: await hasActorFrame(params.actorId, frameType),
-			dataUrl: await getActorFrameDataUrl(params.actorId, frameType)
+	// Load frames for all animation types
+	const animations: Record<string, { exists: boolean; dataUrl: string | null }> = {};
+	for (const animationType of animationTypes) {
+		animations[animationType] = {
+			exists: await hasActorFrame(params.actorId, animationType),
+			dataUrl: await getActorFrameDataUrl(params.actorId, animationType)
 		};
 	}
 
@@ -44,7 +47,8 @@ export async function load({ params }) {
 		conceptDataUrl: await getActorConceptDataUrl(params.actorId),
 		expressionTypes,
 		speechPortraits,
-		frameTypes,
-		frames
+		animationTypes,
+		animations,
+		directions
 	};
 }

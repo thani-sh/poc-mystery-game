@@ -95,22 +95,27 @@ export async function generateImage(
  * Build a prompt for concept art generation
  */
 export function buildConceptPrompt(systemPrompt: string, characterDescription: string): string {
-	const typeInstruction = 'Extract this character from the reference images provided, showing the full body from head to toe. Keep the character design, colors, and style exactly as shown in the reference images. You may make minor adjustments to the pose, but maintain complete visual consistency with the reference character. Center the character in the frame with appropriate spacing around them.';
-	return `${systemPrompt}\n\nCharacter Description:\n${characterDescription}\n\n${typeInstruction}`;
+	return `${systemPrompt}\n\nCharacter Description:\n${characterDescription}`;
 }
 
 /**
  * Build a prompt for portrait generation
  */
-export function buildPortraitPrompt(systemPrompt: string, characterDescription: string): string {
-	const typeInstruction = 'Generate a portrait for this character.';
-	return `${systemPrompt}\n\nCharacter Description:\n${characterDescription}\n\n${typeInstruction}`;
+export function buildPortraitPrompt(
+	systemPrompt: string,
+	characterDescription: string,
+	extraInstructions?: string
+): string {
+	return `${systemPrompt}\n\nCharacter Description:\n${characterDescription}\n\n${extraInstructions}`;
 }
 
 /**
  * Build a prompt for spritesheet generation
  */
-export function buildSpritesheetPrompt(systemPrompt: string, characterDescription: string): string {
-	const typeInstruction = 'Generate a spritesheet for this character.';
-	return `${systemPrompt}\n\nCharacter Description:\n${characterDescription}\n\n${typeInstruction}`;
+export function buildSpritesheetPrompt(
+	systemPrompt: string,
+	characterDescription: string,
+	extraInstructions?: string
+): string {
+	return `${systemPrompt}\n\nCharacter Description:\n${characterDescription}\n\n${extraInstructions}`;
 }

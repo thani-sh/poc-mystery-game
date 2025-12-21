@@ -2,10 +2,11 @@
 	interface Props {
 		src: string;
 		alt: string;
+		row?: number; // 0: down, 1: left, 2: right, 3: up
 		frameDelay?: number; // milliseconds per frame
 	}
 
-	let { src, alt, frameDelay = 200 }: Props = $props();
+	let { src, alt, row = 0, frameDelay = 200 }: Props = $props();
 
 	let canvasRef: HTMLCanvasElement | undefined;
 
@@ -34,14 +35,12 @@
 					// Clear canvas
 					ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-					// Calculate frame position in 2x2 grid
-					// Frame order: 0,0 (0) → 0,1 (1) → 1,0 (2) → 1,1 (3)
-					const frameWidth = img.width / 2;
-					const frameHeight = img.height / 2;
-					const col = currentFrame % 2;
-					const row = Math.floor(currentFrame / 2);
+					// Calculate frame position in 4x4 grid
+					const frameWidth = img.width / 4;
+					const frameHeight = img.height / 4;
+					const col = currentFrame;
 
-					// Draw the current frame quarter
+					// Draw the current frame
 					ctx.drawImage(
 						img,
 						col * frameWidth, // source x
