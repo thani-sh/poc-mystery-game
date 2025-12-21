@@ -1,4 +1,6 @@
 <script lang="ts">
+	import AnimatedFrame from '$lib/AnimatedFrame.svelte';
+
 	let { data } = $props();
 	let editContent = $state(data.actor.content);
 	let generating = $state(false);
@@ -274,10 +276,9 @@
 								class="bg-base-200 rounded-lg p-4 aspect-square flex items-center justify-center"
 							>
 								{#if frames[frameType]}
-									<img
-										src={frames[frameType]}
+									<AnimatedFrame
+										src={frames[frameType] || ''}
 										alt="{data.actor.name} - {frameType}"
-										class="w-full h-full object-contain"
 									/>
 								{:else}
 									<div class="text-center text-base-content/50">
