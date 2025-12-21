@@ -62,12 +62,16 @@ If the user requests individual character spritesheets, refer to the detailed gu
 If the user requests environment tilesets, follow these guidelines:
 
 - Pure white background (#ffffff) for the entire image.
-- Use 1:1 aspect ratio for the image dimensions and use the full canvas.
-- Generate a 16x16 grid of tiles (256 equal squares)
-- Each tile should be 16x16 pixels when the image is divided into the grid
+- Use 1:1 aspect ratio for the image dimensions and use the full canvas
+- Generate a **16x16 grid** of tiles (256 equal squares total)
+- Each tile should be designed at an appropriate resolution for 16x16 division
+- **No borders** between tiles - ensure seamless connections
+- The **top-left tile (position 0,0)** must be a default repeatable floor tile
 - Tiles should represent various environmental elements for the specified environment (e.g., grass, dirt, paths, water, flowers, trees, fences, etc.)
 - Tiles should be designed to seamlessly tile with each other when placed adjacent
+- **Floor and path tiles**: Design in 3x3 patterns with all 4 corners (top-left, top-right, bottom-left, bottom-right). Use center tiles for different purposes
 - Include edge tiles, corner tiles, and transition tiles for smooth blending between different terrain types
+- **Avoid diagonal transitions** - use only straight horizontal and vertical edge transitions between terrain types
 - Maintain the same retro JRPG art style with clean lines, flat cel-shaded colors, and 90s fantasy anime aesthetic
 - Design tiles so they can be arranged in different combinations to create varied environments
 - Include both ground tiles and decorative overlay tiles

@@ -26,7 +26,6 @@ export const generateTileset = command(z.string(), async (tilesetId) => {
 
 Generate a detailed JSON descriptor for a 16x16 tile grid (256 tiles total) for this tileset. The JSON should include:
 - name: The tileset name
-- tileSize: 16 (pixels per tile)
 - gridWidth: 16
 - gridHeight: 16
 - totalTiles: 256
@@ -34,8 +33,17 @@ Generate a detailed JSON descriptor for a 16x16 tile grid (256 tiles total) for 
   - id: tile index (0-255)
   - x: column position (0-15)
   - y: row position (0-15)
-  - type: tile type/category (e.g., "grass", "dirt", "path", "water", "flower", "tree", "fence", etc.)
+  - type: tile type/category (e.g., "grass", "dirt", "path", "fence", "flowers", "shed", etc.)
   - description: brief description of the tile content
+  - z: rendering layer relative to character (-1 for floor tiles that characters walk on, 0 for obstacles that block character movement, 1 for overhead tiles that render above the character)
+
+IMPORTANT:
+- Tile at position (0,0) MUST be a default repeatable floor tile
+- Floor tiles should use 3x3 patterns with all 4 corners defined
+- Path tiles should use 3x3 patterns with all 4 corners defined
+- Most ground/floor tiles should have z: -1 (walkable)
+- Obstacles like fences, sheds, large plants should have z: 0 (blocking)
+- Tree canopies, overhangs should have z: 1 (overhead)
 
 Provide a diverse set of tiles suitable for creating the described environment. Include ground tiles, decorative elements, transitions, and variations. Return ONLY the JSON, no other text.`;
 
@@ -69,13 +77,14 @@ Provide a diverse set of tiles suitable for creating the described environment. 
 		.map((tile: any) => `Tile ${tile.id} (${tile.x},${tile.y}): ${tile.type} - ${tile.description}`)
 		.join('\n');
 
-	const imagePrompt = await buildTilesetPrompt(
+	const { systemInstruction, prompt: userPrompt } = await buildTilesetPrompt(
 		systemPrompt,
 		`${tileset.content}\n\nTile Layout:\n${tileDescriptions}`
 	);
 
 	const result = await generateImage({
-		prompt: imagePrompt,
+		prompt: userPrompt,
+		systemInstruction,
 		aspectRatio: '1:1'
 	});
 

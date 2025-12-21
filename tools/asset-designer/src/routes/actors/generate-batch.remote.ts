@@ -26,10 +26,14 @@ export const generateMissingConcepts = command(async () => {
 		}
 
 		try {
-			const prompt = buildConceptPrompt(systemPrompt, actor.content);
+			const { systemInstruction, prompt: userPrompt } = buildConceptPrompt(
+				systemPrompt,
+				actor.content
+			);
 
 			const result = await generateImage({
-				prompt,
+				prompt: userPrompt,
+				systemInstruction,
 				referenceImages: referenceImages.length > 0 ? referenceImages : undefined,
 				aspectRatio: '16:9'
 			});

@@ -23,12 +23,13 @@ export const generateConcept = command(z.string(), async (actorId) => {
 	}
 
 	const systemPrompt = await getSystemPrompt();
-	const prompt = buildConceptPrompt(systemPrompt, actor.content);
+	const { systemInstruction, prompt: userPrompt } = buildConceptPrompt(systemPrompt, actor.content);
 	const referenceImages = await getConceptArtImages();
 	console.log(`Generating concept art for actor: ${actorId}`);
 
 	const result = await generateImage({
-		prompt,
+		prompt: userPrompt,
+		systemInstruction,
 		referenceImages: referenceImages.length > 0 ? referenceImages : undefined,
 		aspectRatio: '16:9'
 	});

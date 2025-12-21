@@ -1,6 +1,5 @@
 {
-  "name": "Peterswood_Garden_Tileset",
-  "tileSize": 16,
+  "name": "Peterswood Home Garden Tileset",
   "gridWidth": 16,
   "gridHeight": 16,
   "totalTiles": 256,
@@ -10,1792 +9,2048 @@
       "x": 0,
       "y": 0,
       "type": "grass",
-      "description": "Short manicured lawn grass, variation 1"
+      "description": "Lawn grass (Default floor tile)",
+      "z": -1
     },
     {
       "id": 1,
       "x": 1,
       "y": 0,
       "type": "grass",
-      "description": "Short manicured lawn grass, variation 2"
+      "description": "Lawn grass top edge",
+      "z": -1
     },
     {
       "id": 2,
       "x": 2,
       "y": 0,
       "type": "grass",
-      "description": "Short manicured lawn grass, variation 3"
+      "description": "Lawn grass top-right corner",
+      "z": -1
     },
     {
       "id": 3,
       "x": 3,
       "y": 0,
-      "type": "grass",
-      "description": "Short lawn with tiny clover patch"
+      "type": "dirt",
+      "description": "Garden dirt (Default dirt tile)",
+      "z": -1
     },
     {
       "id": 4,
       "x": 4,
       "y": 0,
-      "type": "grass",
-      "description": "Medium length grass, variation 1"
+      "type": "dirt",
+      "description": "Dirt top edge",
+      "z": -1
     },
     {
       "id": 5,
       "x": 5,
       "y": 0,
-      "type": "grass",
-      "description": "Medium length grass, variation 2"
+      "type": "dirt",
+      "description": "Dirt top-right corner",
+      "z": -1
     },
     {
       "id": 6,
       "x": 6,
       "y": 0,
-      "type": "grass",
-      "description": "Medium length grass with small weed"
+      "type": "gravel",
+      "description": "Gravel path (Default gravel tile)",
+      "z": -1
     },
     {
       "id": 7,
       "x": 7,
       "y": 0,
-      "type": "grass",
-      "description": "Tall wild grass tuft"
+      "type": "gravel",
+      "description": "Gravel path top edge",
+      "z": -1
     },
     {
       "id": 8,
       "x": 8,
       "y": 0,
-      "type": "grass",
-      "description": "Grass with small white wildflowers"
+      "type": "gravel",
+      "description": "Gravel path top-right corner",
+      "z": -1
     },
     {
       "id": 9,
       "x": 9,
       "y": 0,
-      "type": "grass",
-      "description": "Grass with small yellow wildflowers"
+      "type": "pave",
+      "description": "Stone paving (Default paving tile)",
+      "z": -1
     },
     {
       "id": 10,
       "x": 10,
       "y": 0,
-      "type": "grass",
-      "description": "Grass with scattered fallen petals"
+      "type": "pave",
+      "description": "Stone paving top edge",
+      "z": -1
     },
     {
       "id": 11,
       "x": 11,
       "y": 0,
-      "type": "grass",
-      "description": "Grass with small grey rock"
+      "type": "pave",
+      "description": "Stone paving top-right corner",
+      "z": -1
     },
     {
       "id": 12,
       "x": 12,
       "y": 0,
-      "type": "dirt",
-      "description": "Dark potting soil, plain"
+      "type": "worn_grass",
+      "description": "Play-worn grass (Default)",
+      "z": -1
     },
     {
       "id": 13,
       "x": 13,
       "y": 0,
-      "type": "dirt",
-      "description": "Dark potting soil, textured"
+      "type": "worn_grass",
+      "description": "Worn grass top edge",
+      "z": -1
     },
     {
       "id": 14,
       "x": 14,
       "y": 0,
-      "type": "dirt",
-      "description": "Dry dirt patch"
+      "type": "worn_grass",
+      "description": "Worn grass top-right corner",
+      "z": -1
     },
     {
       "id": 15,
       "x": 15,
       "y": 0,
-      "type": "dirt",
-      "description": "Muddy patch"
+      "type": "water",
+      "description": "Pond water center",
+      "z": -1
     },
     {
       "id": 16,
       "x": 0,
       "y": 1,
-      "type": "transition",
-      "description": "Grass to Dirt Edge (Top)"
+      "type": "grass",
+      "description": "Lawn grass left edge",
+      "z": -1
     },
     {
       "id": 17,
       "x": 1,
       "y": 1,
-      "type": "transition",
-      "description": "Grass to Dirt Edge (Bottom)"
+      "type": "grass",
+      "description": "Lawn grass with daisy (Decor variant)",
+      "z": -1
     },
     {
       "id": 18,
       "x": 2,
       "y": 1,
-      "type": "transition",
-      "description": "Grass to Dirt Edge (Left)"
+      "type": "grass",
+      "description": "Lawn grass right edge",
+      "z": -1
     },
     {
       "id": 19,
       "x": 3,
       "y": 1,
-      "type": "transition",
-      "description": "Grass to Dirt Edge (Right)"
+      "type": "dirt",
+      "description": "Dirt left edge",
+      "z": -1
     },
     {
       "id": 20,
       "x": 4,
       "y": 1,
-      "type": "transition",
-      "description": "Grass to Dirt Corner (Top-Left)"
+      "type": "dirt",
+      "description": "Dirt with small stones (Decor variant)",
+      "z": -1
     },
     {
       "id": 21,
       "x": 5,
       "y": 1,
-      "type": "transition",
-      "description": "Grass to Dirt Corner (Top-Right)"
+      "type": "dirt",
+      "description": "Dirt right edge",
+      "z": -1
     },
     {
       "id": 22,
       "x": 6,
       "y": 1,
-      "type": "transition",
-      "description": "Grass to Dirt Corner (Bottom-Left)"
+      "type": "gravel",
+      "description": "Gravel path left edge",
+      "z": -1
     },
     {
       "id": 23,
       "x": 7,
       "y": 1,
-      "type": "transition",
-      "description": "Grass to Dirt Corner (Bottom-Right)"
+      "type": "gravel",
+      "description": "Gravel dark patch (Decor variant)",
+      "z": -1
     },
     {
       "id": 24,
       "x": 8,
       "y": 1,
-      "type": "transition",
-      "description": "Grass to Dirt Inner Corner (Top-Left)"
+      "type": "gravel",
+      "description": "Gravel path right edge",
+      "z": -1
     },
     {
       "id": 25,
       "x": 9,
       "y": 1,
-      "type": "transition",
-      "description": "Grass to Dirt Inner Corner (Top-Right)"
+      "type": "pave",
+      "description": "Stone paving left edge",
+      "z": -1
     },
     {
       "id": 26,
       "x": 10,
       "y": 1,
-      "type": "transition",
-      "description": "Grass to Dirt Inner Corner (Bottom-Left)"
+      "type": "pave",
+      "description": "Stone paving cracked (Decor variant)",
+      "z": -1
     },
     {
       "id": 27,
       "x": 11,
       "y": 1,
-      "type": "transition",
-      "description": "Grass to Dirt Inner Corner (Bottom-Right)"
+      "type": "pave",
+      "description": "Stone paving right edge",
+      "z": -1
     },
     {
       "id": 28,
       "x": 12,
       "y": 1,
-      "type": "path",
-      "description": "Worn grass path (Vertical)"
+      "type": "worn_grass",
+      "description": "Worn grass left edge",
+      "z": -1
     },
     {
       "id": 29,
       "x": 13,
       "y": 1,
-      "type": "path",
-      "description": "Worn grass path (Horizontal)"
+      "type": "worn_grass",
+      "description": "Worn grass muddy patch (Decor variant)",
+      "z": -1
     },
     {
       "id": 30,
       "x": 14,
       "y": 1,
-      "type": "path",
-      "description": "Worn grass path (Cross)"
+      "type": "worn_grass",
+      "description": "Worn grass right edge",
+      "z": -1
     },
     {
       "id": 31,
       "x": 15,
       "y": 1,
-      "type": "path",
-      "description": "Worn grass spot"
+      "type": "water",
+      "description": "Pond water edge with lilypad",
+      "z": -1
     },
     {
       "id": 32,
       "x": 0,
       "y": 2,
-      "type": "path",
-      "description": "Gravel path center"
+      "type": "grass",
+      "description": "Lawn grass bottom-left corner",
+      "z": -1
     },
     {
       "id": 33,
       "x": 1,
       "y": 2,
-      "type": "path",
-      "description": "Gravel path edge (Top)"
+      "type": "grass",
+      "description": "Lawn grass bottom edge",
+      "z": -1
     },
     {
       "id": 34,
       "x": 2,
       "y": 2,
-      "type": "path",
-      "description": "Gravel path edge (Right)"
+      "type": "grass",
+      "description": "Lawn grass bottom-right corner",
+      "z": -1
     },
     {
       "id": 35,
       "x": 3,
       "y": 2,
-      "type": "path",
-      "description": "Gravel path edge (Bottom)"
+      "type": "dirt",
+      "description": "Dirt bottom-left corner",
+      "z": -1
     },
     {
       "id": 36,
       "x": 4,
       "y": 2,
-      "type": "path",
-      "description": "Gravel path edge (Left)"
+      "type": "dirt",
+      "description": "Dirt bottom edge",
+      "z": -1
     },
     {
       "id": 37,
       "x": 5,
       "y": 2,
-      "type": "path",
-      "description": "Gravel path corner (Top-Left)"
+      "type": "dirt",
+      "description": "Dirt bottom-right corner",
+      "z": -1
     },
     {
       "id": 38,
       "x": 6,
       "y": 2,
-      "type": "path",
-      "description": "Gravel path corner (Top-Right)"
+      "type": "gravel",
+      "description": "Gravel path bottom-left corner",
+      "z": -1
     },
     {
       "id": 39,
       "x": 7,
       "y": 2,
-      "type": "path",
-      "description": "Gravel path corner (Bottom-Right)"
+      "type": "gravel",
+      "description": "Gravel path bottom edge",
+      "z": -1
     },
     {
       "id": 40,
       "x": 8,
       "y": 2,
-      "type": "path",
-      "description": "Gravel path corner (Bottom-Left)"
+      "type": "gravel",
+      "description": "Gravel path bottom-right corner",
+      "z": -1
     },
     {
       "id": 41,
       "x": 9,
       "y": 2,
-      "type": "path",
-      "description": "Gravel path inner corner (Top-Left)"
+      "type": "pave",
+      "description": "Stone paving bottom-left corner",
+      "z": -1
     },
     {
       "id": 42,
       "x": 10,
       "y": 2,
-      "type": "path",
-      "description": "Gravel path inner corner (Top-Right)"
+      "type": "pave",
+      "description": "Stone paving bottom edge",
+      "z": -1
     },
     {
       "id": 43,
       "x": 11,
       "y": 2,
-      "type": "path",
-      "description": "Gravel path inner corner (Bottom-Right)"
+      "type": "pave",
+      "description": "Stone paving bottom-right corner",
+      "z": -1
     },
     {
       "id": 44,
       "x": 12,
       "y": 2,
-      "type": "path",
-      "description": "Gravel path inner corner (Bottom-Left)"
+      "type": "worn_grass",
+      "description": "Worn grass bottom-left corner",
+      "z": -1
     },
     {
       "id": 45,
       "x": 13,
       "y": 2,
-      "type": "path",
-      "description": "Gravel to Grass Fade (Soft)"
+      "type": "worn_grass",
+      "description": "Worn grass bottom edge",
+      "z": -1
     },
     {
       "id": 46,
       "x": 14,
       "y": 2,
-      "type": "path",
-      "description": "Gravel scatter on grass"
+      "type": "worn_grass",
+      "description": "Worn grass bottom-right corner",
+      "z": -1
     },
     {
       "id": 47,
       "x": 15,
       "y": 2,
-      "type": "path",
-      "description": "Gravel path end cap"
+      "type": "water",
+      "description": "Pond stone border",
+      "z": 0
     },
     {
       "id": 48,
       "x": 0,
       "y": 3,
-      "type": "path",
-      "description": "Stone paver center"
+      "type": "fence_white",
+      "description": "White picket fence (Horizontal)",
+      "z": 0
     },
     {
       "id": 49,
       "x": 1,
       "y": 3,
-      "type": "path",
-      "description": "Stone paver edge (Top)"
+      "type": "fence_white",
+      "description": "White picket fence (Vertical)",
+      "z": 0
     },
     {
       "id": 50,
       "x": 2,
       "y": 3,
-      "type": "path",
-      "description": "Stone paver edge (Right)"
+      "type": "fence_white",
+      "description": "White picket fence (Top-Left Corner)",
+      "z": 0
     },
     {
       "id": 51,
       "x": 3,
       "y": 3,
-      "type": "path",
-      "description": "Stone paver edge (Bottom)"
+      "type": "fence_wood",
+      "description": "Wooden fence panel (Horizontal)",
+      "z": 0
     },
     {
       "id": 52,
       "x": 4,
       "y": 3,
-      "type": "path",
-      "description": "Stone paver edge (Left)"
+      "type": "fence_wood",
+      "description": "Wooden fence post (Vertical)",
+      "z": 0
     },
     {
       "id": 53,
       "x": 5,
       "y": 3,
-      "type": "path",
-      "description": "Stone paver corner (Top-Left)"
+      "type": "fence_wood",
+      "description": "Wooden fence (Top-Left Corner)",
+      "z": 0
     },
     {
       "id": 54,
       "x": 6,
       "y": 3,
-      "type": "path",
-      "description": "Stone paver corner (Top-Right)"
+      "type": "hedge",
+      "description": "Low hedge (Horizontal)",
+      "z": 0
     },
     {
       "id": 55,
       "x": 7,
       "y": 3,
-      "type": "path",
-      "description": "Stone paver corner (Bottom-Right)"
+      "type": "hedge",
+      "description": "Low hedge (Vertical)",
+      "z": 0
     },
     {
       "id": 56,
       "x": 8,
       "y": 3,
-      "type": "path",
-      "description": "Stone paver corner (Bottom-Left)"
+      "type": "hedge",
+      "description": "Low hedge (Corner)",
+      "z": 0
     },
     {
       "id": 57,
       "x": 9,
       "y": 3,
-      "type": "path",
-      "description": "Large stepping stone (Round)"
+      "type": "shed",
+      "description": "Shed Roof (Left)",
+      "z": 1
     },
     {
       "id": 58,
       "x": 10,
       "y": 3,
-      "type": "path",
-      "description": "Large stepping stone (Irregular)"
+      "type": "shed",
+      "description": "Shed Roof (Center)",
+      "z": 1
     },
     {
       "id": 59,
       "x": 11,
       "y": 3,
-      "type": "path",
-      "description": "Two small stepping stones"
+      "type": "shed",
+      "description": "Shed Roof (Right)",
+      "z": 1
     },
     {
       "id": 60,
       "x": 12,
       "y": 3,
-      "type": "path",
-      "description": "Mossy stone paver"
+      "type": "structure",
+      "description": "Dog kennel roof",
+      "z": 1
     },
     {
       "id": 61,
       "x": 13,
       "y": 3,
-      "type": "path",
-      "description": "Cracked stone paver"
+      "type": "structure",
+      "description": "Dog kennel opening",
+      "z": 0
     },
     {
       "id": 62,
       "x": 14,
       "y": 3,
-      "type": "path",
-      "description": "Stone paver stairs (Up)"
+      "type": "decor",
+      "description": "Garden gnome",
+      "z": 0
     },
     {
       "id": 63,
       "x": 15,
       "y": 3,
-      "type": "path",
-      "description": "Stone paver stairs (Down)"
+      "type": "decor",
+      "description": "Stone path single tile",
+      "z": -1
     },
     {
       "id": 64,
       "x": 0,
       "y": 4,
-      "type": "fence",
-      "description": "White Picket Fence (Horizontal)"
+      "type": "fence_white",
+      "description": "White picket fence (T-Junction)",
+      "z": 0
     },
     {
       "id": 65,
       "x": 1,
       "y": 4,
-      "type": "fence",
-      "description": "White Picket Fence (Vertical)"
+      "type": "fence_white",
+      "description": "White picket gate (Closed)",
+      "z": 0
     },
     {
       "id": 66,
       "x": 2,
       "y": 4,
-      "type": "fence",
-      "description": "White Picket Fence Corner (Top-Left)"
+      "type": "fence_white",
+      "description": "White picket fence (Top-Right Corner)",
+      "z": 0
     },
     {
       "id": 67,
       "x": 3,
       "y": 4,
-      "type": "fence",
-      "description": "White Picket Fence Corner (Top-Right)"
+      "type": "fence_wood",
+      "description": "Wooden fence (T-Junction)",
+      "z": 0
     },
     {
       "id": 68,
       "x": 4,
       "y": 4,
-      "type": "fence",
-      "description": "White Picket Fence Corner (Bottom-Right)"
+      "type": "fence_wood",
+      "description": "Wooden garden gate (Closed)",
+      "z": 0
     },
     {
       "id": 69,
       "x": 5,
       "y": 4,
-      "type": "fence",
-      "description": "White Picket Fence Corner (Bottom-Left)"
+      "type": "fence_wood",
+      "description": "Wooden fence (Top-Right Corner)",
+      "z": 0
     },
     {
       "id": 70,
       "x": 6,
       "y": 4,
-      "type": "fence",
-      "description": "White Picket Fence T-Junction (South)"
+      "type": "hedge",
+      "description": "Low hedge (End piece)",
+      "z": 0
     },
     {
       "id": 71,
       "x": 7,
       "y": 4,
-      "type": "fence",
-      "description": "White Garden Gate (Closed)"
+      "type": "hedge",
+      "description": "Low hedge (T-Junction)",
+      "z": 0
     },
     {
       "id": 72,
       "x": 8,
       "y": 4,
-      "type": "fence",
-      "description": "White Garden Gate (Open Left)"
+      "type": "hedge",
+      "description": "Flowering hedge bush",
+      "z": 0
     },
     {
       "id": 73,
       "x": 9,
       "y": 4,
-      "type": "fence",
-      "description": "White Garden Gate (Open Right)"
+      "type": "shed",
+      "description": "Shed Wall (Left window)",
+      "z": 0
     },
     {
       "id": 74,
       "x": 10,
       "y": 4,
-      "type": "fence",
-      "description": "Fence Post (Single)"
+      "type": "shed",
+      "description": "Shed Door (Closed)",
+      "z": 0
     },
     {
       "id": 75,
       "x": 11,
       "y": 4,
-      "type": "fence",
-      "description": "Broken Picket Fence"
+      "type": "shed",
+      "description": "Shed Wall (Right)",
+      "z": 0
     },
     {
       "id": 76,
       "x": 12,
       "y": 4,
-      "type": "fence",
-      "description": "Ivy-covered Picket Fence (Horizontal)"
+      "type": "wall",
+      "description": "Brick wall (Horizontal)",
+      "z": 0
     },
     {
       "id": 77,
       "x": 13,
       "y": 4,
-      "type": "fence",
-      "description": "Stone Wall (Horizontal)"
+      "type": "wall",
+      "description": "Brick wall (Vertical)",
+      "z": 0
     },
     {
       "id": 78,
       "x": 14,
       "y": 4,
-      "type": "fence",
-      "description": "Stone Wall (Vertical)"
+      "type": "wall",
+      "description": "Brick wall (Corner)",
+      "z": 0
     },
     {
       "id": 79,
       "x": 15,
       "y": 4,
-      "type": "fence",
-      "description": "Stone Wall Gate"
+      "type": "decor",
+      "description": "Gravel single tile",
+      "z": -1
     },
     {
       "id": 80,
       "x": 0,
       "y": 5,
-      "type": "hedge",
-      "description": "Short Box Hedge (Horizontal)"
+      "type": "fence_white",
+      "description": "White picket fence (Bottom-Left Corner)",
+      "z": 0
     },
     {
       "id": 81,
       "x": 1,
       "y": 5,
-      "type": "hedge",
-      "description": "Short Box Hedge (Vertical)"
+      "type": "fence_white",
+      "description": "White picket gate (Open)",
+      "z": -1
     },
     {
       "id": 82,
       "x": 2,
       "y": 5,
-      "type": "hedge",
-      "description": "Short Box Hedge Corner (Top-Left)"
+      "type": "fence_white",
+      "description": "White picket fence (Bottom-Right Corner)",
+      "z": 0
     },
     {
       "id": 83,
       "x": 3,
       "y": 5,
-      "type": "hedge",
-      "description": "Short Box Hedge Corner (Top-Right)"
+      "type": "fence_wood",
+      "description": "Wooden fence (Bottom-Left Corner)",
+      "z": 0
     },
     {
       "id": 84,
       "x": 4,
       "y": 5,
-      "type": "hedge",
-      "description": "Short Box Hedge Corner (Bottom-Right)"
+      "type": "fence_wood",
+      "description": "Wooden garden gate (Open)",
+      "z": -1
     },
     {
       "id": 85,
       "x": 5,
       "y": 5,
-      "type": "hedge",
-      "description": "Short Box Hedge Corner (Bottom-Left)"
+      "type": "fence_wood",
+      "description": "Wooden fence (Bottom-Right Corner)",
+      "z": 0
     },
     {
       "id": 86,
       "x": 6,
       "y": 5,
-      "type": "hedge",
-      "description": "Short Box Hedge End (Left)"
+      "type": "bush",
+      "description": "Large round bush",
+      "z": 0
     },
     {
       "id": 87,
       "x": 7,
       "y": 5,
-      "type": "hedge",
-      "description": "Short Box Hedge End (Right)"
+      "type": "bush",
+      "description": "Small bush",
+      "z": 0
     },
     {
       "id": 88,
       "x": 8,
       "y": 5,
-      "type": "hedge",
-      "description": "Tall Hedge Wall (Top)"
+      "type": "bush",
+      "description": "Trimmed topiary",
+      "z": 0
     },
     {
       "id": 89,
       "x": 9,
       "y": 5,
-      "type": "hedge",
-      "description": "Tall Hedge Wall (Body)"
+      "type": "shed",
+      "description": "Shed Base (Left)",
+      "z": 0
     },
     {
       "id": 90,
       "x": 10,
       "y": 5,
-      "type": "hedge",
-      "description": "Tall Hedge Wall (Base)"
+      "type": "shed",
+      "description": "Shed Doorstep",
+      "z": -1
     },
     {
       "id": 91,
       "x": 11,
       "y": 5,
-      "type": "hedge",
-      "description": "Tall Hedge Corner (Left)"
+      "type": "shed",
+      "description": "Shed Base (Right)",
+      "z": 0
     },
     {
       "id": 92,
       "x": 12,
       "y": 5,
-      "type": "hedge",
-      "description": "Tall Hedge Corner (Right)"
+      "type": "wall",
+      "description": "Brick wall (End)",
+      "z": 0
     },
     {
       "id": 93,
       "x": 13,
       "y": 5,
-      "type": "hedge",
-      "description": "Tall Hedge Archway (Top-Left)"
+      "type": "wall",
+      "description": "Ivy covered wall section",
+      "z": 0
     },
     {
       "id": 94,
       "x": 14,
       "y": 5,
-      "type": "hedge",
-      "description": "Tall Hedge Archway (Top-Right)"
+      "type": "decor",
+      "description": "Wall lantern",
+      "z": 1
     },
     {
       "id": 95,
       "x": 15,
       "y": 5,
-      "type": "hedge",
-      "description": "Hedge Trimmings (Debris)"
+      "type": "decor",
+      "description": "Dirt single tile",
+      "z": -1
     },
     {
       "id": 96,
       "x": 0,
       "y": 6,
       "type": "flowers",
-      "description": "Red Roses (Dense)"
+      "description": "Red roses on bush",
+      "z": 0
     },
     {
       "id": 97,
       "x": 1,
       "y": 6,
       "type": "flowers",
-      "description": "Red Roses (Sparse)"
+      "description": "White roses on bush",
+      "z": 0
     },
     {
       "id": 98,
       "x": 2,
       "y": 6,
       "type": "flowers",
-      "description": "Red Roses (Single)"
+      "description": "Yellow roses on bush",
+      "z": 0
     },
     {
       "id": 99,
       "x": 3,
       "y": 6,
       "type": "flowers",
-      "description": "Pink Roses (Dense)"
+      "description": "Tulip bed (Red) on soil",
+      "z": -1
     },
     {
       "id": 100,
       "x": 4,
       "y": 6,
       "type": "flowers",
-      "description": "White Daisies (Dense)"
+      "description": "Tulip bed (Yellow) on soil",
+      "z": -1
     },
     {
       "id": 101,
       "x": 5,
       "y": 6,
       "type": "flowers",
-      "description": "White Daisies (Sparse)"
+      "description": "Daisy clump on grass",
+      "z": -1
     },
     {
       "id": 102,
       "x": 6,
       "y": 6,
       "type": "flowers",
-      "description": "Yellow Tulips (Dense)"
+      "description": "Lavender bush",
+      "z": 0
     },
     {
       "id": 103,
       "x": 7,
       "y": 6,
       "type": "flowers",
-      "description": "Yellow Tulips (Sparse)"
+      "description": "Sunflower (Tall, Head)",
+      "z": 1
     },
     {
       "id": 104,
       "x": 8,
       "y": 6,
       "type": "flowers",
-      "description": "Purple Lavender (Row)"
+      "description": "Sunflower (Tall, Stalk)",
+      "z": 0
     },
     {
       "id": 105,
       "x": 9,
       "y": 6,
       "type": "flowers",
-      "description": "Blue Hydrangea (Small)"
+      "description": "Mixed flower bed (Horizontal)",
+      "z": -1
     },
     {
       "id": 106,
       "x": 10,
       "y": 6,
       "type": "flowers",
-      "description": "Mixed Flowerbed (Left)"
+      "description": "Mixed flower bed (Vertical)",
+      "z": -1
     },
     {
       "id": 107,
       "x": 11,
       "y": 6,
-      "type": "flowers",
-      "description": "Mixed Flowerbed (Center)"
+      "type": "vegetation",
+      "description": "Tall grass tuft",
+      "z": -1
     },
     {
       "id": 108,
       "x": 12,
       "y": 6,
-      "type": "flowers",
-      "description": "Mixed Flowerbed (Right)"
+      "type": "vegetation",
+      "description": "Fern plant",
+      "z": 0
     },
     {
       "id": 109,
       "x": 13,
       "y": 6,
-      "type": "flowers",
-      "description": "Empty Flowerbed Soil"
+      "type": "pot",
+      "description": "Terracotta pot (Empty)",
+      "z": 0
     },
     {
       "id": 110,
       "x": 14,
       "y": 6,
-      "type": "flowers",
-      "description": "Flowerbed with sprouts"
+      "type": "pot",
+      "description": "Terracotta pot with flowers",
+      "z": 0
     },
     {
       "id": 111,
       "x": 15,
       "y": 6,
-      "type": "flowers",
-      "description": "Wilted Flowers"
+      "type": "pot",
+      "description": "Terracotta pot with shrub",
+      "z": 0
     },
     {
       "id": 112,
       "x": 0,
       "y": 7,
-      "type": "vegetables",
-      "description": "Tilled Earth (Row Horizontal)"
+      "type": "crops",
+      "description": "Lettuce rows on soil",
+      "z": -1
     },
     {
       "id": 113,
       "x": 1,
       "y": 7,
-      "type": "vegetables",
-      "description": "Tilled Earth (Row Vertical)"
+      "type": "crops",
+      "description": "Carrot tops on soil",
+      "z": -1
     },
     {
       "id": 114,
       "x": 2,
       "y": 7,
-      "type": "vegetables",
-      "description": "Carrots (Sprouts)"
+      "type": "crops",
+      "description": "Potato plants on soil",
+      "z": -1
     },
     {
       "id": 115,
       "x": 3,
       "y": 7,
-      "type": "vegetables",
-      "description": "Carrots (Mature)"
+      "type": "crops",
+      "description": "Strawberry plants",
+      "z": -1
     },
     {
       "id": 116,
       "x": 4,
       "y": 7,
-      "type": "vegetables",
-      "description": "Lettuce/Cabbage (Sprouts)"
+      "type": "crops",
+      "description": "Empty tilled rows",
+      "z": -1
     },
     {
       "id": 117,
       "x": 5,
       "y": 7,
-      "type": "vegetables",
-      "description": "Lettuce/Cabbage (Mature)"
+      "type": "crops",
+      "description": "Runner bean pole (Top)",
+      "z": 1
     },
     {
       "id": 118,
       "x": 6,
       "y": 7,
-      "type": "vegetables",
-      "description": "Tomatoes on stakes (Green)"
+      "type": "crops",
+      "description": "Tomato stake (Top)",
+      "z": 1
     },
     {
       "id": 119,
       "x": 7,
       "y": 7,
-      "type": "vegetables",
-      "description": "Tomatoes on stakes (Red)"
+      "type": "crops",
+      "description": "Pumpkin patch",
+      "z": 0
     },
     {
       "id": 120,
       "x": 8,
       "y": 7,
-      "type": "vegetables",
-      "description": "Pumpkins (Small)"
+      "type": "crops",
+      "description": "Cabbage patch",
+      "z": -1
     },
     {
       "id": 121,
       "x": 9,
       "y": 7,
-      "type": "vegetables",
-      "description": "Pumpkins (Large)"
+      "type": "crops",
+      "description": "Marrow/Zucchini",
+      "z": 0
     },
     {
       "id": 122,
       "x": 10,
       "y": 7,
-      "type": "vegetables",
-      "description": "Empty Trellis for Beans"
+      "type": "crops",
+      "description": "Rhubarb",
+      "z": 0
     },
     {
       "id": 123,
       "x": 11,
       "y": 7,
-      "type": "vegetables",
-      "description": "Bean Trellis (Green)"
+      "type": "crops",
+      "description": "Runner bean pole (Bottom)",
+      "z": 0
     },
     {
       "id": 124,
       "x": 12,
       "y": 7,
-      "type": "vegetables",
-      "description": "Scarecrow (Bottom)"
+      "type": "crops",
+      "description": "Tomato stake (Bottom)",
+      "z": 0
     },
     {
       "id": 125,
       "x": 13,
       "y": 7,
-      "type": "vegetables",
-      "description": "Scarecrow (Top)"
+      "type": "tool",
+      "description": "Wheelbarrow (Left facing)",
+      "z": 0
     },
     {
       "id": 126,
       "x": 14,
       "y": 7,
-      "type": "vegetables",
-      "description": "Compost Heap"
+      "type": "tool",
+      "description": "Wheelbarrow (Right facing)",
+      "z": 0
     },
     {
       "id": 127,
       "x": 15,
       "y": 7,
-      "type": "vegetables",
-      "description": "Garden Hose Coil"
+      "type": "tool",
+      "description": "Scarecrow",
+      "z": 0
     },
     {
       "id": 128,
       "x": 0,
       "y": 8,
-      "type": "water",
-      "description": "Pond Water (Center/Deep)"
+      "type": "tree",
+      "description": "Oak Tree Canopy (Top-Left)",
+      "z": 1
     },
     {
       "id": 129,
       "x": 1,
       "y": 8,
-      "type": "water",
-      "description": "Pond Edge (Top)"
+      "type": "tree",
+      "description": "Oak Tree Canopy (Top-Center)",
+      "z": 1
     },
     {
       "id": 130,
       "x": 2,
       "y": 8,
-      "type": "water",
-      "description": "Pond Edge (Right)"
+      "type": "tree",
+      "description": "Oak Tree Canopy (Top-Right)",
+      "z": 1
     },
     {
       "id": 131,
       "x": 3,
       "y": 8,
-      "type": "water",
-      "description": "Pond Edge (Bottom)"
+      "type": "tree",
+      "description": "Apple Tree Canopy (Top-Left)",
+      "z": 1
     },
     {
       "id": 132,
       "x": 4,
       "y": 8,
-      "type": "water",
-      "description": "Pond Edge (Left)"
+      "type": "tree",
+      "description": "Apple Tree Canopy (Top-Right)",
+      "z": 1
     },
     {
       "id": 133,
       "x": 5,
       "y": 8,
-      "type": "water",
-      "description": "Pond Corner (Top-Left)"
+      "type": "tree",
+      "description": "Small ornamental tree (Top)",
+      "z": 1
     },
     {
       "id": 134,
       "x": 6,
       "y": 8,
-      "type": "water",
-      "description": "Pond Corner (Top-Right)"
+      "type": "decor",
+      "description": "Bird bath (Top)",
+      "z": 0
     },
     {
       "id": 135,
       "x": 7,
       "y": 8,
-      "type": "water",
-      "description": "Pond Corner (Bottom-Right)"
+      "type": "decor",
+      "description": "Garden archway (Top-Left)",
+      "z": 1
     },
     {
       "id": 136,
       "x": 8,
       "y": 8,
-      "type": "water",
-      "description": "Pond Corner (Bottom-Left)"
+      "type": "decor",
+      "description": "Garden archway (Top-Right)",
+      "z": 1
     },
     {
       "id": 137,
       "x": 9,
       "y": 8,
-      "type": "water",
-      "description": "Pond Inner Corner (Top-Left)"
+      "type": "laundry",
+      "description": "Washing line post (Left)",
+      "z": 0
     },
     {
       "id": 138,
       "x": 10,
       "y": 8,
-      "type": "water",
-      "description": "Pond Inner Corner (Top-Right)"
+      "type": "laundry",
+      "description": "Washing line (Empty)",
+      "z": 1
     },
     {
       "id": 139,
       "x": 11,
       "y": 8,
-      "type": "water",
-      "description": "Pond Inner Corner (Bottom-Right)"
+      "type": "laundry",
+      "description": "Washing line (Sheets)",
+      "z": 1
     },
     {
       "id": 140,
       "x": 12,
       "y": 8,
-      "type": "water",
-      "description": "Pond Inner Corner (Bottom-Left)"
+      "type": "laundry",
+      "description": "Washing line (Clothes)",
+      "z": 1
     },
     {
       "id": 141,
       "x": 13,
       "y": 8,
-      "type": "water",
-      "description": "Water Ripple Animation 1"
+      "type": "laundry",
+      "description": "Washing line post (Right)",
+      "z": 0
     },
     {
       "id": 142,
       "x": 14,
       "y": 8,
-      "type": "water",
-      "description": "Water Ripple Animation 2"
+      "type": "laundry",
+      "description": "Laundry basket",
+      "z": 0
     },
     {
       "id": 143,
       "x": 15,
       "y": 8,
-      "type": "water",
-      "description": "Water Ripple Animation 3"
+      "type": "decor",
+      "description": "Birdhouse on pole",
+      "z": 0
     },
     {
       "id": 144,
       "x": 0,
       "y": 9,
-      "type": "water_feature",
-      "description": "Stone Fountain Top-Left"
+      "type": "tree",
+      "description": "Oak Tree Canopy (Bottom-Left)",
+      "z": 1
     },
     {
       "id": 145,
       "x": 1,
       "y": 9,
-      "type": "water_feature",
-      "description": "Stone Fountain Top-Right"
+      "type": "tree",
+      "description": "Oak Tree Canopy (Bottom-Center)",
+      "z": 1
     },
     {
       "id": 146,
       "x": 2,
       "y": 9,
-      "type": "water_feature",
-      "description": "Stone Fountain Bottom-Left (Water)"
+      "type": "tree",
+      "description": "Oak Tree Canopy (Bottom-Right)",
+      "z": 1
     },
     {
       "id": 147,
       "x": 3,
       "y": 9,
-      "type": "water_feature",
-      "description": "Stone Fountain Bottom-Right (Water)"
+      "type": "tree",
+      "description": "Apple Tree Canopy (Bottom-Left)",
+      "z": 1
     },
     {
       "id": 148,
       "x": 4,
       "y": 9,
-      "type": "water_feature",
-      "description": "Lily Pad (Single)"
+      "type": "tree",
+      "description": "Apple Tree Canopy (Bottom-Right)",
+      "z": 1
     },
     {
       "id": 149,
       "x": 5,
       "y": 9,
-      "type": "water_feature",
-      "description": "Lily Pad (Cluster with Flower)"
+      "type": "tree",
+      "description": "Small ornamental tree (Trunk)",
+      "z": 0
     },
     {
       "id": 150,
       "x": 6,
       "y": 9,
-      "type": "water_feature",
-      "description": "Reeds (Water based)"
+      "type": "decor",
+      "description": "Bird bath (Base)",
+      "z": 0
     },
     {
       "id": 151,
       "x": 7,
       "y": 9,
-      "type": "water_feature",
-      "description": "Koi Fish Shadow"
+      "type": "decor",
+      "description": "Garden archway (Base-Left)",
+      "z": 0
     },
     {
       "id": 152,
       "x": 8,
       "y": 9,
-      "type": "water_feature",
-      "description": "Stone Pond Border (Top)"
+      "type": "decor",
+      "description": "Garden archway (Base-Right)",
+      "z": 0
     },
     {
       "id": 153,
       "x": 9,
       "y": 9,
-      "type": "water_feature",
-      "description": "Stone Pond Border (Right)"
+      "type": "bench",
+      "description": "Wooden Bench (Left)",
+      "z": 0
     },
     {
       "id": 154,
       "x": 10,
       "y": 9,
-      "type": "water_feature",
-      "description": "Stone Pond Border (Bottom)"
+      "type": "bench",
+      "description": "Wooden Bench (Right)",
+      "z": 0
     },
     {
       "id": 155,
       "x": 11,
       "y": 9,
-      "type": "water_feature",
-      "description": "Stone Pond Border (Left)"
+      "type": "bench",
+      "description": "Picnic table (Left)",
+      "z": 0
     },
     {
       "id": 156,
       "x": 12,
       "y": 9,
-      "type": "water_feature",
-      "description": "Stone Pond Border Corner (TL)"
+      "type": "bench",
+      "description": "Picnic table (Right)",
+      "z": 0
     },
     {
       "id": 157,
       "x": 13,
       "y": 9,
-      "type": "water_feature",
-      "description": "Stone Pond Border Corner (TR)"
+      "type": "furniture",
+      "description": "Deck chair (Folded)",
+      "z": 0
     },
     {
       "id": 158,
       "x": 14,
       "y": 9,
-      "type": "water_feature",
-      "description": "Stone Pond Border Corner (BR)"
+      "type": "furniture",
+      "description": "Deck chair (Open)",
+      "z": 0
     },
     {
       "id": 159,
       "x": 15,
       "y": 9,
-      "type": "water_feature",
-      "description": "Stone Pond Border Corner (BL)"
+      "type": "furniture",
+      "description": "Garden table",
+      "z": 0
     },
     {
       "id": 160,
       "x": 0,
       "y": 10,
       "type": "tree",
-      "description": "Apple Tree Trunk (Base Left)"
+      "description": "Oak Tree Trunk (Base-Left)",
+      "z": 0
     },
     {
       "id": 161,
       "x": 1,
       "y": 10,
       "type": "tree",
-      "description": "Apple Tree Trunk (Base Right)"
+      "description": "Oak Tree Trunk (Base-Center)",
+      "z": 0
     },
     {
       "id": 162,
       "x": 2,
       "y": 10,
       "type": "tree",
-      "description": "Apple Tree Trunk (Mid Left)"
+      "description": "Oak Tree Trunk (Base-Right)",
+      "z": 0
     },
     {
       "id": 163,
       "x": 3,
       "y": 10,
       "type": "tree",
-      "description": "Apple Tree Trunk (Mid Right)"
+      "description": "Apple Tree Trunk (Base-Left)",
+      "z": 0
     },
     {
       "id": 164,
       "x": 4,
       "y": 10,
       "type": "tree",
-      "description": "Large Oak Trunk (Base Left)"
+      "description": "Apple Tree Trunk (Base-Right)",
+      "z": 0
     },
     {
       "id": 165,
       "x": 5,
       "y": 10,
-      "type": "tree",
-      "description": "Large Oak Trunk (Base Right)"
+      "type": "tool",
+      "description": "Compost bin (Wooden)",
+      "z": 0
     },
     {
       "id": 166,
       "x": 6,
       "y": 10,
-      "type": "tree",
-      "description": "Large Oak Trunk (Mid Left)"
+      "type": "tool",
+      "description": "Water butt/barrel",
+      "z": 0
     },
     {
       "id": 167,
       "x": 7,
       "y": 10,
-      "type": "tree",
-      "description": "Large Oak Trunk (Mid Right)"
+      "type": "tool",
+      "description": "Garden hose reel",
+      "z": 0
     },
     {
       "id": 168,
       "x": 8,
       "y": 10,
-      "type": "tree",
-      "description": "Thin Tree Trunk"
+      "type": "tool",
+      "description": "Shovel in ground",
+      "z": 0
     },
     {
       "id": 169,
       "x": 9,
       "y": 10,
-      "type": "tree",
-      "description": "Stump with Axe"
+      "type": "tool",
+      "description": "Rake leaning",
+      "z": 0
     },
     {
       "id": 170,
       "x": 10,
       "y": 10,
-      "type": "tree",
-      "description": "Hollow Stump"
+      "type": "tool",
+      "description": "Watering can",
+      "z": 0
     },
     {
       "id": 171,
       "x": 11,
       "y": 10,
-      "type": "tree",
-      "description": "Tree Roots (North)"
+      "type": "tool",
+      "description": "Potting table (Left)",
+      "z": 0
     },
     {
       "id": 172,
       "x": 12,
       "y": 10,
-      "type": "tree",
-      "description": "Tree Roots (East)"
+      "type": "tool",
+      "description": "Potting table (Right)",
+      "z": 0
     },
     {
       "id": 173,
       "x": 13,
       "y": 10,
-      "type": "tree",
-      "description": "Tree Roots (South)"
+      "type": "tool",
+      "description": "Bag of soil",
+      "z": 0
     },
     {
       "id": 174,
       "x": 14,
       "y": 10,
-      "type": "tree",
-      "description": "Tree Roots (West)"
+      "type": "toy",
+      "description": "Child's ball",
+      "z": -1
     },
     {
       "id": 175,
       "x": 15,
       "y": 10,
-      "type": "tree",
-      "description": "Mushrooms on roots"
+      "type": "toy",
+      "description": "Toy truck",
+      "z": -1
     },
     {
       "id": 176,
       "x": 0,
       "y": 11,
-      "type": "tree_canopy",
-      "description": "Apple Tree Leaves (Bottom Left)"
+      "type": "transition",
+      "description": "Transition: Grass (Top) / Dirt (Bottom)",
+      "z": -1
     },
     {
       "id": 177,
       "x": 1,
       "y": 11,
-      "type": "tree_canopy",
-      "description": "Apple Tree Leaves (Bottom Right)"
+      "type": "transition",
+      "description": "Transition: Grass (Bottom) / Dirt (Top)",
+      "z": -1
     },
     {
       "id": 178,
       "x": 2,
       "y": 11,
-      "type": "tree_canopy",
-      "description": "Apple Tree Leaves (Top Left)"
+      "type": "transition",
+      "description": "Transition: Grass (Left) / Dirt (Right)",
+      "z": -1
     },
     {
       "id": 179,
       "x": 3,
       "y": 11,
-      "type": "tree_canopy",
-      "description": "Apple Tree Leaves (Top Right)"
+      "type": "transition",
+      "description": "Transition: Grass (Right) / Dirt (Left)",
+      "z": -1
     },
     {
       "id": 180,
       "x": 4,
       "y": 11,
-      "type": "tree_canopy",
-      "description": "Apple Tree Leaves (Fill)"
+      "type": "transition",
+      "description": "Transition: Grass (Top) / Gravel (Bottom)",
+      "z": -1
     },
     {
       "id": 181,
       "x": 5,
       "y": 11,
-      "type": "tree_canopy",
-      "description": "Apple Tree Leaves (With Apple)"
+      "type": "transition",
+      "description": "Transition: Grass (Bottom) / Gravel (Top)",
+      "z": -1
     },
     {
       "id": 182,
       "x": 6,
       "y": 11,
-      "type": "tree_canopy",
-      "description": "Oak Tree Leaves (Bottom Left)"
+      "type": "transition",
+      "description": "Transition: Grass (Left) / Gravel (Right)",
+      "z": -1
     },
     {
       "id": 183,
       "x": 7,
       "y": 11,
-      "type": "tree_canopy",
-      "description": "Oak Tree Leaves (Bottom Right)"
+      "type": "transition",
+      "description": "Transition: Grass (Right) / Gravel (Left)",
+      "z": -1
     },
     {
       "id": 184,
       "x": 8,
       "y": 11,
-      "type": "tree_canopy",
-      "description": "Oak Tree Leaves (Mid Left)"
+      "type": "transition",
+      "description": "Transition: Grass (Top) / Pave (Bottom)",
+      "z": -1
     },
     {
       "id": 185,
       "x": 9,
       "y": 11,
-      "type": "tree_canopy",
-      "description": "Oak Tree Leaves (Mid Right)"
+      "type": "transition",
+      "description": "Transition: Grass (Bottom) / Pave (Top)",
+      "z": -1
     },
     {
       "id": 186,
       "x": 10,
       "y": 11,
-      "type": "tree_canopy",
-      "description": "Oak Tree Leaves (Top Left)"
+      "type": "transition",
+      "description": "Transition: Grass (Left) / Pave (Right)",
+      "z": -1
     },
     {
       "id": 187,
       "x": 11,
       "y": 11,
-      "type": "tree_canopy",
-      "description": "Oak Tree Leaves (Top Right)"
+      "type": "transition",
+      "description": "Transition: Grass (Right) / Pave (Left)",
+      "z": -1
     },
     {
       "id": 188,
       "x": 12,
       "y": 11,
-      "type": "tree_canopy",
-      "description": "Oak Tree Leaves (Fill)"
+      "type": "transition",
+      "description": "Transition: Dirt (Top) / Gravel (Bottom)",
+      "z": -1
     },
     {
       "id": 189,
       "x": 13,
       "y": 11,
-      "type": "tree_canopy",
-      "description": "Falling Leaf Animation 1"
+      "type": "transition",
+      "description": "Transition: Dirt (Bottom) / Gravel (Top)",
+      "z": -1
     },
     {
       "id": 190,
       "x": 14,
       "y": 11,
-      "type": "tree_canopy",
-      "description": "Falling Leaf Animation 2"
+      "type": "transition",
+      "description": "Transition: Dirt (Left) / Gravel (Right)",
+      "z": -1
     },
     {
       "id": 191,
       "x": 15,
       "y": 11,
-      "type": "tree_canopy",
-      "description": "Falling Leaf Animation 3"
+      "type": "transition",
+      "description": "Transition: Dirt (Right) / Gravel (Left)",
+      "z": -1
     },
     {
       "id": 192,
       "x": 0,
       "y": 12,
-      "type": "bush",
-      "description": "Round Green Bush"
+      "type": "ground_decor",
+      "description": "Stepping stone (Round) on grass",
+      "z": -1
     },
     {
       "id": 193,
       "x": 1,
       "y": 12,
-      "type": "bush",
-      "description": "Round Bush with Berries"
+      "type": "ground_decor",
+      "description": "Stepping stone (Square) on grass",
+      "z": -1
     },
     {
       "id": 194,
       "x": 2,
       "y": 12,
-      "type": "bush",
-      "description": "Flowering Bush (White)"
+      "type": "ground_decor",
+      "description": "Scattered petals on grass",
+      "z": -1
     },
     {
       "id": 195,
       "x": 3,
       "y": 12,
-      "type": "bush",
-      "description": "Flowering Bush (Pink)"
+      "type": "ground_decor",
+      "description": "Scattered leaves on grass",
+      "z": -1
     },
     {
       "id": 196,
       "x": 4,
       "y": 12,
-      "type": "decor",
-      "description": "Wooden Lattice Trellis (Bottom)"
+      "type": "ground_decor",
+      "description": "Manhole cover on grass",
+      "z": -1
     },
     {
       "id": 197,
       "x": 5,
       "y": 12,
-      "type": "decor",
-      "description": "Wooden Lattice Trellis (Top)"
+      "type": "ground_decor",
+      "description": "Drain grate",
+      "z": -1
     },
     {
       "id": 198,
       "x": 6,
       "y": 12,
-      "type": "decor",
-      "description": "Climbing Rose Trellis (Bottom)"
+      "type": "ground_decor",
+      "description": "Molehill",
+      "z": -1
     },
     {
       "id": 199,
       "x": 7,
       "y": 12,
-      "type": "decor",
-      "description": "Climbing Rose Trellis (Top)"
+      "type": "ground_decor",
+      "description": "Mushrooms on grass",
+      "z": -1
     },
     {
       "id": 200,
       "x": 8,
       "y": 12,
-      "type": "decor",
-      "description": "Climbing Ivy Trellis (Bottom)"
+      "type": "ground_decor",
+      "description": "Loose rocks on dirt",
+      "z": -1
     },
     {
       "id": 201,
       "x": 9,
       "y": 12,
-      "type": "decor",
-      "description": "Climbing Ivy Trellis (Top)"
+      "type": "ground_decor",
+      "description": "Puddle on dirt",
+      "z": -1
     },
     {
       "id": 202,
       "x": 10,
       "y": 12,
-      "type": "decor",
-      "description": "Arch Trellis (Left Base)"
+      "type": "ground_decor",
+      "description": "Puddle on path",
+      "z": -1
     },
     {
       "id": 203,
       "x": 11,
       "y": 12,
-      "type": "decor",
-      "description": "Arch Trellis (Right Base)"
+      "type": "stairs",
+      "description": "Garden steps stone (Top)",
+      "z": -1
     },
     {
       "id": 204,
       "x": 12,
       "y": 12,
-      "type": "decor",
-      "description": "Arch Trellis (Top Left)"
+      "type": "stairs",
+      "description": "Garden steps stone (Bottom)",
+      "z": -1
     },
     {
       "id": 205,
       "x": 13,
       "y": 12,
-      "type": "decor",
-      "description": "Arch Trellis (Top Right)"
+      "type": "stairs",
+      "description": "Wooden steps (Top)",
+      "z": -1
     },
     {
       "id": 206,
       "x": 14,
       "y": 12,
-      "type": "decor",
-      "description": "Hanging Basket (from arch)"
+      "type": "stairs",
+      "description": "Wooden steps (Bottom)",
+      "z": -1
     },
     {
       "id": 207,
       "x": 15,
       "y": 12,
       "type": "decor",
-      "description": "Birdhouse on pole"
+      "description": "Doormat",
+      "z": -1
     },
     {
       "id": 208,
       "x": 0,
       "y": 13,
-      "type": "furniture",
-      "description": "Wooden Bench (Left)"
+      "type": "wall_climb",
+      "description": "Trellis with ivy (Top)",
+      "z": 0
     },
     {
       "id": 209,
       "x": 1,
       "y": 13,
-      "type": "furniture",
-      "description": "Wooden Bench (Right)"
+      "type": "wall_climb",
+      "description": "Trellis with ivy (Bottom)",
+      "z": 0
     },
     {
       "id": 210,
       "x": 2,
       "y": 13,
-      "type": "furniture",
-      "description": "Iron Bench (Left)"
+      "type": "wall_climb",
+      "description": "Empty trellis (Top)",
+      "z": 0
     },
     {
       "id": 211,
       "x": 3,
       "y": 13,
-      "type": "furniture",
-      "description": "Iron Bench (Right)"
+      "type": "wall_climb",
+      "description": "Empty trellis (Bottom)",
+      "z": 0
     },
     {
       "id": 212,
       "x": 4,
       "y": 13,
-      "type": "furniture",
-      "description": "Stone Birdbath"
+      "type": "shadow",
+      "description": "Tree shadow (Large)",
+      "z": -1
     },
     {
       "id": 213,
       "x": 5,
       "y": 13,
-      "type": "furniture",
-      "description": "Stone Sundial"
+      "type": "shadow",
+      "description": "Building shadow (Edge)",
+      "z": -1
     },
     {
       "id": 214,
       "x": 6,
       "y": 13,
-      "type": "furniture",
-      "description": "Wooden Planter Box (Empty)"
+      "type": "water",
+      "description": "Water ripple animation 1",
+      "z": -1
     },
     {
       "id": 215,
       "x": 7,
       "y": 13,
-      "type": "furniture",
-      "description": "Wooden Planter Box (Flowers)"
+      "type": "water",
+      "description": "Water ripple animation 2",
+      "z": -1
     },
     {
       "id": 216,
       "x": 8,
       "y": 13,
-      "type": "furniture",
-      "description": "Terracotta Pot (Small)"
+      "type": "container",
+      "description": "Bin/Trash can",
+      "z": 0
     },
     {
       "id": 217,
       "x": 9,
       "y": 13,
-      "type": "furniture",
-      "description": "Terracotta Pot (Medium)"
+      "type": "container",
+      "description": "Wooden crate",
+      "z": 0
     },
     {
       "id": 218,
       "x": 10,
       "y": 13,
-      "type": "furniture",
-      "description": "Potted Fern"
+      "type": "container",
+      "description": "Sack of potatoes",
+      "z": 0
     },
     {
       "id": 219,
       "x": 11,
       "y": 13,
-      "type": "furniture",
-      "description": "Watering Can (Metal)"
+      "type": "animal",
+      "description": "Cat sleeping",
+      "z": 0
     },
     {
       "id": 220,
       "x": 12,
       "y": 13,
-      "type": "furniture",
-      "description": "Wheelbarrow (Empty)"
+      "type": "animal",
+      "description": "Dog sitting",
+      "z": 0
     },
     {
       "id": 221,
       "x": 13,
       "y": 13,
-      "type": "furniture",
-      "description": "Wheelbarrow (Filled)"
+      "type": "animal",
+      "description": "Bird pecking",
+      "z": 0
     },
     {
       "id": 222,
       "x": 14,
       "y": 13,
-      "type": "furniture",
-      "description": "Garden Gnome"
+      "type": "animal",
+      "description": "Hedgehog",
+      "z": 0
     },
     {
       "id": 223,
       "x": 15,
       "y": 13,
-      "type": "furniture",
-      "description": "Garden Lantern"
+      "type": "animal",
+      "description": "Frog",
+      "z": 0
     },
     {
       "id": 224,
       "x": 0,
       "y": 14,
-      "type": "border",
-      "description": "Brick Garden Border (Top)"
+      "type": "path_end",
+      "description": "Gravel path end (Top)",
+      "z": -1
     },
     {
       "id": 225,
       "x": 1,
       "y": 14,
-      "type": "border",
-      "description": "Brick Garden Border (Right)"
+      "type": "path_end",
+      "description": "Gravel path end (Bottom)",
+      "z": -1
     },
     {
       "id": 226,
       "x": 2,
       "y": 14,
-      "type": "border",
-      "description": "Brick Garden Border (Bottom)"
+      "type": "path_end",
+      "description": "Gravel path end (Left)",
+      "z": -1
     },
     {
       "id": 227,
       "x": 3,
       "y": 14,
-      "type": "border",
-      "description": "Brick Garden Border (Left)"
+      "type": "path_end",
+      "description": "Gravel path end (Right)",
+      "z": -1
     },
     {
       "id": 228,
       "x": 4,
       "y": 14,
-      "type": "border",
-      "description": "Brick Garden Border Corner (TL)"
+      "type": "path_end",
+      "description": "Pave path end (Top)",
+      "z": -1
     },
     {
       "id": 229,
       "x": 5,
       "y": 14,
-      "type": "border",
-      "description": "Brick Garden Border Corner (TR)"
+      "type": "path_end",
+      "description": "Pave path end (Bottom)",
+      "z": -1
     },
     {
       "id": 230,
       "x": 6,
       "y": 14,
-      "type": "border",
-      "description": "Brick Garden Border Corner (BR)"
+      "type": "path_end",
+      "description": "Pave path end (Left)",
+      "z": -1
     },
     {
       "id": 231,
       "x": 7,
       "y": 14,
-      "type": "border",
-      "description": "Brick Garden Border Corner (BL)"
+      "type": "path_end",
+      "description": "Pave path end (Right)",
+      "z": -1
     },
     {
       "id": 232,
       "x": 8,
       "y": 14,
-      "type": "border",
-      "description": "Rough Stone Border (Top)"
+      "type": "path_end",
+      "description": "Dirt path end (Top)",
+      "z": -1
     },
     {
       "id": 233,
       "x": 9,
       "y": 14,
-      "type": "border",
-      "description": "Rough Stone Border (Right)"
+      "type": "path_end",
+      "description": "Dirt path end (Bottom)",
+      "z": -1
     },
     {
       "id": 234,
       "x": 10,
       "y": 14,
-      "type": "border",
-      "description": "Rough Stone Border (Bottom)"
+      "type": "path_end",
+      "description": "Dirt path end (Left)",
+      "z": -1
     },
     {
       "id": 235,
       "x": 11,
       "y": 14,
-      "type": "border",
-      "description": "Rough Stone Border (Left)"
+      "type": "path_end",
+      "description": "Dirt path end (Right)",
+      "z": -1
     },
     {
       "id": 236,
       "x": 12,
       "y": 14,
-      "type": "border",
-      "description": "Rough Stone Border Corner (TL)"
+      "type": "misc",
+      "description": "Newspaper on ground",
+      "z": -1
     },
     {
       "id": 237,
       "x": 13,
       "y": 14,
-      "type": "border",
-      "description": "Rough Stone Border Corner (TR)"
+      "type": "misc",
+      "description": "Bicycle (Left half)",
+      "z": 0
     },
     {
       "id": 238,
       "x": 14,
       "y": 14,
-      "type": "border",
-      "description": "Rough Stone Border Corner (BR)"
+      "type": "misc",
+      "description": "Bicycle (Right half)",
+      "z": 0
     },
     {
       "id": 239,
       "x": 15,
       "y": 14,
-      "type": "border",
-      "description": "Rough Stone Border Corner (BL)"
+      "type": "misc",
+      "description": "Bucket",
+      "z": 0
     },
     {
       "id": 240,
       "x": 0,
       "y": 15,
-      "type": "misc",
-      "description": "Shadow Mask (Small Circle)"
+      "type": "extra_grass",
+      "description": "Tall grass patch 1",
+      "z": -1
     },
     {
       "id": 241,
       "x": 1,
       "y": 15,
-      "type": "misc",
-      "description": "Shadow Mask (Medium Circle)"
+      "type": "extra_grass",
+      "description": "Tall grass patch 2",
+      "z": -1
     },
     {
       "id": 242,
       "x": 2,
       "y": 15,
-      "type": "misc",
-      "description": "Shadow Mask (Large Oval)"
+      "type": "extra_grass",
+      "description": "Clover patch",
+      "z": -1
     },
     {
       "id": 243,
       "x": 3,
       "y": 15,
-      "type": "misc",
-      "description": "Semi-transparent water overlay"
+      "type": "extra_grass",
+      "description": "Weeds",
+      "z": -1
     },
     {
       "id": 244,
       "x": 4,
       "y": 15,
-      "type": "misc",
-      "description": "Tiny Frog"
+      "type": "extra_decor",
+      "description": "Rock small",
+      "z": 0
     },
     {
       "id": 245,
       "x": 5,
       "y": 15,
-      "type": "misc",
-      "description": "Butterfly (White)"
+      "type": "extra_decor",
+      "description": "Rock medium",
+      "z": 0
     },
     {
       "id": 246,
       "x": 6,
       "y": 15,
-      "type": "misc",
-      "description": "Butterfly (Yellow)"
+      "type": "extra_decor",
+      "description": "Log seat",
+      "z": 0
     },
     {
       "id": 247,
       "x": 7,
       "y": 15,
-      "type": "misc",
-      "description": "Dropped Glove"
+      "type": "extra_decor",
+      "description": "Stump",
+      "z": 0
     },
     {
       "id": 248,
       "x": 8,
       "y": 15,
-      "type": "misc",
-      "description": "Picnic Blanket (Top Left)"
+      "type": "extra_decor",
+      "description": "Picnic blanket (Top-Left)",
+      "z": -1
     },
     {
       "id": 249,
       "x": 9,
       "y": 15,
-      "type": "misc",
-      "description": "Picnic Blanket (Top Right)"
+      "type": "extra_decor",
+      "description": "Picnic blanket (Top-Right)",
+      "z": -1
     },
     {
       "id": 250,
       "x": 10,
       "y": 15,
-      "type": "misc",
-      "description": "Picnic Blanket (Bottom Left)"
+      "type": "extra_decor",
+      "description": "Picnic blanket (Bottom-Left)",
+      "z": -1
     },
     {
       "id": 251,
       "x": 11,
       "y": 15,
-      "type": "misc",
-      "description": "Picnic Blanket (Bottom Right)"
+      "type": "extra_decor",
+      "description": "Picnic blanket (Bottom-Right)",
+      "z": -1
     },
     {
       "id": 252,
       "x": 12,
       "y": 15,
-      "type": "misc",
-      "description": "Picnic Basket"
+      "type": "food",
+      "description": "Picnic basket",
+      "z": 0
     },
     {
       "id": 253,
       "x": 13,
       "y": 15,
-      "type": "misc",
-      "description": "Tea Set"
+      "type": "food",
+      "description": "Lemonade pitcher",
+      "z": 0
     },
     {
       "id": 254,
       "x": 14,
       "y": 15,
-      "type": "misc",
-      "description": "Solid Black (Void/Fill)"
+      "type": "food",
+      "description": "Sandwich plate",
+      "z": 0
     },
     {
       "id": 255,
       "x": 15,
       "y": 15,
-      "type": "misc",
-      "description": "Transparent/Empty Tile"
+      "type": "empty",
+      "description": "Transparent/Empty",
+      "z": -1
     }
   ]
 }

@@ -30,7 +30,7 @@ export async function generateActorPortrait(
 	const systemPrompt = await getSystemPrompt();
 	const extraInstructions =
 		expressionType === 'talking' ? await getPrompt('talking-portrait.prompt.md') : undefined;
-	const prompt = await buildPortraitPrompt(
+	const { systemInstruction, prompt: userPrompt } = await buildPortraitPrompt(
 		systemPrompt,
 		actor.content,
 		extraInstructions ?? undefined
@@ -51,7 +51,8 @@ export async function generateActorPortrait(
 	}
 
 	const result = await generateImage({
-		prompt,
+		prompt: userPrompt,
+		systemInstruction,
 		referenceImages: referenceImages.length > 0 ? referenceImages : undefined,
 		aspectRatio: '3:4'
 	});
@@ -78,7 +79,7 @@ export async function generateActorSpritesheet(
 
 	const systemPrompt = await getSystemPrompt();
 	const extraInstructions = await getPrompt(`${animationType}-spritesheet.prompt.md`);
-	const prompt = await buildSpritesheetPrompt(
+	const { systemInstruction, prompt: userPrompt } = await buildSpritesheetPrompt(
 		systemPrompt,
 		actor.content,
 		extraInstructions ?? undefined
@@ -121,7 +122,8 @@ export async function generateActorSpritesheet(
 	}
 
 	const result = await generateImage({
-		prompt,
+		prompt: userPrompt,
+		systemInstruction,
 		referenceImages: referenceImages.length > 0 ? referenceImages : undefined,
 		aspectRatio: '1:1'
 	});
