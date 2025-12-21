@@ -7,26 +7,13 @@
 		</p>
 	</div>
 
-	<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-		<div class="card bg-base-100 shadow-xl">
-			<div class="card-body">
-				<h2 class="card-title">📝 Configuration</h2>
-				<p>
-					Edit base configuration documents that define art styles, character templates, and
-					animation frames.
-				</p>
-				<div class="card-actions justify-end">
-					<a href="/config" class="btn btn-primary btn-sm">Go to Config</a>
-				</div>
-			</div>
-		</div>
-
+	<div class="grid grid-cols-1 gap-6">
 		<div class="card bg-base-100 shadow-xl">
 			<div class="card-body">
 				<h2 class="card-title">👥 Actors</h2>
 				<p>
-					View and manage character descriptions, generate AI concept art, and organize character
-					assets.
+					View and manage character descriptions, generate AI concept art, portraits, and
+					spritesheets.
 				</p>
 				<div class="card-actions justify-end">
 					<a href="/actors" class="btn btn-secondary btn-sm">Go to Actors</a>

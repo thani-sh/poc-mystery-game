@@ -1,12 +1,12 @@
 <script lang="ts">
 	import AnimatedFrame from '$lib/AnimatedFrame.svelte';
+	import { generateConcept, generatePortrait, generateSpritesheet } from './generate.remote';
 
 	let { data } = $props();
-	let editContent = $state(data.actor.content);
+
 	let generating = $state(false);
 	let generatingExpression = $state<Record<string, boolean>>({});
 	let generatingFrame = $state<Record<string, boolean>>({});
-	let saving = $state(false);
 	let status = $state<{ type: 'success' | 'error' | 'info'; message: string } | null>(null);
 
 	// Use $derived for values computed from props to avoid effect loops
@@ -20,161 +20,72 @@
 		Object.fromEntries(data.frameTypes.map((type) => [type, data.frames[type]?.dataUrl || null]))
 	);
 
-	async function generateConcept() {
+	async function handleGenerateConcept() {
 		generating = true;
 		status = { type: 'info', message: 'Generating concept...' };
 
 		try {
-			const response = await fetch(`/actors/${data.actor.id}`, {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({
-					action: 'generate'
-				})
-			});
-
-			const result = await response.json();
-
-			if (result.success) {
-				status = { type: 'success', message: 'Concept generated successfully!' };
-				// Reload the page to get the new portrait
-				window.location.reload();
-			} else {
-				status = { type: 'error', message: result.error || 'Failed to generate concept' };
-			}
+			await generateConcept(data.actor.id);
+			status = { type: 'success', message: 'Concept generated successfully!' };
+			// Reload the page to get the new portrait
+			window.location.reload();
 		} catch (error) {
-			status = { type: 'error', message: 'Error generating concept' };
+			status = { type: 'error', message: error instanceof Error ? error.message : 'Error generating concept' };
 			console.error('Generate error:', error);
 		} finally {
 			generating = false;
 		}
 	}
 
-	async function generateSpeechPortrait(expressionType: string) {
+	async function handleGenerateSpeechPortrait(expressionType: string) {
 		generatingExpression[expressionType] = true;
 		status = { type: 'info', message: `Generating ${expressionType} expression...` };
 
 		try {
-			const response = await fetch(`/actors/${data.actor.id}`, {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({
-					action: 'generate-speech',
-					expressionType
-				})
-			});
-
-			const result = await response.json();
-
-			if (result.success) {
-				status = {
-					type: 'success',
-					message: `${expressionType} expression generated successfully!`
-				};
-				// Reload the page to get the new portrait
-				window.location.reload();
-			} else {
-				status = {
-					type: 'error',
-					message: result.error || `Failed to generate ${expressionType} expression`
-				};
-			}
+			await generatePortrait([data.actor.id, expressionType]);
+			status = {
+				type: 'success',
+				message: `${expressionType} expression generated successfully!`
+			};
+			// Reload the page to get the new portrait
+			window.location.reload();
 		} catch (error) {
-			status = { type: 'error', message: `Error generating ${expressionType} expression` };
+			status = {
+				type: 'error',
+				message: error instanceof Error ? error.message : `Error generating ${expressionType} expression`
+			};
 			console.error('Generate error:', error);
 		} finally {
 			generatingExpression[expressionType] = false;
 		}
 	}
 
-	async function generateFrame(frameType: string) {
+	async function handleGenerateFrame(frameType: string) {
 		generatingFrame[frameType] = true;
 		status = { type: 'info', message: `Generating ${frameType} frame...` };
 
 		try {
-			const response = await fetch(`/actors/${data.actor.id}`, {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({
-					action: 'generate-frame',
-					frameType
-				})
-			});
-
-			const result = await response.json();
-
-			if (result.success) {
-				status = { type: 'success', message: `${frameType} frame generated successfully!` };
-				// Reload the page to get the new frame
-				window.location.reload();
-			} else {
-				status = {
-					type: 'error',
-					message: result.error || `Failed to generate ${frameType} frame`
-				};
-			}
+			await generateSpritesheet([data.actor.id, frameType]);
+			status = { type: 'success', message: `${frameType} frame generated successfully!` };
+			// Reload the page to get the new frame
+			window.location.reload();
 		} catch (error) {
-			status = { type: 'error', message: `Error generating ${frameType} frame` };
+			status = {
+				type: 'error',
+				message: error instanceof Error ? error.message : `Error generating ${frameType} frame`
+			};
 			console.error('Generate error:', error);
 		} finally {
 			generatingFrame[frameType] = false;
 		}
 	}
 
-	async function saveChanges() {
-		saving = true;
-		status = null;
-
-		try {
-			const response = await fetch(`/actors/${data.actor.id}`, {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({
-					action: 'save',
-					content: editContent
-				})
-			});
-
-			if (response.ok) {
-				status = { type: 'success', message: 'Changes saved successfully!' };
-				data.actor.content = editContent;
-			} else {
-				status = { type: 'error', message: 'Failed to save changes' };
-			}
-		} catch (error) {
-			status = { type: 'error', message: 'Error saving changes' };
-			console.error('Save error:', error);
-		} finally {
-			saving = false;
-		}
-	}
 </script>
 
 <div class="max-w-7xl mx-auto">
 	<h1 class="text-3xl font-bold mb-6">{data.actor.name}</h1>
 
 	<div class="space-y-8">
-		<!-- Character Editor -->
-		<div>
-			<h2 class="text-xl font-bold mb-4">Character Description</h2>
-
-			<textarea
-				class="textarea textarea-bordered w-full h-64 font-mono"
-				bind:value={editContent}
-				placeholder="Edit character description..."
-			></textarea>
-
-			<div class="flex justify-end mt-4">
-				<button
-					class="btn btn-secondary"
-					onclick={saveChanges}
-					disabled={saving || editContent === data.actor.content}
-				>
-					{saving ? 'Saving...' : 'Save Changes'}
-				</button>
-			</div>
-		</div>
-
 		<!-- Concept Preview -->
 		<div>
 			<h2 class="text-xl font-bold mb-4">Concept Art</h2>
@@ -191,7 +102,7 @@
 			</div>
 
 			<div class="flex justify-end mt-4">
-				<button class="btn btn-primary" onclick={generateConcept} disabled={generating}>
+				<button class="btn btn-primary" onclick={handleGenerateConcept} disabled={generating}>
 					{generating ? 'Generating...' : conceptUrl ? 'Regenerate Concept' : 'Generate Concept'}
 				</button>
 			</div>
@@ -231,7 +142,7 @@
 							{/if}
 							<button
 								class="btn btn-circle btn-sm btn-primary absolute top-2 right-2"
-								onclick={() => generateSpeechPortrait(expressionType)}
+								onclick={() => handleGenerateSpeechPortrait(expressionType)}
 								disabled={generatingExpression[expressionType] || !conceptUrl}
 								title={generatingExpression[expressionType]
 									? 'Generating...'
@@ -293,7 +204,7 @@
 							{/if}
 							<button
 								class="btn btn-circle btn-sm btn-primary absolute top-2 right-2"
-								onclick={() => generateFrame(frameType)}
+								onclick={() => handleGenerateFrame(frameType)}
 								disabled={generatingFrame[frameType] || !conceptUrl}
 								title={generatingFrame[frameType]
 									? 'Generating...'

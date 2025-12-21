@@ -5,9 +5,7 @@ import {
 	getActorFrameDataUrl,
 	hasActorConcept,
 	hasActorSpeech,
-	hasActorFrame,
-	getSpeechExpressionTypes,
-	getFrameTypes
+	hasActorFrame
 } from '$lib/server/filesystem';
 import { error } from '@sveltejs/kit';
 
@@ -18,8 +16,9 @@ export async function load({ params }) {
 		throw error(404, 'Actor not found');
 	}
 
-	// Get all available expression types
-	const expressionTypes = await getSpeechExpressionTypes();
+	// Define available expression types and frame types
+	const expressionTypes = ['neutral', 'talking', 'happy', 'sad', 'angry', 'surprised'];
+	const frameTypes = ['idle-down', 'walk-down', 'walk-left', 'walk-right', 'walk-up'];
 
 	// Load speech portraits for all expression types
 	const speechPortraits: Record<string, { exists: boolean; dataUrl: string | null }> = {};
@@ -29,9 +28,6 @@ export async function load({ params }) {
 			dataUrl: await getActorSpeechDataUrl(params.actorId, expressionType)
 		};
 	}
-
-	// Get all available frame types
-	const frameTypes = await getFrameTypes();
 
 	// Load frames for all frame types
 	const frames: Record<string, { exists: boolean; dataUrl: string | null }> = {};

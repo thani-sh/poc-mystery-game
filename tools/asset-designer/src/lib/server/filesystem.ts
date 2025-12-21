@@ -2,6 +2,7 @@ import fs from 'fs/promises';
 import path from 'path';
 
 const SPEC_DIR = path.resolve(process.cwd(), '../../docs/spec');
+const PROMPTS_DIR = path.join(SPEC_DIR, 'prompts');
 const ACTORS_DIR = path.join(SPEC_DIR, 'actors');
 const ASSETS_DIR = path.resolve(process.cwd(), '../../assets');
 
@@ -19,49 +20,37 @@ export interface SpecFile {
 }
 
 /**
- * Get all base spec files (excluding actors)
+ * Get system prompt from file
  */
-export async function getSpecFiles(): Promise<SpecFile[]> {
-	const files = await fs.readdir(SPEC_DIR);
-	const specFiles: SpecFile[] = [];
-
-	for (const file of files) {
-		const filePath = path.join(SPEC_DIR, file);
-		const stat = await fs.stat(filePath);
-		// Skip directories and non-markdown files
-		if (stat.isDirectory() || !file.endsWith('.md')) {
-			continue;
-		}
-		const content = await fs.readFile(filePath, 'utf-8');
-		specFiles.push({
-			id: file.replace('.md', ''),
-			name: file.replace('.md', '').replace(/-/g, ' '),
-			content: content
-		});
-	}
-
-	return specFiles;
+export async function getSystemPrompt(): Promise<string> {
+	const filePath = path.join(PROMPTS_DIR, 'system.prompt.md');
+	const content = await fs.readFile(filePath, 'utf-8');
+	return content;
 }
 
 /**
- * Get a specific spec file
+ * Get concept art reference images
  */
-export async function getSpecFile(id: string): Promise<SpecFile | null> {
+export async function getConceptArtImages(): Promise<Buffer[]> {
+	const images: Buffer[] = [];
+
 	try {
-		const filePath = path.join(SPEC_DIR, `${id}.md`);
-		const content = await fs.readFile(filePath, 'utf-8');
-		return { id, name: id.replace(/-/g, ' '), content };
+		const mainCastPath = path.join(ASSETS_DIR, 'main-cast-concept-image.jpeg');
+		const mainCastImage = await fs.readFile(mainCastPath);
+		images.push(mainCastImage);
 	} catch (error) {
-		return null;
+		console.warn('Could not load main-cast-concept-image.jpeg');
 	}
-}
 
-/**
- * Update a spec file
- */
-export async function updateSpecFile(id: string, content: string): Promise<void> {
-	const filePath = path.join(SPEC_DIR, `${id}.md`);
-	await fs.writeFile(filePath, content, 'utf-8');
+	try {
+		const recurringPath = path.join(ASSETS_DIR, 'recurring-concept-image.jpeg');
+		const recurringImage = await fs.readFile(recurringPath);
+		images.push(recurringImage);
+	} catch (error) {
+		console.warn('Could not load recurring-concept-image.jpeg');
+	}
+
+	return images;
 }
 
 /**
@@ -210,58 +199,6 @@ export async function getActorSpeechDataUrl(
 		return `data:image/png;base64,${base64}`;
 	} catch {
 		return null;
-	}
-}
-
-/**
- * Get speech spec file
- */
-export async function getSpeechSpecFile(type: string): Promise<SpecFile | null> {
-	try {
-		const filePath = path.join(SPEC_DIR, 'speech', `${type}.md`);
-		const content = await fs.readFile(filePath, 'utf-8');
-		return { id: type, name: type, content };
-	} catch (error) {
-		return null;
-	}
-}
-
-/**
- * Get all available speech expression types
- */
-export async function getSpeechExpressionTypes(): Promise<string[]> {
-	try {
-		const speechDir = path.join(SPEC_DIR, 'speech');
-		const files = await fs.readdir(speechDir);
-		return files.filter((f) => f.endsWith('.md')).map((f) => f.replace('.md', ''));
-	} catch {
-		return [];
-	}
-}
-
-/**
- * Get frame spec file
- */
-export async function getFrameSpecFile(frameType: string): Promise<SpecFile | null> {
-	try {
-		const filePath = path.join(SPEC_DIR, 'frames', `${frameType}.md`);
-		const content = await fs.readFile(filePath, 'utf-8');
-		return { id: frameType, name: frameType, content };
-	} catch (error) {
-		return null;
-	}
-}
-
-/**
- * Get all available frame types
- */
-export async function getFrameTypes(): Promise<string[]> {
-	try {
-		const framesDir = path.join(SPEC_DIR, 'frames');
-		const files = await fs.readdir(framesDir);
-		return files.filter((f) => f.endsWith('.md')).map((f) => f.replace('.md', ''));
-	} catch {
-		return [];
 	}
 }
 

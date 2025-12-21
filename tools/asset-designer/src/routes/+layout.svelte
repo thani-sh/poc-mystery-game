@@ -7,7 +7,6 @@
 
 	const navItems = [
 		{ href: '/', label: 'Home', icon: '🏠' },
-		{ href: '/config', label: 'Config', icon: '⚙️' },
 		{ href: '/actors', label: 'Actors', icon: '👥' }
 	];
 

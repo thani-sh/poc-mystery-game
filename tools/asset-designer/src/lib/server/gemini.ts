@@ -3,10 +3,12 @@ import { env } from '$env/dynamic/private';
 
 const ai = env.GEMINI_API_KEY ? new GoogleGenAI({ apiKey: env.GEMINI_API_KEY }) : null;
 
+export type AspectRatio = '16:9' | '3:4' | '1:1';
+
 export interface GenerateImageOptions {
 	prompt: string;
-	referenceImage?: Buffer; // Optional reference image
 	referenceImages?: Buffer[]; // Optional multiple reference images
+	aspectRatio?: AspectRatio; // Aspect ratio for the generated image
 }
 
 /**
@@ -26,29 +28,36 @@ export async function generateImage(
 		// Add reference images if provided
 		if (options.referenceImages && options.referenceImages.length > 0) {
 			for (const refImage of options.referenceImages) {
+				// Detect mime type based on buffer header
+				let mimeType = 'image/png';
+				if (refImage[0] === 0xff && refImage[1] === 0xd8) {
+					mimeType = 'image/jpeg';
+				}
+
 				contentParts.push({
 					inlineData: {
 						data: refImage.toString('base64'),
-						mimeType: 'image/png'
+						mimeType
 					}
 				});
 			}
-		} else if (options.referenceImage) {
-			// Backward compatibility: single reference image
-			contentParts.push({
-				inlineData: {
-					data: options.referenceImage.toString('base64'),
-					mimeType: 'image/png'
-				}
-			});
+		}
+
+		// Build config with aspect ratio if provided
+		const config: any = {
+			responseModalities: ['image']
+		};
+
+		if (options.aspectRatio) {
+			config.imageGenerationConfig = {
+				aspectRatio: options.aspectRatio
+			};
 		}
 
 		const response = await ai.models.generateContent({
 			model: 'gemini-3-pro-image-preview',
 			contents: contentParts,
-			config: {
-				responseModalities: ['image']
-			}
+			config
 		});
 
 		// Extract image data from response
@@ -83,35 +92,25 @@ export async function generateImage(
 }
 
 /**
- * Build a prompt for character concept generation
+ * Build a prompt for concept art generation
  */
-export function buildConceptPrompt(characterDescription: string, basePrompt: string): string {
-	return `${basePrompt}\n\nCharacter Description:\n${characterDescription}\n\nPlease generate a character concept image following the style guidelines above.`;
+export function buildConceptPrompt(systemPrompt: string, characterDescription: string): string {
+	const typeInstruction = 'Extract this character from the reference images provided, showing the full body from head to toe. Keep the character design, colors, and style exactly as shown in the reference images. You may make minor adjustments to the pose, but maintain complete visual consistency with the reference character. Center the character in the frame with appropriate spacing around them.';
+	return `${systemPrompt}\n\nCharacter Description:\n${characterDescription}\n\n${typeInstruction}`;
 }
 
 /**
- * Build a prompt for character speech portrait generation
+ * Build a prompt for portrait generation
  */
-export function buildSpeechPrompt(
-	characterDescription: string,
-	baseSpeechPrompt: string,
-	expressionPrompt: string
-): string {
-	return `${baseSpeechPrompt}\n\n${expressionPrompt}\n\nCharacter Description:\n${characterDescription}\n\nPlease generate a character speech portrait following the style guidelines and expression requirements above.\n\nReference the provided concept image for the character's appearance, ensuring consistency in design, colors, and features.`;
+export function buildPortraitPrompt(systemPrompt: string, characterDescription: string): string {
+	const typeInstruction = 'Generate a portrait for this character.';
+	return `${systemPrompt}\n\nCharacter Description:\n${characterDescription}\n\n${typeInstruction}`;
 }
 
 /**
- * Build a prompt for character frame generation
+ * Build a prompt for spritesheet generation
  */
-export function buildFramePrompt(
-	characterDescription: string,
-	baseFramesPrompt: string,
-	framePrompt: string,
-	hasIdleDownReference: boolean = false
-): string {
-	const referenceInstructions = hasIdleDownReference
-		? "Reference the provided concept image for the character's appearance and the idle-down frame for consistent style, proportions, and design across all frames."
-		: "Reference the provided concept image for the character's appearance, ensuring consistency in design, colors, and features across all frames.";
-
-	return `${baseFramesPrompt}\n\n${framePrompt}\n\nCharacter Description:\n${characterDescription}\n\nPlease generate a character sprite frame following the style guidelines and pose requirements above.\n\n${referenceInstructions}`;
+export function buildSpritesheetPrompt(systemPrompt: string, characterDescription: string): string {
+	const typeInstruction = 'Generate a spritesheet for this character.';
+	return `${systemPrompt}\n\nCharacter Description:\n${characterDescription}\n\n${typeInstruction}`;
 }

@@ -1,11 +1,73 @@
 <script lang="ts">
+	import { generateMissingConcepts } from './generate-batch.remote';
+
 	let { data } = $props();
+	let generating = $state(false);
+	let status = $state<{ type: 'success' | 'error' | 'info'; message: string } | null>(null);
+
+	// Count actors missing concepts
+	let missingConceptsCount = $derived(data.actors.filter((a) => !a.hasConcept).length);
+
+	async function handleGenerateMissing() {
+		generating = true;
+		status = { type: 'info', message: `Generating concepts for ${missingConceptsCount} actors...` };
+
+		try {
+			const result = await generateMissingConcepts();
+			const successCount = result.results.filter((r) => r.success).length;
+			const failCount = result.results.filter((r) => !r.success).length;
+
+			if (failCount === 0) {
+				status = {
+					type: 'success',
+					message: `Successfully generated ${successCount} concept images!`
+				};
+			} else {
+				status = {
+					type: 'error',
+					message: `Generated ${successCount} concepts, ${failCount} failed.`
+				};
+			}
+
+			// Reload page to show new concepts
+			setTimeout(() => window.location.reload(), 2000);
+		} catch (error) {
+			status = {
+				type: 'error',
+				message: error instanceof Error ? error.message : 'Failed to generate concepts'
+			};
+		} finally {
+			generating = false;
+		}
+	}
 </script>
 
 <div class="max-w-7xl mx-auto">
 	<div class="flex justify-between items-center mb-6">
 		<h1 class="text-3xl font-bold">Actors</h1>
+		{#if missingConceptsCount > 0}
+			<button
+				class="btn btn-primary"
+				onclick={handleGenerateMissing}
+				disabled={generating}
+			>
+				{generating
+					? 'Generating...'
+					: `Generate Missing Concepts (${missingConceptsCount})`}
+			</button>
+		{/if}
 	</div>
+
+	{#if status}
+		<div
+			class="alert mb-6"
+			class:alert-success={status.type === 'success'}
+			class:alert-error={status.type === 'error'}
+			class:alert-info={status.type === 'info'}
+		>
+			<span>{status.message}</span>
+		</div>
+	{/if}
 
 	<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 		{#each data.actors as actor}
@@ -21,10 +83,7 @@
 					{/if}
 				</div>
 				<div class="p-4">
-					<h2 class="text-xl font-bold mb-2">{actor.name}</h2>
-					<p class="text-sm opacity-70 line-clamp-2">
-						{actor.description || 'No description available'}
-					</p>
+					<h2 class="text-xl font-bold">{actor.name}</h2>
 				</div>
 			</a>
 		{/each}
