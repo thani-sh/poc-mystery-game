@@ -13,8 +13,8 @@ export class GameScreen extends Container {
   private player1Controller: PlayerController | null = null;
   private player2Controller: PlayerController | null = null;
 
-  private readonly GRID_SIZE = 10; // 10x10 grid
-  private readonly TILE_SIZE = 128; // 128 pixels per tile
+  private readonly GRID_SIZE = 6; // 6x6 grid
+  private readonly TILE_SIZE = 200; // 200 pixels per tile
 
   private paused = false;
 
@@ -69,7 +69,7 @@ export class GameScreen extends Container {
    */
   public async prepare() {
     console.log("GameScreen: Starting prepare");
-    
+
     // Initialize player 1 (Elizabeth) on the left
     const player1Pos = {
       x: 2,
@@ -82,6 +82,7 @@ export class GameScreen extends Container {
       this.TILE_SIZE,
       this.GRID_SIZE,
       { up: "w", down: "s", left: "a", right: "d" },
+      0.8,
     );
 
     // Initialize player 2 (Daisy) on the right
@@ -95,14 +96,19 @@ export class GameScreen extends Container {
       player2Pos,
       this.TILE_SIZE,
       this.GRID_SIZE,
-      { up: "arrowup", down: "arrowdown", left: "arrowleft", right: "arrowright" },
+      {
+        up: "arrowup",
+        down: "arrowdown",
+        left: "arrowleft",
+        right: "arrowright",
+      },
     );
 
     console.log("GameScreen: Initializing player controllers");
     await this.player1Controller.init();
     await this.player2Controller.init();
     console.log("GameScreen: Player controllers initialized");
-    
+
     this.characterContainer.addChild(this.player1Controller.getSprite());
     this.characterContainer.addChild(this.player2Controller.getSprite());
     console.log("GameScreen: Character sprites added to container");

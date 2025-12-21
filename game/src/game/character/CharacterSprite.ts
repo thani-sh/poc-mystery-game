@@ -10,13 +10,16 @@ export class CharacterSprite extends Container {
   private currentDirection: Direction = Direction.Down;
   private isWalking: boolean = false;
   private tileSize: number;
+  private characterScale: number;
 
   constructor(
     private characterId: string,
     tileSize: number = 128,
+    characterScale: number = 1.0,
   ) {
     super();
     this.tileSize = tileSize;
+    this.characterScale = characterScale;
   }
 
   /**
@@ -43,11 +46,12 @@ export class CharacterSprite extends Container {
           const animation = new AnimatedSprite(frames);
           animation.animationSpeed = 0.1;
           animation.visible = false;
-          animation.anchor.set(0.5, 0.5);
+          animation.anchor.set(0.5, 1.0); // Bottom-aligned
 
           // Scale to match tile size
           const scale =
-            this.tileSize / Math.max(frames[0].width, frames[0].height);
+            (this.tileSize / Math.max(frames[0].width, frames[0].height)) *
+            this.characterScale;
           animation.scale.set(scale);
 
           // Mirror horizontally for right direction

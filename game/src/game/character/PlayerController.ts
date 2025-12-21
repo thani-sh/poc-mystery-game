@@ -29,8 +29,13 @@ export class PlayerController {
     tileSize: number,
     gridSize: number,
     keyMap: KeyMap,
+    characterScale: number = 1.0,
   ) {
-    this.characterSprite = new CharacterSprite(characterId, tileSize);
+    this.characterSprite = new CharacterSprite(
+      characterId,
+      tileSize,
+      characterScale,
+    );
     this.gridPosition = { ...startPosition };
     this.targetPosition = { ...startPosition };
     this.tileSize = tileSize;
@@ -70,7 +75,7 @@ export class PlayerController {
   private updatePixelPosition() {
     this.characterSprite.position.set(
       this.gridPosition.x * this.tileSize + this.tileSize / 2,
-      this.gridPosition.y * this.tileSize + this.tileSize / 2,
+      (this.gridPosition.y + 1) * this.tileSize, // Bottom of the tile
     );
   }
 
@@ -79,9 +84,9 @@ export class PlayerController {
    */
   private interpolatePosition() {
     const startX = this.gridPosition.x * this.tileSize + this.tileSize / 2;
-    const startY = this.gridPosition.y * this.tileSize + this.tileSize / 2;
+    const startY = (this.gridPosition.y + 1) * this.tileSize; // Bottom of the tile
     const targetX = this.targetPosition.x * this.tileSize + this.tileSize / 2;
-    const targetY = this.targetPosition.y * this.tileSize + this.tileSize / 2;
+    const targetY = (this.targetPosition.y + 1) * this.tileSize; // Bottom of the tile
 
     this.characterSprite.position.set(
       startX + (targetX - startX) * this.moveProgress,
