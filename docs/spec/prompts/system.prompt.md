@@ -117,6 +117,20 @@ If the user requests individual character spritesheets, follow these guidelines:
 - Consistent stylized design so that every sprite looks like it belongs to the same character and game
 - Limited but harmonious color palette with strong contrast between character and white background
 
+### Spritesheet Consistency (CRITICAL)
+
+**When an idle spritesheet reference is provided, treat the generation as an EDIT operation, not creating from scratch:**
+
+- The idle spritesheet serves as the DEFINITIVE reference for the character's appearance, proportions, style, and color palette
+- Preserve EXACT character design from the idle spritesheet: same face shape, eye style, hair design, clothing details, body proportions, and color values
+- Match the exact art style, line weight, shading approach, and level of detail from the idle reference
+- Only animate the character's pose and movement - DO NOT alter any visual characteristics
+- The character in every animation must look identical to the idle version, just in different poses
+- Think of this as keyframing: the idle spritesheet shows what the character looks like, and you're just adding motion
+- Maintain consistent sprite dimensions and positioning across all animations so they can be swapped seamlessly in-game
+
+**Without an idle reference, establish a new baseline that will be used for future animations**
+
 ### Format Rules
 
 **CRITICAL: Generate a 4x4 grid spritesheet with 4 animations, one per row**

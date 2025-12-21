@@ -35,6 +35,9 @@
 		data.animationTypes.filter((type) => !data.animations[type]?.exists).length
 	);
 
+	// Check if idle spritesheet exists
+	let hasIdleSpritesheet = $derived(data.animations['idle']?.exists || false);
+
 	async function handleGenerateConcept() {
 		generating = true;
 		status = { type: 'info', message: 'Generating concept...' };
@@ -128,7 +131,9 @@
 		};
 
 		try {
-			const result = await generateMissingSpritesheets([data.actor.id, data.animationTypes]);
+			// Filter animation types to ensure idle is generated first
+			const orderedTypes = ['idle', ...data.animationTypes.filter((t) => t !== 'idle')];
+			const result = await generateMissingSpritesheets([data.actor.id, orderedTypes]);
 			const successCount = result.results.filter((r) => r.success).length;
 			const failCount = result.results.filter((r) => !r.success).length;
 
@@ -303,16 +308,21 @@
 							<div>
 								<h3 class="text-lg font-bold capitalize">{animationType} Animation</h3>
 								<p class="text-sm text-base-content/60">Full 4x4 spritesheet for all directions</p>
+								{#if animationType !== 'idle' && !hasIdleSpritesheet}
+									<div class="badge badge-warning badge-sm mt-2">Requires idle spritesheet</div>
+								{/if}
 							</div>
 							<button
 								class="btn btn-circle btn-sm btn-primary"
 								onclick={() => handleGenerateFrame(animationType)}
-								disabled={generatingFrame[animationType] || !conceptUrl}
+								disabled={generatingFrame[animationType] || !conceptUrl || (animationType !== 'idle' && !hasIdleSpritesheet)}
 								title={generatingFrame[animationType]
 									? 'Generating...'
-									: frames[animationType]
-										? 'Regenerate Spritesheet'
-										: 'Generate Spritesheet'}
+									: animationType !== 'idle' && !hasIdleSpritesheet
+										? 'Generate idle spritesheet first'
+										: frames[animationType]
+											? 'Regenerate Spritesheet'
+											: 'Generate Spritesheet'}
 							>
 								{#if generatingFrame[animationType]}
 									<span class="loading loading-spinner loading-xs"></span>

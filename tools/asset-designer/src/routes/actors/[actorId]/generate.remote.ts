@@ -11,7 +11,12 @@ import {
 	hasActorSpeech,
 	hasActorFrame
 } from '$lib/server/filesystem';
-import { generateImage, buildConceptPrompt, buildPortraitPrompt, buildSpritesheetPrompt } from '$lib/server/gemini';
+import {
+	generateImage,
+	buildConceptPrompt,
+	buildPortraitPrompt,
+	buildSpritesheetPrompt
+} from '$lib/server/gemini';
 import fs from 'fs/promises';
 import path from 'path';
 
@@ -47,88 +52,112 @@ export const generateConcept = command(z.string(), async (actorId) => {
 /**
  * Generate portrait for an actor (3:4 aspect ratio)
  */
-export const generatePortrait = command(z.tuple([z.string(), z.string()]), async ([actorId, expressionType]) => {
-	const actor = await getActor(actorId);
-	if (!actor) {
-		throw new Error('Actor not found');
+export const generatePortrait = command(
+	z.tuple([z.string(), z.string()]),
+	async ([actorId, expressionType]) => {
+		const actor = await getActor(actorId);
+		if (!actor) {
+			throw new Error('Actor not found');
+		}
+
+		const systemPrompt = await getSystemPrompt();
+		const extraInstructions =
+			expressionType === 'talking' ? await getPrompt('talking-portrait.prompt.md') : undefined;
+		const prompt = buildPortraitPrompt(systemPrompt, actor.content, extraInstructions ?? undefined);
+
+		const referenceImages: Buffer[] = [];
+		const conceptArtImages = await getConceptArtImages();
+		referenceImages.push(...conceptArtImages);
+		console.log(`Generating ${expressionType} portrait for actor: ${actorId}`);
+
+		// Add actor's concept if it exists
+		try {
+			const ASSETS_DIR = path.resolve(process.cwd(), '../../assets');
+			const conceptPath = path.join(ASSETS_DIR, 'actors', actorId, 'concept.png');
+			const conceptImage = await fs.readFile(conceptPath);
+			referenceImages.push(conceptImage);
+		} catch {
+			// Continue without actor concept
+		}
+
+		const result = await generateImage({
+			prompt,
+			referenceImages: referenceImages.length > 0 ? referenceImages : undefined,
+			aspectRatio: '3:4'
+		});
+
+		if (!result) {
+			throw new Error('Failed to generate portrait');
+		}
+
+		await saveActorSpeech(actorId, expressionType, result.data);
+		console.log(`Done generating ${expressionType} portrait for actor: ${actorId}`);
+		return { success: true };
 	}
-
-	const systemPrompt = await getSystemPrompt();
-	const extraInstructions = expressionType === 'talking' ? await getPrompt('talking-portrait.prompt.md') : undefined;
-	const prompt = buildPortraitPrompt(systemPrompt, actor.content, extraInstructions ?? undefined);
-
-	const referenceImages: Buffer[] = [];
-	const conceptArtImages = await getConceptArtImages();
-	referenceImages.push(...conceptArtImages);
-	console.log(`Generating ${expressionType} portrait for actor: ${actorId}`);
-
-	// Add actor's concept if it exists
-	try {
-		const ASSETS_DIR = path.resolve(process.cwd(), '../../assets');
-		const conceptPath = path.join(ASSETS_DIR, 'actors', actorId, 'concept.png');
-		const conceptImage = await fs.readFile(conceptPath);
-		referenceImages.push(conceptImage);
-	} catch {
-		// Continue without actor concept
-	}
-
-	const result = await generateImage({
-		prompt,
-		referenceImages: referenceImages.length > 0 ? referenceImages : undefined,
-		aspectRatio: '3:4'
-	});
-
-	if (!result) {
-		throw new Error('Failed to generate portrait');
-	}
-
-	await saveActorSpeech(actorId, expressionType, result.data);
-	console.log(`Done generating ${expressionType} portrait for actor: ${actorId}`);
-	return { success: true };
-});
+);
 
 /**
  * Generate spritesheet for an actor (1:1 aspect ratio)
  */
-export const generateSpritesheet = command(z.tuple([z.string(), z.string()]), async ([actorId, animationType]) => {
-	const actor = await getActor(actorId);
-	if (!actor) {
-		throw new Error('Actor not found');
+export const generateSpritesheet = command(
+	z.tuple([z.string(), z.string()]),
+	async ([actorId, animationType]) => {
+		const actor = await getActor(actorId);
+		if (!actor) {
+			throw new Error('Actor not found');
+		}
+
+		const systemPrompt = await getSystemPrompt();
+		const extraInstructions = await getPrompt(`${animationType}-spritesheet.prompt.md`);
+		const prompt = buildSpritesheetPrompt(
+			systemPrompt,
+			actor.content,
+			extraInstructions ?? undefined
+		);
+
+		const referenceImages: Buffer[] = [];
+		const conceptArtImages = await getConceptArtImages();
+		referenceImages.push(...conceptArtImages);
+		console.log(`Generating ${animationType} spritesheet for actor: ${actorId}`);
+
+		// Add actor's concept if it exists
+		try {
+			const ASSETS_DIR = path.resolve(process.cwd(), '../../assets');
+			const conceptPath = path.join(ASSETS_DIR, 'actors', actorId, 'concept.png');
+			const conceptImage = await fs.readFile(conceptPath);
+			referenceImages.push(conceptImage);
+		} catch {
+			// Continue without actor concept
+		}
+
+		// Add idle spritesheet as reference for other animations
+		if (animationType !== 'idle') {
+			try {
+				const ASSETS_DIR = path.resolve(process.cwd(), '../../assets');
+				const idlePath = path.join(ASSETS_DIR, 'actors', actorId, 'frames', 'idle.png');
+				const idleImage = await fs.readFile(idlePath);
+				referenceImages.push(idleImage);
+				console.log(`Added idle spritesheet as reference for ${animationType}`);
+			} catch {
+				console.warn(`Idle spritesheet not found for ${actorId}, continuing without it`);
+			}
+		}
+
+		const result = await generateImage({
+			prompt,
+			referenceImages: referenceImages.length > 0 ? referenceImages : undefined,
+			aspectRatio: '1:1'
+		});
+
+		if (!result) {
+			throw new Error('Failed to generate spritesheet');
+		}
+
+		await saveActorFrame(actorId, animationType, result.data);
+		console.log(`Done generating ${animationType} spritesheet for actor: ${actorId}`);
+		return { success: true };
 	}
-
-	const systemPrompt = await getSystemPrompt();
-	const extraInstructions = await getPrompt(`${animationType}-spritesheet.prompt.md`);
-	const prompt = buildSpritesheetPrompt(systemPrompt, actor.content, extraInstructions ?? undefined);
-
-	const referenceImages: Buffer[] = [];
-	const conceptArtImages = await getConceptArtImages();
-	referenceImages.push(...conceptArtImages);
-	console.log(`Generating ${animationType} spritesheet for actor: ${actorId}`);
-
-	// Add actor's concept if it exists
-	try {
-		const ASSETS_DIR = path.resolve(process.cwd(), '../../assets');
-		const conceptPath = path.join(ASSETS_DIR, 'actors', actorId, 'concept.png');
-		const conceptImage = await fs.readFile(conceptPath);
-		referenceImages.push(conceptImage);
-	} catch {
-		// Continue without actor concept
-	}
-
-	const result = await generateImage({
-		prompt,
-		referenceImages: referenceImages.length > 0 ? referenceImages : undefined,
-		aspectRatio: '1:1'
-	});
-
-	if (!result) {
-		throw new Error('Failed to generate spritesheet');
-	}
-
-	await saveActorFrame(actorId, animationType, result.data);
-	console.log(`Done generating ${animationType} spritesheet for actor: ${actorId}`);
-	return { success: true };
-});
+);
 
 /**
  * Generate all missing portraits for an actor
@@ -153,8 +182,13 @@ export const generateMissingPortraits = command(
 				if (!actor) throw new Error('Actor not found');
 
 				const systemPrompt = await getSystemPrompt();
-				const extraInstructions = type === 'talking' ? await getPrompt('talking-portrait.prompt.md') : undefined;
-				const prompt = buildPortraitPrompt(systemPrompt, actor.content, extraInstructions ?? undefined);
+				const extraInstructions =
+					type === 'talking' ? await getPrompt('talking-portrait.prompt.md') : undefined;
+				const prompt = buildPortraitPrompt(
+					systemPrompt,
+					actor.content,
+					extraInstructions ?? undefined
+				);
 
 				const referenceImages: Buffer[] = [];
 				const conceptArtImages = await getConceptArtImages();
@@ -166,7 +200,9 @@ export const generateMissingPortraits = command(
 					const conceptPath = path.join(ASSETS_DIR, 'actors', actorId, 'concept.png');
 					const conceptImage = await fs.readFile(conceptPath);
 					referenceImages.push(conceptImage);
-				} catch { /* Continue */ }
+				} catch {
+					/* Continue */
+				}
 
 				const result = await generateImage({
 					prompt,
@@ -210,7 +246,11 @@ export const generateMissingSpritesheets = command(
 
 				const systemPrompt = await getSystemPrompt();
 				const extraInstructions = await getPrompt(`${type}-spritesheet.prompt.md`);
-				const prompt = buildSpritesheetPrompt(systemPrompt, actor.content, extraInstructions ?? undefined);
+				const prompt = buildSpritesheetPrompt(
+					systemPrompt,
+					actor.content,
+					extraInstructions ?? undefined
+				);
 
 				const referenceImages: Buffer[] = [];
 				const conceptArtImages = await getConceptArtImages();
@@ -222,7 +262,22 @@ export const generateMissingSpritesheets = command(
 					const conceptPath = path.join(ASSETS_DIR, 'actors', actorId, 'concept.png');
 					const conceptImage = await fs.readFile(conceptPath);
 					referenceImages.push(conceptImage);
-				} catch { /* Continue */ }
+				} catch {
+					/* Continue */
+				}
+
+				// Add idle spritesheet as reference for other animations
+				if (type !== 'idle') {
+					try {
+						const ASSETS_DIR = path.resolve(process.cwd(), '../../assets');
+						const idlePath = path.join(ASSETS_DIR, 'actors', actorId, 'frames', 'idle.png');
+						const idleImage = await fs.readFile(idlePath);
+						referenceImages.push(idleImage);
+						console.log(`Added idle spritesheet as reference for ${type}`);
+					} catch {
+						console.warn(`Idle spritesheet not found for ${actorId}, continuing without it`);
+					}
+				}
 
 				const result = await generateImage({
 					prompt,
