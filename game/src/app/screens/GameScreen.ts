@@ -1,4 +1,4 @@
-import { Container, Graphics, Ticker } from "pixi.js";
+import { Assets, Container, Graphics, Sprite, Ticker } from "pixi.js";
 import { PlayerController } from "../../game/character/PlayerController";
 import { CharacterSprite } from "../../game/character/CharacterSprite";
 import { Direction } from "../../game/types";
@@ -23,8 +23,8 @@ export class GameScreen extends Container {
   private larrySprite: CharacterSprite | null = null;
   private pipSprite: CharacterSprite | null = null;
 
-  private readonly GRID_SIZE = 12; // 12x12 grid
-  private readonly TILE_SIZE = 100; // 100 pixels per tile
+  private readonly GRID_SIZE = 16; // 16x16 grid
+  private readonly TILE_SIZE = 64; // 64 pixels per tile
 
   private paused = false;
 
@@ -42,36 +42,67 @@ export class GameScreen extends Container {
   }
 
   /**
-   * Draw a simple grid
+   * Draw a simple grid with village background
    */
   private drawGrid() {
+    // Grid will be replaced with actual tilemap background in prepare()
+    // Just draw a placeholder for now
     const graphics = new Graphics();
-
-    // Draw grid background
     graphics.rect(
       0,
       0,
       this.GRID_SIZE * this.TILE_SIZE,
       this.GRID_SIZE * this.TILE_SIZE,
     );
-    graphics.fill(0xffffff);
-
-    // Draw grid lines with very low opacity
-    graphics.stroke({ width: 1, color: 0x000000, alpha: 0.02 });
-
-    for (let i = 0; i <= this.GRID_SIZE; i++) {
-      // Vertical lines
-      graphics.moveTo(i * this.TILE_SIZE, 0);
-      graphics.lineTo(i * this.TILE_SIZE, this.GRID_SIZE * this.TILE_SIZE);
-
-      // Horizontal lines
-      graphics.moveTo(0, i * this.TILE_SIZE);
-      graphics.lineTo(this.GRID_SIZE * this.TILE_SIZE, i * this.TILE_SIZE);
-    }
-
-    graphics.stroke();
-
+    graphics.fill(0xcccccc);
     this.gridContainer.addChild(graphics);
+  }
+
+  /**
+   * Setup the village tilemap background
+   * Uses the top-left 32x32 portion of the 64x64 tile map (2048x2048 source image)
+   * Renders at 1:1 pixel ratio to make background elements smaller relative to characters
+   */
+  private async setupBackground() {
+    // Load the village tilemap texture
+    const texture = await Assets.load("main/scene/village-1.jpeg");
+
+    // The source image is 2048x2048 pixels (64x64 tiles at 32px per tile)
+    // We want to use the top-left 32x32 tile portion (1024x1024 source pixels)
+    // and render it at 1024 pixels (our 16x16 grid at 64px per tile)
+    const sourceTileSize = texture.width / 64; // 32 pixels per tile in source
+    const startTile = 0; // Starting position for top-left corner
+
+    // Calculate the region to extract from the source texture
+    // Extract 32x32 tiles = 1024x1024 pixels from source
+    const sourceX = startTile * sourceTileSize;
+    const sourceY = startTile * sourceTileSize;
+    const sourceWidth = 32 * sourceTileSize; // 32 tiles
+    const sourceHeight = 32 * sourceTileSize; // 32 tiles
+
+    // Create a sprite with the full texture
+    const backgroundSprite = new Sprite(texture);
+
+    // Set up the texture region (crop to top-left 32x32 tiles)
+    backgroundSprite.texture.frame.x = sourceX;
+    backgroundSprite.texture.frame.y = sourceY;
+    backgroundSprite.texture.frame.width = sourceWidth;
+    backgroundSprite.texture.frame.height = sourceHeight;
+    backgroundSprite.texture.updateUvs();
+
+    // Render at 1:1 scale (1024 source pixels -> 1024 render pixels)
+    // This makes background elements smaller relative to characters
+    const targetSize = this.GRID_SIZE * this.TILE_SIZE; // 1024 pixels
+    backgroundSprite.width = targetSize;
+    backgroundSprite.height = targetSize;
+
+    // Clear the placeholder and add the background
+    this.gridContainer.removeChildren();
+    this.gridContainer.addChild(backgroundSprite);
+
+    console.log(
+      "GameScreen: Village background loaded (32x32 tiles at 1:1 scale)",
+    );
   }
 
   /**
@@ -80,11 +111,11 @@ export class GameScreen extends Container {
   public async prepare() {
     console.log("GameScreen: Starting prepare");
 
+    // Load and setup the village tilemap background
+    await this.setupBackground();
+
     // Initialize player 1 (Bets) on the left
-    const player1Pos = {
-      x: 2 + 3,
-      y: Math.floor(this.GRID_SIZE / 2),
-    };
+    const player1Pos = { x: 5, y: 8 };
 
     this.player1Controller = new PlayerController(
       "bets",
@@ -96,10 +127,7 @@ export class GameScreen extends Container {
     );
 
     // Initialize player 2 (Daisy) on the right
-    const player2Pos = {
-      x: this.GRID_SIZE - 3,
-      y: Math.floor(this.GRID_SIZE / 2),
-    };
+    const player2Pos = { x: 7, y: 8 };
 
     this.player2Controller = new PlayerController(
       "daisy",
@@ -130,60 +158,42 @@ export class GameScreen extends Container {
     // Ern - Top left area
     this.ernSprite = new CharacterSprite("ern", this.TILE_SIZE, 0.9);
     await this.ernSprite.setup();
-    this.ernSprite.position.set(
-      1 * this.TILE_SIZE + this.TILE_SIZE / 2,
-      (2 + 1) * this.TILE_SIZE,
-    );
+    this.ernSprite.position.set(1 * this.TILE_SIZE, 8 * this.TILE_SIZE);
     this.ernSprite.setDirection(Direction.Right);
     this.characterContainer.addChild(this.ernSprite);
 
     // Fatty - Top right area
     this.fattySprite = new CharacterSprite("fatty", this.TILE_SIZE);
     await this.fattySprite.setup();
-    this.fattySprite.position.set(
-      10 * this.TILE_SIZE + this.TILE_SIZE / 2,
-      (2 + 1) * this.TILE_SIZE,
-    );
+    this.fattySprite.position.set(15 * this.TILE_SIZE, 8 * this.TILE_SIZE);
     this.fattySprite.setDirection(Direction.Left);
     this.characterContainer.addChild(this.fattySprite);
 
     // Goon - Middle left area
     this.goonSprite = new CharacterSprite("goon", this.TILE_SIZE, 1.1);
     await this.goonSprite.setup();
-    this.goonSprite.position.set(
-      2 * this.TILE_SIZE + this.TILE_SIZE / 2,
-      (6 + 1) * this.TILE_SIZE,
-    );
+    this.goonSprite.position.set(2 * this.TILE_SIZE, 8 * this.TILE_SIZE);
     this.goonSprite.setDirection(Direction.Down);
     this.characterContainer.addChild(this.goonSprite);
 
     // Jenks - Center area
     this.jenksSprite = new CharacterSprite("jenks", this.TILE_SIZE, 1.1);
     await this.jenksSprite.setup();
-    this.jenksSprite.position.set(
-      6 * this.TILE_SIZE + this.TILE_SIZE / 2,
-      (5 + 1) * this.TILE_SIZE,
-    );
+    this.jenksSprite.position.set(6 * this.TILE_SIZE, 7 * this.TILE_SIZE);
     this.jenksSprite.setDirection(Direction.Down);
     this.characterContainer.addChild(this.jenksSprite);
 
     // Larry - Bottom left area
     this.larrySprite = new CharacterSprite("larry", this.TILE_SIZE);
     await this.larrySprite.setup();
-    this.larrySprite.position.set(
-      1 * this.TILE_SIZE + this.TILE_SIZE / 2,
-      (9 + 1) * this.TILE_SIZE,
-    );
-    this.larrySprite.setDirection(Direction.Right);
+    this.larrySprite.position.set(15 * this.TILE_SIZE, 9 * this.TILE_SIZE);
+    this.larrySprite.setDirection(Direction.Left);
     this.characterContainer.addChild(this.larrySprite);
 
     // Pip - Bottom right area
     this.pipSprite = new CharacterSprite("pip", this.TILE_SIZE);
     await this.pipSprite.setup();
-    this.pipSprite.position.set(
-      10 * this.TILE_SIZE + this.TILE_SIZE / 2,
-      (9 + 1) * this.TILE_SIZE,
-    );
+    this.pipSprite.position.set(9 * this.TILE_SIZE, 8 * this.TILE_SIZE);
     this.pipSprite.setDirection(Direction.Left);
     this.characterContainer.addChild(this.pipSprite);
 
