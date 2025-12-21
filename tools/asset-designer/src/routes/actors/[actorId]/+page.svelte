@@ -151,156 +151,176 @@
 </script>
 
 <div class="max-w-7xl mx-auto">
-	<div class="mb-6">
-		<a href="/actors" class="btn btn-ghost btn-sm">← Back to Actors</a>
-	</div>
-
 	<h1 class="text-3xl font-bold mb-6">{data.actor.name}</h1>
 
-	<div class="max-w-3xl mx-auto space-y-6">
+	<div class="space-y-8">
 		<!-- Character Editor -->
-		<div class="card bg-base-100 shadow-xl">
-			<div class="card-body">
-				<h2 class="card-title">Character Description</h2>
+		<div>
+			<h2 class="text-xl font-bold mb-4">Character Description</h2>
 
-				<textarea
-					class="textarea textarea-bordered w-full h-64 font-mono"
-					bind:value={editContent}
-					placeholder="Edit character description..."
-				></textarea>
+			<textarea
+				class="textarea textarea-bordered w-full h-64 font-mono"
+				bind:value={editContent}
+				placeholder="Edit character description..."
+			></textarea>
 
-				<div class="card-actions justify-end mt-4">
-					<button
-						class="btn btn-secondary"
-						onclick={saveChanges}
-						disabled={saving || editContent === data.actor.content}
-					>
-						{saving ? 'Saving...' : 'Save Changes'}
-					</button>
-				</div>
+			<div class="flex justify-end mt-4">
+				<button
+					class="btn btn-secondary"
+					onclick={saveChanges}
+					disabled={saving || editContent === data.actor.content}
+				>
+					{saving ? 'Saving...' : 'Save Changes'}
+				</button>
 			</div>
 		</div>
 
 		<!-- Concept Preview -->
-		<div class="card bg-base-100 shadow-xl">
-			<div class="card-body">
-				<h2 class="card-title">Concept Art</h2>
+		<div>
+			<h2 class="text-xl font-bold mb-4">Concept Art</h2>
 
-				<div class="bg-base-200 rounded-lg p-4 aspect-square flex items-center justify-center">
-					{#if conceptUrl}
-						<img src={conceptUrl} alt={data.actor.name} class="w-full h-full object-contain" />
-					{:else}
-						<div class="text-center text-base-content/50">
-							<div class="text-6xl mb-4">👤</div>
-							<p>No concept generated yet</p>
-						</div>
-					{/if}
-				</div>
+			<div class="bg-base-200 rounded-lg p-4 aspect-square flex items-center justify-center">
+				{#if conceptUrl}
+					<img src={conceptUrl} alt={data.actor.name} class="w-full h-full object-contain" />
+				{:else}
+					<div class="text-center text-base-content/50">
+						<div class="text-6xl mb-4">👤</div>
+						<p>No concept generated yet</p>
+					</div>
+				{/if}
+			</div>
 
-				<div class="card-actions justify-end mt-4">
-					<button class="btn btn-primary" onclick={generateConcept} disabled={generating}>
-						{generating ? 'Generating...' : conceptUrl ? 'Regenerate Concept' : 'Generate Concept'}
-					</button>
-				</div>
+			<div class="flex justify-end mt-4">
+				<button class="btn btn-primary" onclick={generateConcept} disabled={generating}>
+					{generating ? 'Generating...' : conceptUrl ? 'Regenerate Concept' : 'Generate Concept'}
+				</button>
 			</div>
 		</div>
 
 		<!-- Speech Portraits -->
-		<div class="card bg-base-100 shadow-xl">
-			<div class="card-body">
-				<h2 class="card-title mb-4">Speech Portraits</h2>
+		<div>
+			<h2 class="text-xl font-bold mb-4">Speech Portraits</h2>
 
-				{#if !conceptUrl}
-					<div class="alert alert-warning mb-4">
-						<span class="text-sm">Generate a concept first to create speech portraits</span>
-					</div>
-				{/if}
+			{#if !conceptUrl}
+				<div class="alert alert-warning mb-4">
+					<span class="text-sm">Generate a concept first to create speech portraits</span>
+				</div>
+			{/if}
 
-				<!-- Horizontal scrollable container -->
-				<div class="flex gap-4 overflow-x-auto pb-2">
-					{#each data.expressionTypes as expressionType}
-						<div class="shrink-0 w-64">
-							<h3 class="font-semibold mb-2 text-sm capitalize">
-								{expressionType.replace(/-/g, ' ')}
-							</h3>
-							<div
-								class="bg-base-200 rounded-lg p-4 aspect-square flex items-center justify-center"
-							>
-								{#if speechPortraits[expressionType]}
-									<img
-										src={speechPortraits[expressionType]}
-										alt="{data.actor.name} - {expressionType}"
-										class="w-full h-full object-contain"
-									/>
-								{:else}
-									<div class="text-center text-base-content/50">
-										<div class="text-4xl mb-2">😐</div>
-										<p class="text-xs">No {expressionType} portrait yet</p>
-									</div>
-								{/if}
-							</div>
+			<!-- Multi-row grid container -->
+			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+				{#each data.expressionTypes as expressionType}
+					<div>
+						<h3 class="font-semibold mb-2 text-sm capitalize">
+							{expressionType.replace(/-/g, ' ')}
+						</h3>
+						<div
+							class="bg-base-200 rounded-lg p-4 aspect-square flex items-center justify-center relative"
+						>
+							{#if speechPortraits[expressionType]}
+								<img
+									src={speechPortraits[expressionType]}
+									alt="{data.actor.name} - {expressionType}"
+									class="w-full h-full object-contain"
+								/>
+							{:else}
+								<div class="text-center text-base-content/50">
+									<div class="text-4xl mb-2">😐</div>
+									<p class="text-xs">No {expressionType} portrait yet</p>
+								</div>
+							{/if}
 							<button
-								class="btn btn-sm btn-primary w-full mt-2"
+								class="btn btn-circle btn-sm btn-primary absolute top-2 right-2"
 								onclick={() => generateSpeechPortrait(expressionType)}
 								disabled={generatingExpression[expressionType] || !conceptUrl}
-							>
-								{generatingExpression[expressionType]
+								title={generatingExpression[expressionType]
 									? 'Generating...'
 									: speechPortraits[expressionType]
 										? 'Regenerate'
 										: 'Generate'}
+							>
+								{#if generatingExpression[expressionType]}
+									<span class="loading loading-spinner loading-xs"></span>
+								{:else}
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										class="h-4 w-4"
+										viewBox="0 0 20 20"
+										fill="currentColor"
+									>
+										<path
+											fill-rule="evenodd"
+											d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z"
+											clip-rule="evenodd"
+										/>
+									</svg>
+								{/if}
 							</button>
 						</div>
-					{/each}
-				</div>
+					</div>
+				{/each}
 			</div>
 		</div>
 
 		<!-- Character Frames -->
-		<div class="card bg-base-100 shadow-xl">
-			<div class="card-body">
-				<h2 class="card-title mb-4">Character Frames</h2>
+		<div>
+			<h2 class="text-xl font-bold mb-4">Character Frames</h2>
 
-				{#if !conceptUrl}
-					<div class="alert alert-warning mb-4">
-						<span class="text-sm">Generate a concept first to create character frames</span>
-					</div>
-				{/if}
+			{#if !conceptUrl}
+				<div class="alert alert-warning mb-4">
+					<span class="text-sm">Generate a concept first to create character frames</span>
+				</div>
+			{/if}
 
-				<!-- Horizontal scrollable container -->
-				<div class="flex gap-4 overflow-x-auto pb-2">
-					{#each data.frameTypes as frameType}
-						<div class="shrink-0 w-64">
-							<h3 class="font-semibold mb-2 text-sm capitalize">{frameType.replace(/-/g, ' ')}</h3>
-							<div
-								class="bg-base-200 rounded-lg p-4 aspect-square flex items-center justify-center"
-							>
-								{#if frames[frameType]}
-									<AnimatedFrame
-										src={frames[frameType] || ''}
-										alt="{data.actor.name} - {frameType}"
-									/>
-								{:else}
-									<div class="text-center text-base-content/50">
-										<div class="text-4xl mb-2">🚶</div>
-										<p class="text-xs">No {frameType} frame yet</p>
-									</div>
-								{/if}
-							</div>
+			<!-- Multi-row grid container -->
+			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+				{#each data.frameTypes as frameType}
+					<div>
+						<h3 class="font-semibold mb-2 text-sm capitalize">{frameType.replace(/-/g, ' ')}</h3>
+						<div
+							class="bg-base-200 rounded-lg p-4 aspect-square flex items-center justify-center relative"
+						>
+							{#if frames[frameType]}
+								<AnimatedFrame
+									src={frames[frameType] || ''}
+									alt="{data.actor.name} - {frameType}"
+								/>
+							{:else}
+								<div class="text-center text-base-content/50">
+									<div class="text-4xl mb-2">🚶</div>
+									<p class="text-xs">No {frameType} frame yet</p>
+								</div>
+							{/if}
 							<button
-								class="btn btn-sm btn-primary w-full mt-2"
+								class="btn btn-circle btn-sm btn-primary absolute top-2 right-2"
 								onclick={() => generateFrame(frameType)}
 								disabled={generatingFrame[frameType] || !conceptUrl}
-							>
-								{generatingFrame[frameType]
+								title={generatingFrame[frameType]
 									? 'Generating...'
 									: frames[frameType]
 										? 'Regenerate'
 										: 'Generate'}
+							>
+								{#if generatingFrame[frameType]}
+									<span class="loading loading-spinner loading-xs"></span>
+								{:else}
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										class="h-4 w-4"
+										viewBox="0 0 20 20"
+										fill="currentColor"
+									>
+										<path
+											fill-rule="evenodd"
+											d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z"
+											clip-rule="evenodd"
+										/>
+									</svg>
+								{/if}
 							</button>
 						</div>
-					{/each}
-				</div>
+					</div>
+				{/each}
 			</div>
 		</div>
 	</div>

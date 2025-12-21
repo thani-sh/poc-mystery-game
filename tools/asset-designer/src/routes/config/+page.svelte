@@ -55,36 +55,34 @@
 			<span>No configuration files available</span>
 		</div>
 	{:else}
-		<div class="space-y-6">
+		<div class="space-y-8">
 			{#each data.specFiles as file}
-				<div class="card bg-base-100 border border-base-300">
-					<div class="card-body">
-						<h2 class="card-title capitalize">{file.name}</h2>
+				<div>
+					<h2 class="text-xl font-bold capitalize mb-4">{file.name}</h2>
 
-						<textarea
-							class="textarea textarea-bordered w-full h-64 font-mono"
-							bind:value={editContents[file.id]}
-							placeholder="Edit markdown content..."
-						></textarea>
+					<textarea
+						class="textarea textarea-bordered w-full h-64 font-mono"
+						bind:value={editContents[file.id]}
+						placeholder="Edit markdown content..."
+					></textarea>
 
-						<div class="card-actions justify-end mt-4">
-							{#if saveStatuses[file.id]}
-								<div
-									class="alert alert-sm"
-									class:alert-success={saveStatuses[file.id]?.includes('success')}
-									class:alert-error={saveStatuses[file.id]?.includes('Error')}
-								>
-									<span>{saveStatuses[file.id]}</span>
-								</div>
-							{/if}
-							<button
-								class="btn btn-primary btn-sm"
-								onclick={() => saveFile(file.id)}
-								disabled={savingStates[file.id] || !hasChanges(file.id)}
+					<div class="flex justify-end items-center gap-4 mt-4">
+						{#if saveStatuses[file.id]}
+							<div
+								class="alert alert-sm"
+								class:alert-success={saveStatuses[file.id]?.includes('success')}
+								class:alert-error={saveStatuses[file.id]?.includes('Error')}
 							>
-								{savingStates[file.id] ? 'Saving...' : 'Save Changes'}
-							</button>
-						</div>
+								<span>{saveStatuses[file.id]}</span>
+							</div>
+						{/if}
+						<button
+							class="btn btn-primary btn-sm"
+							onclick={() => saveFile(file.id)}
+							disabled={savingStates[file.id] || !hasChanges(file.id)}
+						>
+							{savingStates[file.id] ? 'Saving...' : 'Save Changes'}
+						</button>
 					</div>
 				</div>
 			{/each}
