@@ -15,7 +15,7 @@
 - Use pixel art style while resembling major features
 - Flat cel-shaded coloring with minimal gradients
 - Bold, clean black outlines around major forms and details
-- Limited but harmonious color palette with strong contrast between character and background
+- Limited but harmonious color palette with strong contrast between character and white background
 - Simplified detail level appropriate for 16-bit era sprite work
 
 ## Spritesheet Format
@@ -55,13 +55,13 @@ All sprites of the same character must share:
 
 ## Background
 
-- Transparent background (alpha channel) for all sprites - no solid background color
+- Pure white background (#ffffff) for all sprites
 - No environmental elements, props, or scene details - focus entirely on the character sprite
 - Clean separation between the 4 squares in the grid (thin dividing lines are acceptable for clarity)
 
 ## Technical Requirements
 
-- PNG format with alpha channel transparency support
+- PNG format
 - Square aspect ratio for the overall spritesheet (e.g., 512x512 containing four 256x256 frames)
 - High enough resolution that sprites remain crisp when divided into the 2x2 grid
 - Each of the 4 frames must be perfectly square and equal in size

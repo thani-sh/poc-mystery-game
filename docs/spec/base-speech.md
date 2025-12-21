@@ -13,7 +13,7 @@
 - Ink and watercolor illustration look
 - Flat cel-shaded coloring with minimal gradients
 - Bold, clean black outlines around major forms and details
-- Limited but harmonious color palette with strong contrast between character and transparent background
+- Limited but harmonious color palette with strong contrast between character and white background
 - Subtle vintage paper texture, as if printed in a 1990s game manual or strategy guide
 
 ## Portrait Framing and Composition
@@ -77,15 +77,15 @@ All portraits of the same character must share:
 
 ## Background
 
-- Transparent background (alpha channel) for the entire portrait to allow easy extraction and background customization
+- Pure white background (#ffffff) for the entire portrait
 - No environmental elements, props, or scene details - focus entirely on the character portrait
 
 ## Technical Requirements
 
-- PNG format with alpha channel transparency support
+- PNG format
 - High enough resolution that portraits remain crisp (recommended: 512x512 or higher for a single portrait)
 - Square aspect ratio for individual portraits
 
 ## Negative Prompts
 
---no 3d render, photorealistic, pixel art, low resolution, blurry, sketch, messy lines, painterly brush strokes, modern digital painting look, photobashing, extreme close-up, fisheye, dynamic action pose, full-body shot, busy background, environmental scene, solid background, opaque background, multiple characters, grid layout
+--no 3d render, photorealistic, pixel art, low resolution, blurry, sketch, messy lines, painterly brush strokes, modern digital painting look, photobashing, extreme close-up, fisheye, dynamic action pose, full-body shot, busy background, environmental scene, transparent background, multiple characters, grid layout
