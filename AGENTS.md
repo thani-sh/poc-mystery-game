@@ -22,7 +22,7 @@ npm run build      # Production build (runs lint + tsc + vite build)
 npm run lint       # Run ESLint
 
 # Tools (asset designer, copier)
-cd tools/<tool-name>
+cd tools/asset-designer  # or tools/asset-copier
 npm install
 npm run dev        # Development server
 ```
