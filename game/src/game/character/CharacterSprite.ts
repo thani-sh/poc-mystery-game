@@ -1,4 +1,11 @@
-import { AnimatedSprite, Assets, Container, Texture } from "pixi.js";
+import {
+  AnimatedSprite,
+  Assets,
+  Container,
+  DestroyOptions,
+  Rectangle,
+  Texture,
+} from "pixi.js";
 import { Direction } from "../types";
 
 /**
@@ -94,12 +101,12 @@ export class CharacterSprite extends Container {
       for (let col = 0; col < 4; col++) {
         const frame = new Texture({
           source: baseTexture.source,
-          frame: {
-            x: col * frameWidth,
-            y: row * frameHeight,
-            width: frameWidth,
-            height: frameHeight,
-          },
+          frame: new Rectangle(
+            col * frameWidth,
+            row * frameHeight,
+            frameWidth,
+            frameHeight,
+          ),
         });
         frames.push(frame);
       }
@@ -169,7 +176,7 @@ export class CharacterSprite extends Container {
   /**
    * Cleanup
    */
-  public destroy(options?: any) {
+  public destroy(options?: DestroyOptions) {
     this.animations.forEach((animation) => animation.destroy());
     this.animations.clear();
     super.destroy(options);

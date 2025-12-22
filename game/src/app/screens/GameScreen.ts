@@ -1,4 +1,4 @@
-import { Assets, Container, Graphics, Sprite, Ticker } from "pixi.js";
+import { Assets, Container, DestroyOptions, Graphics, Sprite } from "pixi.js";
 import { PlayerController } from "../../game/character/PlayerController";
 import { CharacterSprite } from "../../game/character/CharacterSprite";
 import { Direction } from "../../game/types";
@@ -203,7 +203,7 @@ export class GameScreen extends Container {
   /**
    * Update the screen
    */
-  public update(_time: Ticker) {
+  public update() {
     if (this.paused) return;
     if (this.player1Controller) {
       this.player1Controller.update();
@@ -252,7 +252,7 @@ export class GameScreen extends Container {
   /**
    * Cleanup
    */
-  public destroy(options?: any) {
+  public destroy(options?: DestroyOptions) {
     if (this.player1Controller) {
       this.player1Controller.destroy();
     }
