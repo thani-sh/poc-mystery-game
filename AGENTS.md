@@ -21,10 +21,15 @@ npm run start      # Development server at localhost:5173
 npm run build      # Production build (runs lint + tsc + vite build)
 npm run lint       # Run ESLint
 
-# Tools (asset designer, copier)
-cd tools/asset-designer  # or tools/asset-copier
+# Asset Designer tool
+cd tools/asset-designer
 npm install
 npm run dev        # Development server
+
+# Asset Copier tool (uses bun)
+cd tools/asset-copier
+bun install
+bun run dev
 ```
 
 ## Project Structure
