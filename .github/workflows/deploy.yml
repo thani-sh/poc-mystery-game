@@ -39,6 +39,8 @@ jobs:
       - name: Build game
         run: npm run build
         working-directory: ./game
+        env:
+          VITE_BASE_PATH: /${{ github.event.repository.name }}/
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
