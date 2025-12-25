@@ -139,16 +139,14 @@ export class Navigation {
     }
 
     // Load assets for the new screen, if available
-    if (ctor.assetBundles) {
+    if (ctor.assetBundles?.length) {
       // Load all assets required by this new screen
       await Assets.loadBundle(ctor.assetBundles, (progress) => {
         if (this.currentScreen?.onLoad) {
           this.currentScreen.onLoad(progress * 100);
         }
       });
-    }
-
-    if (this.currentScreen?.onLoad) {
+    } else if (this.currentScreen?.onLoad) {
       this.currentScreen.onLoad(100);
     }
 
